@@ -16,7 +16,7 @@
     <!-- Layout styles -->
     <link rel="stylesheet" href="public/backend/assets/css/style.css">
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="public/backend/assets/images/favicon.ico" />
+    <link rel="shortcut icon" href="public/backend/assets/images/favicon.ico">
   </head>
   <body>
     <div class="container-scroller">
@@ -72,7 +72,7 @@
               </div>
             </div>
             <div class="col-lg-4 d-none d-lg-block">
-           		<image style = "position: fixed;"  src="public/frontend/assets/images/login-images2.png"/>
+           		<image style = "position: fixed;"  src="public/frontend/assets/images/login-images2.png">
            </div>
           </div>
         </div>
