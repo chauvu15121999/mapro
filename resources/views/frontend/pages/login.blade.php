@@ -24,7 +24,7 @@
         <div class="content-wrapper d-flex align-items-center auth">
           <div class="row flex-grow">
            <div class="col-lg-4 d-none d-lg-block">
-           		<image style = "position: fixed;"  src="public/frontend/assets/images/login-images1.png"/>
+           		<image style = "position: fixed;"  src="public/frontend/assets/images/login-images1.png">
            </div>
             <div class="col-lg-4 col-mx-auto">
               <div class="auth-form-light text-left p-5">
