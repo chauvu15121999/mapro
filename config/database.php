@@ -94,8 +94,8 @@ return [
             'driver' => 'mongodb',
             'dsn' => env('MONGO_DB_DSN'),
             'database' => env('DB_DATABASE', 'mapro'),
-            'username' => env('DB_USERNAME', ''),
-            'password' => env('DB_PASSWORD', ''),
+            'username' => env('DB_USERNAME', 'mapro'),
+            'password' => env('DB_PASSWORD', '0768415044chauvu'),
             'options' => [
                 // here you can pass more settings to the Mongo Driver Manager
                 // see https://www.php.net/manual/en/mongodb-driver-manager.construct.php under "Uri Options" for a list of complete parameters that you can use
