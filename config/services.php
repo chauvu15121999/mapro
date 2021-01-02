@@ -32,7 +32,7 @@ return [
     'google' => [
     'client_id' => '79008025781-sjs7abnb804ebl180954l2uosb1446eo.apps.googleusercontent.com',
     'client_secret' => 'x6jJwwMQN31mgz5eT6p3uO6n',
-    'redirect' => 'http://localhost:88/Mapro/callback/google',
+    'redirect' => 'https://chauvu-mapro.herokuapp.com/callback/google',
     ], 
 
 ];
