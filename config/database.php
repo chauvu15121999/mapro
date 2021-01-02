@@ -107,7 +107,7 @@ return [
         'mongodb' => [
         'driver' => 'mongodb',
         'dsn'=>'mongodb+srv://mapro:0768415044chauvu@cluster0.b3ycn.mongodb.net/mapro?retryWrites=true&w=majority',
-        'database' => 'my_data',
+        'database' => 'mapro',
         ]
     ],
 
