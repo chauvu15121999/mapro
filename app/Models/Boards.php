@@ -10,7 +10,7 @@ use Jenssegers\Mongodb\Eloquent\Model;
 class Boards extends Model
 {
     use HasFactory;
-    protected $collection = 'broads';
+    protected $collection = 'boards';
     // public function Team()
     // {
     // 	# code...
