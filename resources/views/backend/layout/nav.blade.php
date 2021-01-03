@@ -4,7 +4,6 @@
           @if(Auth::check()){
           <a class="navbar-brand brand-logo" href="home/{{Auth::user()->user_name}}"><img src="public/backend/assets/images/logo.svg" alt="logo" /></a>
           <a class="navbar-brand brand-logo-mini" href="home/{{Auth::user()->user_name}}"><img src="public/backend/assets/images/logo-mini.svg" alt="logo" /></a>
-        }
           @endif
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-stretch">
