@@ -167,7 +167,7 @@ select option {
               	selectMoreBackground: false,
               	listBackgrouds: [], // 
               	listAllBackgroud: [], // lag
-                id_background : "this.listBackgrouds[0]._id", // id defaul
+                id_background : "5ff10b29e4d2ea2b69d1e46d", // id defaul
                 image : '', // lấy link hình 
                 csrf: document.head.querySelector('meta[name="csrf-token"]').content
               }

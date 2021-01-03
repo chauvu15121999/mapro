@@ -2407,7 +2407,7 @@ __webpack_require__.r(__webpack_exports__);
       // 
       listAllBackgroud: [],
       // lag
-      id_background: "this.listBackgrouds[0]._id",
+      id_background: "5ff10b29e4d2ea2b69d1e46d",
       // id defaul
       image: '',
       // lấy link hình 
