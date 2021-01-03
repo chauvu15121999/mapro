@@ -1,7 +1,7 @@
 
 <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row broad">
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-          @if(Auth::check()){
+          @if(Auth::check())
           <a class="navbar-brand brand-logo" href="home/{{Auth::user()->user_name}}"><img src="public/backend/assets/images/logo.svg" alt="logo" /></a>
           <a class="navbar-brand brand-logo-mini" href="home/{{Auth::user()->user_name}}"><img src="public/backend/assets/images/logo-mini.svg" alt="logo" /></a>
           @endif

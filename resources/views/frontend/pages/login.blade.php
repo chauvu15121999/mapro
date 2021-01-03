@@ -26,7 +26,7 @@
            <div class="col-lg-4 d-none d-lg-block">
            		<img style = "position: fixed;"  src="public/frontend/assets/images/loginImages1.png">
            </div>
-            <div class="col-lg-4 col-mx-auto">
+            <div class="col-lg-4 col-12 col-mx-auto">
               <div class="auth-form-light text-left p-5">
                 <div class="brand-logo">
                   <img src="public/backend/assets/images/logo.svg">
