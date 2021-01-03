@@ -39,10 +39,10 @@
        $url =  parse_url($url)['path'];
        $url = explode( '/', $url );          
       ?>
-      @if($url[2] == 'b')
+      @if($url[1] == 'b')
         @include('backend/layout/nav2')
       @else
-          @include('backend/layout/nav')
+        @include('backend/layout/nav')
       @endif
 
       <!-- partial -->
