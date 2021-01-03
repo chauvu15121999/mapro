@@ -76581,7 +76581,7 @@ var render = function() {
       _c("div", { staticClass: "row pb-2 pt-2 header-chat" }, [
         _c(
           "div",
-          { staticClass: "col-lg-10 ml-2" },
+          { staticClass: "col-lg-10 col-sm-9 col-8 ml-2" },
           _vm._l(_vm.member, function(mem) {
             return _c("span", [
               _c("img", {
@@ -76594,7 +76594,7 @@ var render = function() {
           0
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "col-lg-1" }, [
+        _c("div", { staticClass: "col-lg-1 " }, [
           _c(
             "button",
             {
@@ -76680,7 +76680,7 @@ var render = function() {
                 expression: "message"
               }
             ],
-            staticClass: "mt-2  col-lg-10 input",
+            staticClass: "mt-2 col-lg-10 col-sm-8 col-10 input",
             attrs: { type: "text" },
             domProps: { value: _vm.message },
             on: {
@@ -76703,7 +76703,7 @@ var render = function() {
           }),
           _vm._v(" "),
           _c("i", {
-            staticClass: "mdi mdi-send ml-2 send",
+            staticClass: "mdi mdi-send ml-2  send",
             on: {
               click: function($event) {
                 return _vm.sendMessage($event)
@@ -77809,7 +77809,8 @@ var render = function() {
       _c(
         "div",
         {
-          staticClass: "modal-content-card h-auto mx-auto mr-n5 col-sm-6 mt-5 "
+          staticClass:
+            "modal-content-card h-auto mx-auto mr-n5 col-lg-6 col-sm-12 col-12 mt-5 "
         },
         [
           _c(
@@ -77866,7 +77867,7 @@ var render = function() {
           ),
           _vm._v(" "),
           _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-xl-9 col-lg-9 col-sm-9 col-9" }, [
+            _c("div", { staticClass: "col-xl-9 col-lg-9 col-sm-9 col-8" }, [
               _c("div", { staticClass: "row" }, [
                 _vm._m(1),
                 _vm._v(" "),
@@ -77958,7 +77959,7 @@ var render = function() {
                 : _vm._e()
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "col-xl-3 col-lg-3 col-sm-3 col-3" }, [
+            _c("div", { staticClass: "col-xl-3 col-lg-3 col-sm-3 col-4" }, [
               _vm._m(2),
               _vm._v(" "),
               _vm.Members.checkMember != 1
@@ -78233,7 +78234,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("span", { staticClass: " select_name" }, [
+    return _c("span", { staticClass: "select_name " }, [
       _c("i", { staticClass: "mdi mdi-checkbox-marked-outline" }),
       _vm._v("  CheckList")
     ])
@@ -78242,16 +78243,16 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("span", { staticClass: " select_name" }, [
-      _c("i", { staticClass: "mdi mdi-attachment" }),
-      _vm._v("  Attachment")
+    return _c("span", { staticClass: "select_name " }, [
+      _c("i", { staticClass: "mdi mdi-attachment d-none" }),
+      _vm._v(" Attachment")
     ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("span", { staticClass: " select_name" }, [
+    return _c("span", { staticClass: "select_name" }, [
       _c("i", { staticClass: "mdi mdi-timelapse" }),
       _vm._v(" Dou to")
     ])

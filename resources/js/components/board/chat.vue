@@ -1,13 +1,13 @@
 <template>
 <div class="chat chated mr-2"  :class="{chatClose : isDismiss}">
 	<div class="row pb-2 pt-2 header-chat">
-		<div class="col-lg-10 ml-2">
+		<div class="col-lg-10 col-sm-9 col-8 ml-2">
 			<span v-for=" mem in member"><img 
 			          :src="mem.avatar.encoded" style="width: 35px; height:35px; " class="rounded-circle " 
 			          />
 			 </span>
 		 </div>
-	<div class="col-lg-1"><button  v-on:click="close()" class="close"><i class="mdi mdi-close"></i></button></div>
+	<div class="col-lg-1 "><button  v-on:click="close()" class="close"><i class="mdi mdi-close"></i></button></div>
 	</div>
  	<div class="row">
  		<div class="col-lg-12">
@@ -27,8 +27,8 @@
  	</div>
  	<div class="row input-chat">
  		<div class="col-lg-12 ml-2">
-			<input v-on:keyup.enter="sendMessage($event)" v-model="message" class="mt-2  col-lg-10 input" type="text">
-			<i v-on:click="sendMessage($event)"  class="mdi mdi-send ml-2 send"></i>
+			<input v-on:keyup.enter="sendMessage($event)" v-model="message" class="mt-2 col-lg-10 col-sm-8 col-10 input" type="text">
+			<i v-on:click="sendMessage($event)"  class="mdi mdi-send ml-2  send"></i>
 		 </div>
  	</div>
 </div>

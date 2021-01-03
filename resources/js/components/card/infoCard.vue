@@ -2,7 +2,7 @@
  <!-- Modal -->
 <div id="myModal" class="modal-card">
   <!-- Modal content -->
-  <div class="modal-content-card h-auto mx-auto mr-n5 col-sm-6 mt-5 ">
+  <div class="modal-content-card h-auto mx-auto mr-n5 col-lg-6 col-sm-12 col-12 mt-5 ">
     <div class="row mt-2 mb-2">
       <span class="col-lg-1 col-sm-2 col-2  " style="font-size : 28px;" ><i class=" mdi mdi-equal-box"></i></span>
       <TextareaAutosize
@@ -18,7 +18,7 @@
       <p style="color: #9A9696" class="ml-5 pl-4">in list: <u>{{list.list_name}}</u> </p>
     </div>
     <div class="row">
-      <div class="col-xl-9 col-lg-9 col-sm-9 col-9">
+      <div class="col-xl-9 col-lg-9 col-sm-9 col-8">
         <!-- Member -->
         <div class="row">
           <div class="ml-4 pl-4 col-12">
@@ -75,7 +75,7 @@
         </div>
         <!-- Endfiles -->
       </div>
-      <div class="col-xl-3 col-lg-3 col-sm-3 col-3">
+      <div class="col-xl-3 col-lg-3 col-sm-3 col-4">
         <!-- SUGGESTED -->
         <div class="row">
           <div class="col-9">
@@ -108,7 +108,7 @@
         <!-- end Checklist -->
         <div class="row mt-2">
           <div v-on:click="hanldeShowAddCheckList($event)" class="col-11 selector pt-2">
-              <span class=" select_name"><i  class="mdi mdi-checkbox-marked-outline"></i>  CheckList</span>
+            <span class="select_name "><i  class="mdi mdi-checkbox-marked-outline"></i>  CheckList</span>
           </div>
         </div>
         <!-- end Checklist -->
@@ -120,13 +120,13 @@
                       @change="hanldeAddAttchment($event)"
                       ref="fileInputAttachment" 
                       style="display: none;">
-              <span class=" select_name"><i class="mdi mdi-attachment"></i>  Attachment</span>
+              <span class="select_name "><i class="mdi mdi-attachment d-none"></i> Attachment</span>
           </div>
         </div>
         <!-- Attachment --> 
         <div class="row mt-2">
           <div v-on:click="hanldeShowAddTask($event)" class="col-11 selector pt-2">
-               <span class=" select_name"><i class="mdi mdi-timelapse"></i> Dou to</span> 
+               <span class="select_name"><i class="mdi mdi-timelapse"></i> Dou to</span> 
           </div>
         </div>
         <div class="row mt-3">
