@@ -17,7 +17,7 @@
           <img 
           :src="mess.avatar.encoded" :style="mess.user_id == user._id ? ' display: none ; ' : 'display : inline;' "  style="width: 25px; height:25px; " class="rounded-circle ml-2" 
                   />
-          <span class="pl-3 pt-1 pr-3 pb-1" 
+          <span class="pl-3 pt-1 pr-3 pb-1 text" 
           :style="mess.user_id == user._id ? 'border-radius: 15px; background: #5A68F3; color: white;': 'border-radius: 15px; background: #EAEAEC; color: black;'">{{mess.message}}</span>
           <div class="clear">.</div>
       </div>
@@ -134,6 +134,9 @@
  visibility: hidden;
  width: 0;
  height: 0;
+}
+.text{
+  max-width: 100%;
 }
 </style>
 <script>
