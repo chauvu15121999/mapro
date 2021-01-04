@@ -172,7 +172,7 @@
                     {
                         this.users =  this.Member.getMembers[i];
                     }else{
-                        window.location="home/";
+                       window.history.go(-1);
                     }
                 }
             },

@@ -2652,7 +2652,7 @@ __webpack_require__.r(__webpack_exports__);
         if (this.Member.getMembers[i].user_email == this.user.email) {
           this.users = this.Member.getMembers[i];
         } else {
-          window.location = "home/";
+          window.history.go(-1);
         }
       }
     },
