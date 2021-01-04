@@ -167,13 +167,15 @@
         methods: {
           // Lấy user 
            getUser(){
+                var test = 0;
                 for(var i = 0; i < this.Member.getMembers.length; i ++){
                     if (this.Member.getMembers[i].user_email == this.user.email)
                     {
                         this.users =  this.Member.getMembers[i];
+                        test = 1;
                     }
                 }
-                   if(this.users.length === 0){
+                   if(test === 0){
                        window.history.go(-1);
                     }
             },
