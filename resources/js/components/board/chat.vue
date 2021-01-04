@@ -159,8 +159,7 @@ import VueChatScroll from 'vue-chat-scroll'
         	this.loadMessage();
           // Lắng nghe sự kiện 
            Echo.channel('chat').listen('MessageSent',(e) => {
-               this.loadMessage();
-               this.$emit('close');   // load lại dữ liệu  
+               this.loadMessage();  // load lại dữ liệu  
             });
         },
         methods: {

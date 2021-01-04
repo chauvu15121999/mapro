@@ -2589,7 +2589,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
@@ -2635,8 +2634,13 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
+    var _this = this;
+
     this.getInfoBoard();
     this.getMember();
+    Echo.channel('chat').listen('MessageSent', function (e) {
+      _this.isShowChat = true; // load lại dữ liệu  
+    });
   },
   updated: function updated() {
     this.getUser();
@@ -2652,10 +2656,10 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     getInfoBoard: function getInfoBoard() {
-      var _this = this;
+      var _this2 = this;
 
       axios.get('getInfoBoard/' + this.board._id).then(function (response) {
-        _this.boards = response.data;
+        _this2.boards = response.data;
       });
     },
     changeName: function changeName(event) {
@@ -2676,18 +2680,18 @@ __webpack_require__.r(__webpack_exports__);
       this.Member.inviteStyle.top = e.pageY + '%'; // lấy vị trí click
     },
     getMember: function getMember() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get('getMemberBoard/' + this.board._id).then(function (response) {
-        _this2.Member.getMembers = response.data;
+        _this3.Member.getMembers = response.data;
       });
     },
     addMember: function addMember() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.Member.isInvite = false;
       axios.get('getMemberBoard/' + this.board._id).then(function (response) {
-        _this3.Member.getMembers = response.data;
+        _this4.Member.getMembers = response.data;
       });
     },
     handleShowInfoMember: function handleShowInfoMember(e, data) {
@@ -2700,18 +2704,18 @@ __webpack_require__.r(__webpack_exports__);
       this.Member.getOneMember = data;
     },
     changeInfoMember: function changeInfoMember() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.Member.isShowInfoMember = false;
       axios.get('getMemberBoard/' + this.board._id).then(function (response) {
-        _this4.Member.getMembers = response.data;
+        _this5.Member.getMembers = response.data;
       });
     },
     updateBackground: function updateBackground() {
-      var _this5 = this;
+      var _this6 = this;
 
       axios.get('getInfoBoard/' + this.board._id).then(function (response) {
-        _this5.boards = response.data;
+        _this6.boards = response.data;
       });
     },
     ShowChat: function ShowChat() {
@@ -2892,9 +2896,7 @@ __webpack_require__.r(__webpack_exports__);
     this.loadMessage(); // Lắng nghe sự kiện 
 
     Echo.channel('chat').listen('MessageSent', function (e) {
-      _this.loadMessage();
-
-      _this.$emit('close'); // load lại dữ liệu  
+      _this.loadMessage(); // load lại dữ liệu  
 
     });
   },
@@ -76538,9 +76540,6 @@ var render = function() {
                   on: {
                     close: function($event) {
                       _vm.isShowChat = false
-                    },
-                    showMess: function($event) {
-                      _vm.isShowChat = true
                     }
                   }
                 })

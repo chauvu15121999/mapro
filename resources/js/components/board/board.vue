@@ -54,7 +54,6 @@
         :board="board"
         :user="user"
         v-on:close="isShowChat = false"
-        v-on:showMess="isShowChat = true"
         />
       </div>
 
@@ -158,6 +157,9 @@
         created() {
             this.getInfoBoard();
             this.getMember();
+            Echo.channel('chat').listen('MessageSent',(e) => {
+               this.isShowChat = true;  // load lại dữ liệu  
+            });
         },
         updated(){
           this.getUser();
