@@ -172,10 +172,10 @@
                     {
                         this.users =  this.Member.getMembers[i];
                     }
+                }
                     if(this.users = null){
                        window.history.go(-1);
                     }
-                }
             },
           getInfoBoard(){
             axios.get('getInfoBoard/'+this.board._id)

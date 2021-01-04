@@ -2652,10 +2652,10 @@ __webpack_require__.r(__webpack_exports__);
         if (this.Member.getMembers[i].user_email == this.user.email) {
           this.users = this.Member.getMembers[i];
         }
+      }
 
-        if (this.users = null) {
-          window.history.go(-1);
-        }
+      if (this.users = null) {
+        window.history.go(-1);
       }
     },
     getInfoBoard: function getInfoBoard() {
