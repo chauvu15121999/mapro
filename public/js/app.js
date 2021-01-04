@@ -2654,7 +2654,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
 
-      if (this.users.length != 1) {
+      if (this.users.length === 0) {
         window.history.go(-1);
       }
     },
