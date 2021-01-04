@@ -171,8 +171,9 @@
                     if (this.Member.getMembers[i].user_email == this.user.email)
                     {
                         this.users =  this.Member.getMembers[i];
-                    }else{
-                      console.log('ko co trong');
+                    }
+                    if(this.users = ''){
+                       window.history.go(-1);
                     }
                 }
             },
