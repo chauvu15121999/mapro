@@ -54,7 +54,7 @@
         :board="board"
         :user="user"
         v-on:close="isShowChat = false"
-        v-on:showMess="isShowChat = true"
+        v-on:showMess="ShowChat"
         />
       </div>
 

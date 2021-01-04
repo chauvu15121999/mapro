@@ -76539,9 +76539,7 @@ var render = function() {
                     close: function($event) {
                       _vm.isShowChat = false
                     },
-                    showMess: function($event) {
-                      _vm.isShowChat = true
-                    }
+                    showMess: _vm.ShowChat
                   }
                 })
               : _vm._e()
