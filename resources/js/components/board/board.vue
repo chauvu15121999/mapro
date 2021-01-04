@@ -39,7 +39,7 @@
         <button style="z-index: 1000;" v-on:click="isShowMenu = true" type="button" class="btn btn-secondary btn-sm float-right mx-auto">
           Show menu
         </button>
-        <button style="z-index: 1000; height: 35px;" v-on:click="isShowChat = true" type="button" class="btn btn-gradient-info btn-rounded btn-icon float-right mr-2">
+        <button style="z-index: 1000; height: 35px;" v-on:click="ShowChat" type="button" class="btn btn-gradient-info btn-rounded btn-icon float-right mr-2">
           <i class="mdi mdi-facebook-messenger"></i>
         </button>
         <menuBoards 
@@ -54,6 +54,7 @@
         :board="board"
         :user="user"
         v-on:close="isShowChat = false"
+        v-on:batMess="isShowChat = true"
         />
       </div>
 
@@ -227,6 +228,9 @@
               .then(response => {
                   this.boards = response.data;
               })  
+          },
+          ShowChat(){
+            this.isShowChat = !this.isShowChat;
           }
     },
 

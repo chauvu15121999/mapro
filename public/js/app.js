@@ -2589,6 +2589,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -2712,6 +2713,9 @@ __webpack_require__.r(__webpack_exports__);
       axios.get('getInfoBoard/' + this.board._id).then(function (response) {
         _this5.boards = response.data;
       });
+    },
+    ShowChat: function ShowChat() {
+      this.isShowChat = !this.isShowChat;
     }
   }
 });
@@ -2867,6 +2871,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['member', 'board', 'user'],
@@ -2884,7 +2892,9 @@ __webpack_require__.r(__webpack_exports__);
     this.loadMessage(); // Lắng nghe sự kiện 
 
     Echo.channel('chat').listen('MessageSent', function (e) {
-      _this.loadMessage(); // load lại dữ liệu  
+      _this.loadMessage();
+
+      _this.$emit('batMess'); // load lại dữ liệu  
 
     });
   },
@@ -10956,7 +10966,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n.chat {\r\n  position: absolute;\r\n  top: -500%;\r\n  right: 0;\r\n  width: 300px;\r\n  display: inline-block;\r\n  max-height: 400px;\r\n  overflow-x: hidden;\r\n  overflow-y: visible;\r\n  white-space: pre-line;\r\n  background: #F0F0F0;\r\n  z-index: 2000;\r\n  transform: translateY(100%);\r\n  -webkit-transform: translateY(100%);\n}\n.chated {\r\n   animation: chat-in 0.5s forwards;\r\n  -webkit-animation: chat-in 0.5s forwards;\n}\n.chatClose {\r\n  animation: chat-out 0.5s forwards;\r\n  -webkit-animation: chat-out 0.5s forwards;\n}\n@keyframes chat-in {\n0% {\r\n    -webkit-transform: translateY(200%);\n}\n100% {\r\n    -webkit-transform: translateY(100%);\n}\n}\n@-webkit-keyframes chat-in {\n0% {\r\n    transform: translateY(200%);\n}\n100% {\r\n    transform: translateY(100%);\n}\n}\n@keyframes chat-out {\n0% {\r\n    transform: translateY(100%);\n}\n100% {\r\n    transform: translateY(200%);\n}\n}\n@-webkit-keyframes chat-out {\n0% {\r\n    -webkit-transform: translateY(100%);\n}\n100% {\r\n    -webkit-transform: translateY(200%);\n}\n}\n.header-chat{\r\n  border-width: 1px;\r\n  border-style: outset;\r\n  height: 50px;\n}\n.bdChat{\r\n  /*min-height: 295px;*/\r\n  max-height: 295px;\r\n  min-height: 295px;\r\n  width: 100%;  \r\n  overflow-y: auto;\r\n  display: inline-block;\r\n  white-space: pre-line;\r\n  background: white;\n}\n.input-chat{\r\n\theight: 50px;\r\n\tborder-width: 1px;\r\n\tborder-style: outset;\n}\n.input{\r\n\tborder-radius: 10px; \r\n\tbackground-color: #DADDE2;\n}\n.send{\r\n\tcolor: #036BF8;\r\n\tcursor: pointer;\n}\r\n/*.mess{\r\n  display: tabble;\r\n}*/\n.clear {\r\n clear: both;\r\n display: block;\r\n overflow: hidden;\r\n visibility: hidden;\r\n width: 0;\r\n height: 0;\n}\r\n", ""]);
+exports.push([module.i, "\n.chat {\r\n  position: absolute;\r\n  top: -500%;\r\n  right: 0;\r\n  width: 300px;\r\n  display: inline-block;\r\n  max-height: 400px;\r\n  overflow-x: hidden;\r\n  overflow-y: visible;\r\n  white-space: pre-line;\r\n  background: #F0F0F0;\r\n  z-index: 2000;\r\n  transform: translateY(100%);\r\n  -webkit-transform: translateY(100%);\n}\n.chated {\r\n   animation: chat-in 0.5s forwards;\r\n  -webkit-animation: chat-in 0.5s forwards;\n}\n.chatClose {\r\n  animation: chat-out 0.5s forwards;\r\n  -webkit-animation: chat-out 0.5s forwards;\n}\n@keyframes chat-in {\n0% {\r\n    -webkit-transform: translateY(200%);\n}\n100% {\r\n    -webkit-transform: translateY(100%);\n}\n}\n@-webkit-keyframes chat-in {\n0% {\r\n    transform: translateY(200%);\n}\n100% {\r\n    transform: translateY(100%);\n}\n}\n@keyframes chat-out {\n0% {\r\n    transform: translateY(100%);\n}\n100% {\r\n    transform: translateY(200%);\n}\n}\n@-webkit-keyframes chat-out {\n0% {\r\n    -webkit-transform: translateY(100%);\n}\n100% {\r\n    -webkit-transform: translateY(200%);\n}\n}\n.header-chat{\r\n  border-width: 1px;\r\n  border-style: outset;\r\n  height: 50px;\n}\n.bdChat{\r\n  /*min-height: 295px;*/\r\n  max-height: 295px;\r\n  min-height: 295px;\r\n  width: 100%;  \r\n  overflow-y: auto;\r\n  display: inline-block;\r\n  white-space: pre-line;\r\n  background: white;\n}\n.input-chat{\r\n\theight: 50px;\r\n\tborder-width: 1px;\r\n\tborder-style: outset;\n}\n.input{\r\n\tborder-radius: 10px; \r\n\tbackground-color: #DADDE2;\n}\n.send{\r\n\tcolor: #036BF8;\r\n\tcursor: pointer;\n}\r\n/*.mess{\r\n  display: tabble;\r\n}*/\n.clear {\r\n clear: both;\r\n display: block;\r\n overflow: hidden;\r\n visibility: hidden;\r\n width: 0;\r\n height: 0;\n}\n.text-mess{\r\n  max-width: 70%;\r\n  word-wrap: break-word;\n}\r\n", ""]);
 
 // exports
 
@@ -76499,11 +76509,7 @@ var render = function() {
                   "btn btn-gradient-info btn-rounded btn-icon float-right mr-2",
                 staticStyle: { "z-index": "1000", height: "35px" },
                 attrs: { type: "button" },
-                on: {
-                  click: function($event) {
-                    _vm.isShowChat = true
-                  }
-                }
+                on: { click: _vm.ShowChat }
               },
               [_c("i", { staticClass: "mdi mdi-facebook-messenger" })]
             ),
@@ -76532,6 +76538,9 @@ var render = function() {
                   on: {
                     close: function($event) {
                       _vm.isShowChat = false
+                    },
+                    batMess: function($event) {
+                      _vm.isShowChat = true
                     }
                   }
                 })
@@ -76651,7 +76660,7 @@ var render = function() {
                   _c(
                     "span",
                     {
-                      staticClass: "pl-3 pt-1 pr-3 pb-1",
+                      staticClass: "pl-3 pt-1 pr-3 pb-1 text-mess",
                       style:
                         mess.user_id == _vm.user._id
                           ? "border-radius: 15px; background: #5A68F3; color: white;"
@@ -96454,7 +96463,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
-  authEndpoint: 'http://localhost:88/Mapro',
+  authEndpoint: 'https://chauvu-mapro.herokuapp.com/',
   broadcaster: 'pusher',
   key: '4cb86fe08791bf5a049a',
   cluster: 'ap1',
@@ -96728,14 +96737,15 @@ __webpack_require__.r(__webpack_exports__);
 /*!*************************************************!*\
   !*** ./resources/js/components/board/board.vue ***!
   \*************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _board_vue_vue_type_template_id_29f1c9fc___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./board.vue?vue&type=template&id=29f1c9fc& */ "./resources/js/components/board/board.vue?vue&type=template&id=29f1c9fc&");
 /* harmony import */ var _board_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./board.vue?vue&type=script&lang=js& */ "./resources/js/components/board/board.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _board_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./board.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/board/board.vue?vue&type=style&index=0&lang=css&");
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _board_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _board_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+/* harmony import */ var _board_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./board.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/board/board.vue?vue&type=style&index=0&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -96767,7 +96777,7 @@ component.options.__file = "resources/js/components/board/board.vue"
 /*!**************************************************************************!*\
   !*** ./resources/js/components/board/board.vue?vue&type=script&lang=js& ***!
   \**************************************************************************/
-/*! exports provided: default */
+/*! no static exports found */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

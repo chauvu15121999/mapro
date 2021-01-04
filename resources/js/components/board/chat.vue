@@ -136,7 +136,7 @@
  height: 0;
 }
 .text-mess{
-  max-width: 60%;
+  max-width: 70%;
   word-wrap: break-word;
 }
 </style>
@@ -159,7 +159,8 @@ import VueChatScroll from 'vue-chat-scroll'
         	this.loadMessage();
           // Lắng nghe sự kiện 
            Echo.channel('chat').listen('MessageSent',(e) => {
-               this.loadMessage();   // load lại dữ liệu  
+               this.loadMessage();
+               this.$emit('batMess');   // load lại dữ liệu  
             });
         },
         methods: {
