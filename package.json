@@ -28,6 +28,7 @@
         "laravel-echo": "^1.10.0",
         "pusher-js": "^7.0.2",
         "vue-axios": "^3.2.0",
+        "vue-beautiful-chat": "^2.5.0",
         "vue-chat-scroll": "^1.4.0",
         "vue-draggable": "^2.0.6",
         "vue-dragscroll": "^2.1.0",
@@ -39,5 +40,4 @@
         "vue-textarea-autosize": "^1.1.1",
         "vuedraggable": "^2.24.3"
     }
-
 }
