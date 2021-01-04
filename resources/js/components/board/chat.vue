@@ -136,7 +136,8 @@
  height: 0;
 }
 .text{
-  max-width: 100%;
+  max-width: 80%;
+  word-wrap: break-word;
 }
 </style>
 <script>
