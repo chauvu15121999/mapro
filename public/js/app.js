@@ -2894,7 +2894,7 @@ __webpack_require__.r(__webpack_exports__);
     Echo.channel('chat').listen('MessageSent', function (e) {
       _this.loadMessage();
 
-      _this.$emit('batMess'); // load lại dữ liệu  
+      _this.$emit('showMess'); // load lại dữ liệu  
 
     });
   },
@@ -76539,7 +76539,7 @@ var render = function() {
                     close: function($event) {
                       _vm.isShowChat = false
                     },
-                    batMess: function($event) {
+                    showMess: function($event) {
                       _vm.isShowChat = true
                     }
                   }
