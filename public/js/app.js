@@ -2649,7 +2649,7 @@ __webpack_require__.r(__webpack_exports__);
     // Lấy user 
     getUser: function getUser() {
       for (var i = 0; i < this.Member.getMembers.length; i++) {
-        if (this.Member.getMembers[i].user_email == this.user.email) {
+        if (this.Member.getMembers[i].user_email === this.user.email) {
           this.users = this.Member.getMembers[i];
         } else {
           window.history.go(-1);
