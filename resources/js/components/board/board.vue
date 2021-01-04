@@ -175,9 +175,6 @@
                           test = 1;
                     }
                 }
-                   if(test === 0){
-                       window.history.go(-1);
-                    }
             },
           getInfoBoard(){
             axios.get('getInfoBoard/'+this.board._id)

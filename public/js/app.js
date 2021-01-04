@@ -2656,10 +2656,6 @@ __webpack_require__.r(__webpack_exports__);
           test = 1;
         }
       }
-
-      if (test === 0) {
-        window.history.go(-1);
-      }
     },
     getInfoBoard: function getInfoBoard() {
       var _this2 = this;
