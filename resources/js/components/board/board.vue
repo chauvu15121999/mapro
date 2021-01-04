@@ -172,7 +172,7 @@
                     {
                         this.users =  this.Member.getMembers[i];
                     }
-                    if(this.users = ''){
+                    if(this.users = null){
                        window.history.go(-1);
                     }
                 }

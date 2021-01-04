@@ -2653,7 +2653,7 @@ __webpack_require__.r(__webpack_exports__);
           this.users = this.Member.getMembers[i];
         }
 
-        if (this.users = '') {
+        if (this.users = null) {
           window.history.go(-1);
         }
       }
