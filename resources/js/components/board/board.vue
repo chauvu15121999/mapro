@@ -173,7 +173,7 @@
                         this.users =  this.Member.getMembers[i];
                     }
                 }
-                    if(this.users == null){
+                    if(this.users == ''){
                        window.history.go(-1);
                     }
             },
