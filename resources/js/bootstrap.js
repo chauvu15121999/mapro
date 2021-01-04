@@ -34,7 +34,7 @@ import Echo from 'laravel-echo';
 window.Pusher = require('pusher-js');
 
 window.Echo = new Echo({
-	authEndpoint : 'http://localhost:88/Mapro',
+	authEndpoint : '/Mapro',
     broadcaster: 'pusher',
     key: '4cb86fe08791bf5a049a',
     cluster: 'ap1',
