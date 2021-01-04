@@ -172,7 +172,7 @@
                     if (this.Member.getMembers[i].user_email == this.user.email)
                     {
                         this.users =  this.Member.getMembers[i];
-                        test = 1;
+                          test = 1;
                     }
                 }
                    if(test === 0){
