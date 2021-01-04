@@ -11,7 +11,7 @@
 	</div>
  	<div class="row">
  		<div class="col-lg-12">
- 			<div v-chat-scroll="{always: false, smooth: true, scrollonremoved:true}" class="bdChat" id="bdChat">
+ 			<div v-chat-scroll="{always: true, smooth: true, scrollonremoved:true}" class="bdChat" id="bdChat">
       <div v-for = "mess in list_messages" class="ml-2 mr-2 mt-2 mess" 
         :style="mess.user_id == user._id ? ' text-align: right ;' : 'text-align : left;' ">
           <img 

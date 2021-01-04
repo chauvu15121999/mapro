@@ -76627,9 +76627,9 @@ var render = function() {
                 {
                   name: "chat-scroll",
                   rawName: "v-chat-scroll",
-                  value: { always: false, smooth: true, scrollonremoved: true },
+                  value: { always: true, smooth: true, scrollonremoved: true },
                   expression:
-                    "{always: false, smooth: true, scrollonremoved:true}"
+                    "{always: true, smooth: true, scrollonremoved:true}"
                 }
               ],
               staticClass: "bdChat",
