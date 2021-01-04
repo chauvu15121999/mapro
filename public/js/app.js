@@ -2654,7 +2654,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
 
-      if (this.users = null) {
+      if (this.users == null) {
         window.history.go(-1);
       }
     },
