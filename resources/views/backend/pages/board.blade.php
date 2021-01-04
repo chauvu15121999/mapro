@@ -3,7 +3,7 @@
 	<?php
 	for($i = 0 ; $i < count($board['members']) ; $i++){
 		 if($board['members'][$i]['user_email'] != Auth::user()->email){
-		 	header("location:javascript://history.go(-1)");
+		 	url()->previous();
 		 } 
 		}
 	?>
