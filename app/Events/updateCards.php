@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class updateData implements ShouldBroadcast
+class updateCards implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -47,6 +47,6 @@ class updateData implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('update');
+        return new Channel('updateC');
     }
 }

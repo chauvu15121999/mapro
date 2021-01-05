@@ -16,14 +16,17 @@ use Avatar;
 use App\Http\Controllers\MailController;
 use Carbon\Carbon;
 use App\Events\MessageSent;
-use App\Events\UpdateData;
+use App\Events\updateBoards;
 class BoardController extends Controller
 {
        public function showBoard($id)
         {
           # code...
           $board =  Boards::find($id);
-          return view('backend.pages.board',compact('board'));
+          if(isset($board)){
+             return view('backend.pages.board',compact('board'));
+          }
+         
         }
 //Background ---------------------------------------------------------
       public function getOneBackgroud(Request $Request)
@@ -63,7 +66,7 @@ class BoardController extends Controller
           );
           $time = Carbon::now();
           $mess = 'đã cập nhật background bảng vào lúc: '.$time;
-          Broadcast(new UpdateData(Auth::user(),$mess));
+          Broadcast(new updateBoards(Auth::user(),$mess))->toOthers();
       }
 // Thêm bảng ------------------------------------------------------------------------------
       public function AddBoards(Request $Request)
@@ -76,9 +79,7 @@ class BoardController extends Controller
             'id' => $Request->id_background,
             'url' => $Request->url
         ];
-      	$board->activity = [
-          Auth::user()->user_name.' đã tạo bảng vào lúc '.Carbon::now()
-        ];
+      	$board->activity = [ ];
       	$board->by_user = Auth::user()->id;
         if(Auth::user()->avatar != null){
           $avatar = Auth::user()->avatar;
@@ -93,7 +94,7 @@ class BoardController extends Controller
       	$board->save();
           $time = Carbon::now();
           $mess = 'đã thêm bảng '. $board->board_name .' vào lúc: '.$time;
-          Broadcast(new UpdateData(Auth::user(),$mess));
+          Broadcast(new updateBoards(Auth::user(),$mess));
         return redirect('b/'.$board->id.'/'.$board->board_name);
       }
       public function getAllBoards()
@@ -114,7 +115,7 @@ class BoardController extends Controller
          $board = Boards::find($id);
           $time = Carbon::now();
         $mess = 'đã thay đổi tên bảng '. $board->board_name .' thành '. $Request->name .' vào lúc: '.$time;
-        Broadcast(new UpdateData(Auth::user(),$mess));
+        Broadcast(new updateBoards(Auth::user(),$mess));
          $board->board_name = $Request->name;
          $board->save();
            
@@ -155,7 +156,7 @@ class BoardController extends Controller
             $result = $result->board_mail($Request->members,$link,$user);
         $time = Carbon::now();
         $mess = 'đã mời '. $Request->members .' vào bảng  vào lúc: '.$time;
-        Broadcast(new UpdateData(Auth::user(),$mess));
+        Broadcast(new updateBoards(Auth::user(),$mess));
             return response()->json($this->getMemBer($id));
           }else{
             $err = array('errors' => array("người này đã tồn tại"));
@@ -193,7 +194,7 @@ class BoardController extends Controller
         }
         $time = Carbon::now();
         $mess = '';
-        Broadcast(new UpdateData(Auth::user(),$mess));
+        Broadcast(new updateBoards(Auth::user(),$mess));
       }
       // removeMember
       public function removeMember(Request $Request,$id)
@@ -214,7 +215,7 @@ class BoardController extends Controller
         // Realtime
         $time = Carbon::now();
         $mess = $members['user_email'] . 'đã rời  bảng  vào lúc: '.$time;
-        Broadcast(new UpdateData(Auth::user(),$mess));
+        Broadcast(new updateBoards(Auth::user(),$mess));
         // Xóa member trong bảng
         $listCart = listCart::where('board',$id)->get();
           foreach($listCart as $key => $value){
@@ -238,7 +239,7 @@ class BoardController extends Controller
           $board->delete();
           $time = Carbon::now();
           $mess = '';
-          Broadcast(new UpdateData(Auth::user(),$mess));
+          Broadcast(new updateBoards(Auth::user(),$mess));
           return redirect('home/'.Auth::user()->user_name.'/dashboard.html');
 
       }
@@ -260,7 +261,22 @@ class BoardController extends Controller
           $time = Carbon::now('Asia/Ho_Chi_Minh');
           $chat = array('message' => $mess, 'user_name' => $user_name, 'user_id' => $user_id ,   'avatar' => $avatar, 'time' => (string)$time);
           Boards::find($id)->push('message',[$chat]);
-          Broadcast(new MessageSent($user,$mess))->toOthers();
+          Broadcast(new MessageSent($user,$mess));
         }
+      }
+      // ------------------------------------------------------------------------------
+      function getNofication($id)
+      {
+          $board = boards::find($id);
+          return response()->json($board->activity);
+      }
+      function pushNofication(Request $request,$id)
+      {
+        $user_name = $request->user['user_name'];
+        $user_id = $request->user['_id'];
+        $avatar = $request->user['avatar'];
+        $content = $request->content;
+        $nofication = array('content' => $content, 'user_name' => $user_name, 'user_id' => $user_id ,   'avatar' => $avatar);
+        Boards::find($id)->push('activity',[$chat]);
       }
 }

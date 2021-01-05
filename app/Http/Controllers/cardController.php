@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\Response; 
 use Illuminate\Support\Facades\File; // dùng để chỉnh sửa file 
-use App\Events\UpdateData; // realtime
+use App\Events\updateCards; // realtime
 class cardController extends Controller
 {
     //
@@ -45,7 +45,7 @@ class cardController extends Controller
     	$card->save();
         $time = Carbon::now();
         $mess = 'đã thêm thẻ '. $card->card_name .' vào lúc: '.$time;
-        Broadcast(new UpdateData(Auth::user(),$mess));
+        Broadcast(new updateCards(Auth::user(),$mess));
     }
     // thay đổi id list của thẻ
     public function changeListOfCard(Request $Request,$id)
@@ -55,7 +55,7 @@ class cardController extends Controller
     	$card->save();
         $time = Carbon::now();
         $mess = 'thẻ '. $card->card_name .' đã thay đổi vị trí lúc '.$time;
-        Broadcast(new UpdateData(Auth::user(),$mess));
+        Broadcast(new updateCards(Auth::user(),$mess));
     }
     // thay đổi vị trí thẻ
     public function updatePositionCard(Request $Request)
@@ -71,7 +71,7 @@ class cardController extends Controller
 		}
         $time = Carbon::now();
         $mess = 'thẻ '. $card->card_name .' đã thay đổi vị trí lúc '.$time;
-        Broadcast(new UpdateData(Auth::user(),$mess));
+        Broadcast(new updateCards(Auth::user(),$mess));
     }
     public function changeNameCard(Request $Request , $id){
     	$card = cards::find($id);
@@ -81,7 +81,7 @@ class cardController extends Controller
         $time = Carbon::now();
         $mess = 'thẻ '. $name_old .' đã thay đổi tên thành '.$card->card_name.' trí lúc '.$time;
         if($name_old != $card->card_name){
-            Broadcast(new UpdateData(Auth::user(),$mess));
+            Broadcast(new updateCards(Auth::user(),$mess));
         }
     }
     public function getMember($id)
@@ -97,7 +97,7 @@ class cardController extends Controller
           array('user_name' => Auth::user()->user_name, 'user_email' => Auth::user()->email, 'role' => 1 , 'avatar' => Auth::user()->avatar )
             ];
         $card->save();
-        Broadcast(new UpdateData(Auth::user(),' '));
+        Broadcast(new updateCards(Auth::user(),' '));
     }
     public function addMember(Request $Request, $id)
     {
@@ -114,13 +114,13 @@ class cardController extends Controller
     	}else{
     		cards::find($id)->pull('members',[$Request->members]);
     	}
-        Broadcast(new UpdateData(Auth::user(),' '));
+        Broadcast(new updateCards(Auth::user(),' '));
     }
     public function changeDescription(Request $Request , $id){
     	$card = cards::find($id);
     	$card->description = $Request->description;
     	$card->save();
-        Broadcast(new UpdateData(Auth::user(),' '));
+        Broadcast(new updateCards(Auth::user(),' '));
     }
     function updateFile(Request $request , $id)
     {
@@ -148,7 +148,7 @@ class cardController extends Controller
                 $card->push('attachment', array($file));
                 $time = Carbon::now();
                 $mess = 'đã cập nhật file '. $file_name .' vào lúc: '.$time;
-                Broadcast(new UpdateData(Auth::user(),$mess))->toOrther();
+                Broadcast(new updateCards(Auth::user(),$mess))->toOrther();
              }else{
                 echo "Tải tập tin thất bại";
              }
@@ -176,13 +176,13 @@ class cardController extends Controller
         cards::find($id)->pull('attachment',[$request->attachment]);
         $time = Carbon::now();
         $mess = 'đã xóa file '. $request->attachment['file_save'] .' vào lúc: '.$time;
-        Broadcast(new UpdateData(Auth::user(),$mess));
+        Broadcast(new updateCards(Auth::user(),$mess));
     }
     function removeCard($id){
         $C = cards::find($id);
         $time = Carbon::now();
         $mess = 'đã xóa thẻ'. $C->card_name .' vào lúc: '.$time;
-        Broadcast(new UpdateData(Auth::user(),$mess));
+        Broadcast(new updateCards(Auth::user(),$mess));
         $card = cards::where('_id',$id)->get();
         foreach ($card as $key => $value) {
              checkList::where('card_id',$value['_id'])->delete();
@@ -190,4 +190,19 @@ class cardController extends Controller
         $C->delete();
         
     }
+    // ---------------------------------------------------------------------------------
+    function getNofication($id)
+      {
+          $board = boards::find($id);
+          return response()->json($board->activity);
+      }
+    function pushNofication(Request $request,$id)
+      {
+        $user_name = $request->user['user_name'];
+        $user_id = $request->user['_id'];
+        $avatar = $request->user['avatar'];
+        $content = $request->content;
+        $nofication = array('content' => $content, 'user_name' => $user_name, 'user_id' => $user_id ,   'avatar' => $avatar);
+        Boards::find($id)->push('activity',[$chat]);
+      }
 }

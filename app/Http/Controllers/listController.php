@@ -8,7 +8,7 @@ use App\Models\cards;
 use Carbon\Carbon; // dùng auth để đăng nhập
 use Illuminate\Http\Request;
 use Auth;
-use App\Events\UpdateData; // realtime
+use App\Events\updateBoards; // realtime
 class listController extends Controller {
 	//
 	public function addList(Request $Request) {
@@ -22,7 +22,7 @@ class listController extends Controller {
 		$list->save();
 		$time = Carbon::now();
         $mess = 'đã thêm list '. $Request->list_name .' vào lúc: '.$time;
-        Broadcast(new UpdateData(Auth::user(),$mess));
+        Broadcast(new updateBoards(Auth::user(),$mess));
 		return response()->json($list);
 		// Realtime
 	}
@@ -38,13 +38,13 @@ class listController extends Controller {
 		$list->save();
 			$time = Carbon::now();
 	        $mess = 'đã thêm list '. $list->list_name .' vào lúc: '.$time;
-	        Broadcast(new UpdateData(Auth::user(),$mess));
+	        Broadcast(new updateBoards(Auth::user(),$mess));
 	}
 	public function remove($id){
 		$list = listCart::find($id);
 		$time = Carbon::now();
 	    $mess = 'đã xóa list '. $list->list_name .' vào lúc: '.$time;
-	    Broadcast(new UpdateData(Auth::user(),$mess));
+	    Broadcast(new updateBoards(Auth::user(),$mess));
         $card = cards::where('list_id',$id)->get();
             foreach ($card as $key => $value) {
              checkList::where('card_id',$value['_id'])->delete();
@@ -64,6 +64,6 @@ class listController extends Controller {
 		}
 		$time = Carbon::now();
         $mess = 'list  đã thay đổi vị trí lúc '.$time;
-        Broadcast(new UpdateData(Auth::user(),$mess));	
+        Broadcast(new updateBoards(Auth::user(),$mess));	
 	}
 }

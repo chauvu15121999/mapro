@@ -113,7 +113,7 @@ import infoCard from './infoCard'
     	},
       created(){
         this.getCards();
-          Echo.channel('update').listen('updateData',(e) => {
+          Echo.channel('updateC').listen('updateCards',(e) => {
                 this.getCards();
                 // load lại dữ liệu  
           });

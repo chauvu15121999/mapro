@@ -2642,7 +2642,7 @@ __webpack_require__.r(__webpack_exports__);
     Echo.channel('chat').listen('MessageSent', function (e) {
       _this.isShowChat = true; // load lại dữ liệu  
     });
-    Echo.channel('update').listen('updateData', function (e) {
+    Echo.channel('updateB').listen('updateBoards', function (e) {
       _this.getInfoBoard();
 
       _this.getMember(); // load lại dữ liệu  
@@ -3621,7 +3621,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.getCards();
-    Echo.channel('update').listen('updateData', function (e) {
+    Echo.channel('updateC').listen('updateCards', function (e) {
       _this.getCards(); // load lại dữ liệu  
 
     });
@@ -4083,7 +4083,7 @@ __webpack_require__.r(__webpack_exports__);
     this.getCheckList();
     this.getAllFile();
     this.getTasks();
-    Echo.channel('update').listen('updateData', function (e) {
+    Echo.channel('updateC').listen('updateCards', function (e) {
       _this.getMemberCard();
 
       _this.getCheckList();
@@ -4476,7 +4476,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {},
   updated: function updated() {},
-  computed: {},
   methods: {
     deleteCheckList: function deleteCheckList(data) {
       var _this = this;
@@ -5159,7 +5158,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.getAll();
-    Echo.channel('update').listen('updateData', function (e) {
+    Echo.channel('updateB').listen('updateBoards', function (e) {
       _this.getAll(); // load lại dữ liệu  
 
     });

@@ -309,7 +309,7 @@
           this.getCheckList();
           this.getAllFile();
           this.getTasks();
-          Echo.channel('update').listen('updateData',(e) => {
+          Echo.channel('updateC').listen('updateCards',(e) => {
                 this.getMemberCard();
                 this.getCheckList();
                 this.getAllFile();

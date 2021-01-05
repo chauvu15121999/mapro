@@ -14,7 +14,7 @@
 	        		</div>
 	        		<div class="col-10">
 	        			<div class="sad" style="background : #E1E4EA; width: 100%; height: 10px; border-radius: 5px; position: relative;">
-	        				<div class="processs" :style="item.style">	        			
+	        				<div class="processs"  :style="item.style">	        			
 	        				</div>
 	        			</div>        			
 	        		</div>
@@ -70,9 +70,6 @@ import item from './item.vue';
 	 		
 	 	},
 	 	updated(){
-	 	},
-	 	computed: {
-
 	 	},
 	 	methods: {
 	 		deleteCheckList(data){

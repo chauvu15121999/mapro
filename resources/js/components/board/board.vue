@@ -161,7 +161,7 @@
             Echo.channel('chat').listen('MessageSent',(e) => {
                this.isShowChat = true;  // load lại dữ liệu  
             });
-            Echo.channel('update').listen('updateData',(e) => {
+            Echo.channel('updateB').listen('updateBoards',(e) => {
                 this.getInfoBoard();
                 this.getMember();
                 // load lại dữ liệu  
