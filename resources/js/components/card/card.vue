@@ -113,6 +113,10 @@ import infoCard from './infoCard'
     	},
       created(){
         this.getCards();
+          Echo.channel('update').listen('updateData',(e) => {
+                this.getCards();
+                // load lại dữ liệu  
+          });
       },	 
     	methods : {
         getCards(){
@@ -135,6 +139,7 @@ import infoCard from './infoCard'
             this.$emit('close');
           });
         },
+        // Thay đổi vị trí của thẻ
         checkMove(id_list){
           setTimeout(() => this.cards.map((card,index) =>{
                 card.order = index + 1;
@@ -145,6 +150,7 @@ import infoCard from './infoCard'
                 // console.log(this.cards);
               }), 500);
         },
+        // Kiểm tra xem có thẻ nào vừa đc thêm vô không
         onAdd(e , id_list){
           let id = e.item.getAttribute("data-id");
           axios.post('changeListOfCard/'+id,{

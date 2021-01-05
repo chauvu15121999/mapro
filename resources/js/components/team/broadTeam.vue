@@ -11,19 +11,7 @@
             <div class="row">
               <div  class="broads mr-3 mt-3 col-sm-2">
                  <p>aaa</p>
-              </div>
-              <div class="col-sm-2 mr-3 mt-3 broads">
-                <p>aaa</p>
-              </div>
-              <div class="col-sm-2 mr-3 mt-3 broads">
-                <p>aaa</p>
-              </div>
-              <div class="col-sm-2 mr-3 mt-3 broads">
-                <p>aaa</p>
-              </div>
-              <div class="col-sm-2 mr-3 mt-3 broads">
-                <p>aaa</p>
-              </div> 
+              </div>      
             </div>                   
       </div>
     </div>
@@ -37,7 +25,7 @@
 </style>
 <script>
     export default {
-        props: [],
+        props: ['team'],
         components: {
            
         },
@@ -50,7 +38,9 @@
             
         },
         methods: {
-            
+            getBoards(){
+              this.get('getBoards')
+            }
         }
         
     }

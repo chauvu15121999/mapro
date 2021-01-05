@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\typeteam;
+use App\Models\boards;
 use Illuminate\Support\Facades\Auth; // dùng auth để đăng nhập
 use Illuminate\Support\Str;
 use DB;

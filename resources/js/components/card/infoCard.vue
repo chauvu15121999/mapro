@@ -309,6 +309,12 @@
           this.getCheckList();
           this.getAllFile();
           this.getTasks();
+          Echo.channel('update').listen('updateData',(e) => {
+                this.getMemberCard();
+                this.getCheckList();
+                this.getAllFile();
+                this.getTasks(); // load lại dữ liệu  
+          });
         },
         updated(){
           this.checkMembers();

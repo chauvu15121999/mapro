@@ -16,6 +16,7 @@ use Avatar;
 use App\Http\Controllers\MailController;
 use Carbon\Carbon;
 use App\Events\MessageSent;
+use App\Events\UpdateData;
 class BoardController extends Controller
 {
        public function showBoard($id)
@@ -60,6 +61,9 @@ class BoardController extends Controller
                     'background.url' => $url,
                     )
           );
+          $time = Carbon::now();
+          $mess = 'đã cập nhật background bảng vào lúc: '.$time;
+          Broadcast(new UpdateData(Auth::user(),$mess));
       }
 // Thêm bảng ------------------------------------------------------------------------------
       public function AddBoards(Request $Request)
@@ -87,6 +91,9 @@ class BoardController extends Controller
       	$board->status = $Request->status;
         $board->message = [];
       	$board->save();
+          $time = Carbon::now();
+          $mess = 'đã thêm bảng '. $board->board_name .' vào lúc: '.$time;
+          Broadcast(new UpdateData(Auth::user(),$mess));
         return redirect('b/'.$board->id.'/'.$board->board_name);
       }
       public function getAllBoards()
@@ -105,8 +112,12 @@ class BoardController extends Controller
       {
         # code...
          $board = Boards::find($id);
+          $time = Carbon::now();
+        $mess = 'đã thay đổi tên bảng '. $board->board_name .' thành '. $Request->name .' vào lúc: '.$time;
+        Broadcast(new UpdateData(Auth::user(),$mess));
          $board->board_name = $Request->name;
          $board->save();
+           
       }
       public function InviteMember(Request $Request,$id)
       {
@@ -142,6 +153,9 @@ class BoardController extends Controller
             $link = url()->previous(); //
             $result = new MailController(); // gọi tới hàm gửi  lấy địa chỉ url hiện tại mail
             $result = $result->board_mail($Request->members,$link,$user);
+        $time = Carbon::now();
+        $mess = 'đã mời '. $Request->members .' vào bảng  vào lúc: '.$time;
+        Broadcast(new UpdateData(Auth::user(),$mess));
             return response()->json($this->getMemBer($id));
           }else{
             $err = array('errors' => array("người này đã tồn tại"));
@@ -177,6 +191,9 @@ class BoardController extends Controller
               }   
             }
         }
+        $time = Carbon::now();
+        $mess = '';
+        Broadcast(new UpdateData(Auth::user(),$mess));
       }
       // removeMember
       public function removeMember(Request $Request,$id)
@@ -194,6 +211,10 @@ class BoardController extends Controller
         }
         $b->members = $member;
         $b->save();
+        // Realtime
+        $time = Carbon::now();
+        $mess = $members['user_email'] . 'đã rời  bảng  vào lúc: '.$time;
+        Broadcast(new UpdateData(Auth::user(),$mess));
         // Xóa member trong bảng
         $listCart = listCart::where('board',$id)->get();
           foreach($listCart as $key => $value){
@@ -215,6 +236,9 @@ class BoardController extends Controller
           }
           listCart::where('board',$id)->delete();
           $board->delete();
+          $time = Carbon::now();
+          $mess = '';
+          Broadcast(new UpdateData(Auth::user(),$mess));
           return redirect('home/'.Auth::user()->user_name.'/dashboard.html');
 
       }

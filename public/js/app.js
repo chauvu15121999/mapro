@@ -2642,6 +2642,12 @@ __webpack_require__.r(__webpack_exports__);
     Echo.channel('chat').listen('MessageSent', function (e) {
       _this.isShowChat = true; // load lại dữ liệu  
     });
+    Echo.channel('update').listen('updateData', function (e) {
+      _this.getInfoBoard();
+
+      _this.getMember(); // load lại dữ liệu  
+
+    });
   },
   updated: function updated() {
     this.getUser();
@@ -3612,18 +3618,24 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
+    var _this = this;
+
     this.getCards();
+    Echo.channel('update').listen('updateData', function (e) {
+      _this.getCards(); // load lại dữ liệu  
+
+    });
   },
   methods: {
     getCards: function getCards() {
-      var _this = this;
+      var _this2 = this;
 
       axios.get('getAllCard/' + this.list._id, {}).then(function (response) {
-        _this.cards = response.data;
+        _this2.cards = response.data;
       });
     },
     handleAddCard: function handleAddCard() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.post('addCard', {
         cart_name: this.inputNameCard,
@@ -3632,28 +3644,30 @@ __webpack_require__.r(__webpack_exports__);
         board: this.board._id,
         position: this.addCard.checkPosition
       }).then(function (response) {
-        _this2.getCards();
+        _this3.getCards();
 
-        _this2.inputNameCard = '';
+        _this3.inputNameCard = '';
 
-        _this2.$emit('close');
+        _this3.$emit('close');
       });
     },
+    // Thay đổi vị trí của thẻ
     checkMove: function checkMove(id_list) {
-      var _this3 = this;
+      var _this4 = this;
 
       setTimeout(function () {
-        return _this3.cards.map(function (card, index) {
+        return _this4.cards.map(function (card, index) {
           card.order = index + 1;
         });
       }, 500);
       setTimeout(function () {
         return axios.post('updatePositionCard', {
-          cards: _this3.cards
+          cards: _this4.cards
         }).then(function (response) {// console.log(this.cards);
         });
       }, 500);
     },
+    // Kiểm tra xem có thẻ nào vừa đc thêm vô không
     onAdd: function onAdd(e, id_list) {
       var id = e.item.getAttribute("data-id");
       axios.post('changeListOfCard/' + id, {
@@ -4063,10 +4077,22 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
+    var _this = this;
+
     this.getMemberCard();
     this.getCheckList();
     this.getAllFile();
     this.getTasks();
+    Echo.channel('update').listen('updateData', function (e) {
+      _this.getMemberCard();
+
+      _this.getCheckList();
+
+      _this.getAllFile();
+
+      _this.getTasks(); // load lại dữ liệu  
+
+    });
   },
   updated: function updated() {
     this.checkMembers();
@@ -4091,32 +4117,32 @@ __webpack_require__.r(__webpack_exports__);
     },
     // Thay đổi tên
     changeNameCard: function changeNameCard() {
-      var _this = this;
+      var _this2 = this;
 
       axios.post('changeNameCard/' + this.card._id, {
         name: this.card.card_name
       }).then(function (response) {
-        _this.$emit('updateCard');
+        _this2.$emit('updateCard');
       });
     },
     // Lấy danh sách member
     getMemberCard: function getMemberCard() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get('getMemberCard/' + this.card._id, {}).then(function (response) {
-        _this2.Members.getMembers = response.data;
+        _this3.Members.getMembers = response.data;
 
-        _this2.$emit('updateCard');
+        _this3.$emit('updateCard');
       });
     },
     // Hàm tham gia card
     Join: function Join() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.post('joinCard/' + this.card._id, {
         user: this.user
       }).then(function (response) {
-        _this3.getMemberCard();
+        _this4.getMemberCard();
       });
     },
     // hàm mở tab mời 
@@ -4152,12 +4178,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     // Lấy tất cả các checklist
     getCheckList: function getCheckList() {
-      var _this4 = this;
+      var _this5 = this;
 
       axios.get('getCheckList/' + this.card._id, {}).then(function (response) {
-        _this4.checkList.checkLists = response.data;
+        _this5.checkList.checkLists = response.data;
 
-        _this4.$emit('updateCard');
+        _this5.$emit('updateCard');
       });
     },
     hanldeDeleteCheckList: function hanldeDeleteCheckList(data) {
@@ -4167,13 +4193,13 @@ __webpack_require__.r(__webpack_exports__);
       this.$refs.fileInputAttachment.click();
     },
     hanldeAddAttchment: function hanldeAddAttchment(e) {
-      var _this5 = this;
+      var _this6 = this;
 
       this.files.fileUpload = this.$refs.fileInputAttachment.files[0];
       var data = new FormData();
       data.append('files', this.files.fileUpload);
       axios.post("uploadFiles/" + this.card._id, data).then(function (response) {
-        _this5.getAllFile();
+        _this6.getAllFile();
       })["catch"](function (err) {
         if (err.response.status === 413) {
           alert("File quá lớn , kích cỡ tối đa là 10MB");
@@ -4181,12 +4207,12 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     getAllFile: function getAllFile() {
-      var _this6 = this;
+      var _this7 = this;
 
       axios.get('getAllFile/' + this.card._id).then(function (response) {
-        _this6.files.getFiles = response.data;
+        _this7.files.getFiles = response.data;
 
-        _this6.$emit('updateCard');
+        _this7.$emit('updateCard');
       });
     },
     hanldeShowAddTask: function hanldeShowAddTask(e) {
@@ -4195,23 +4221,23 @@ __webpack_require__.r(__webpack_exports__);
       this.task.style.left = e.pageX + 'px';
     },
     getTasks: function getTasks() {
-      var _this7 = this;
+      var _this8 = this;
 
       axios.get('getTask/' + this.card._id).then(function (response) {
-        _this7.task.tasks = response.data;
+        _this8.task.tasks = response.data;
 
-        _this7.$emit('updateCard');
+        _this8.$emit('updateCard');
       });
     },
     remove: function remove() {
-      var _this8 = this;
+      var _this9 = this;
 
       if (this.user._id === this.card.by_user) {
         if (confirm("Bạn có muốn xóa thẻ này ?")) {
           axios.get('removeCard/' + this.card._id).then(function (response) {
-            _this8.$emit('close');
+            _this9.$emit('close');
 
-            _this8.$emit('updateCard');
+            _this9.$emit('updateCard');
           });
         }
       } else {
@@ -4450,6 +4476,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function created() {},
   updated: function updated() {},
+  computed: {},
   methods: {
     deleteCheckList: function deleteCheckList(data) {
       var _this = this;
@@ -4603,46 +4630,52 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
+    var _this = this;
+
     this.getAllItem();
+    Echo.channel('update').listen('updateData', function (e) {
+      _this.getAllItem(); // load lại dữ liệu  
+
+    });
   },
   updated: function updated() {
     this.hanldeFinishItem();
   },
   methods: {
     addItem: function addItem(data) {
-      var _this = this;
+      var _this2 = this;
 
       axios.post('addItem/' + this.checkList._id, {
         name: this.item.inputAdd
       }).then(function (response) {
-        _this.item.isShowAddItem = false;
-        _this.item.inputAdd = '';
+        _this2.item.isShowAddItem = false;
+        _this2.item.inputAdd = '';
 
-        _this.getAllItem();
+        _this2.getAllItem();
 
         setTimeout(function () {
-          return _this.$emit('hanldeFinishItem', _this.item.items);
+          return _this2.$emit('hanldeFinishItem', _this2.item.items);
         }, 500);
       });
     },
     getAllItem: function getAllItem() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get('getItem/' + this.checkList._id, {}).then(function (response) {
-        _this2.item.items = response.data;
+        _this3.item.items = response.data;
       });
     },
     actived: function actived(e, data) {
-      var _this3 = this;
+      var _this4 = this;
 
       axios.post('changeActived/' + this.checkList._id, {
         active: e.target.value,
         data: data
       }).then(function (response) {
-        _this3.getAllItem();
+        _this4.getAllItem();
 
         setTimeout(function () {
-          return _this3.$emit('hanldeFinishItem', _this3.item.items);
+          return _this4.$emit('hanldeFinishItem', _this4.item.items);
         }, 500);
       });
     },
@@ -4663,16 +4696,16 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     deleteItem: function deleteItem(data) {
-      var _this4 = this;
+      var _this5 = this;
 
       if (confirm("Do you really want to delete?")) {
         axios.post('deleteItem/' + this.checkList._id, {
           item: data
         }).then(function (response) {
-          _this4.getAllItem();
+          _this5.getAllItem();
 
           setTimeout(function () {
-            return _this4.$emit('hanldeFinishItem', _this4.item.items);
+            return _this5.$emit('hanldeFinishItem', _this5.item.items);
           }, 500);
         });
       }
@@ -4856,8 +4889,15 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
+    var _this = this;
+
     this.getListTeam();
     this.getAllBoards();
+    Echo.channel('update').listen('updateData', function (e) {
+      // this.getListTeam();
+      _this.getAllBoards(); // load lại dữ liệu  
+
+    });
   },
   methods: {
     //Thêm nhóm
@@ -4866,19 +4906,19 @@ __webpack_require__.r(__webpack_exports__);
     },
     // lấy danh sách team
     getListTeam: function getListTeam() {
-      var _this = this;
+      var _this2 = this;
 
       axios.get('getAllTeam').then(function (response) {
-        _this.list_teams = response.data;
+        _this2.list_teams = response.data;
       })["catch"](function (error) {
-        _this.errors = error.response.data.errors.name;
+        _this2.errors = error.response.data.errors.name;
       });
     },
     getAllBoards: function getAllBoards() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get('getAllBoards').then(function (response) {
-        _this2.boards = response.data;
+        _this3.boards = response.data;
       });
     },
     redirect: function redirect(id, name) {
@@ -5116,7 +5156,13 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
+    var _this = this;
+
     this.getAll();
+    Echo.channel('update').listen('updateData', function (e) {
+      _this.getAll(); // load lại dữ liệu  
+
+    });
   },
   updated: function updated() {
     this.change();
@@ -5133,33 +5179,33 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     addList: function addList() {
-      var _this = this;
+      var _this2 = this;
 
       axios.post('addList', {
         id_board: this.board._id,
         user: this.user._id,
         list_name: this.inputNameList
       }).then(function (response) {
-        _this.getAll();
+        _this2.getAll();
 
-        _this.inputNameList = '';
+        _this2.inputNameList = '';
       });
     },
     getAll: function getAll() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios.get('getAllList/' + this.board._id, {}).then(function (response) {
-        _this2.lists = response.data;
+        _this3.lists = response.data;
       });
     },
     chageNameList: function chageNameList(event, id_list) {
-      var _this3 = this;
+      var _this4 = this;
 
       if (event.target.value != '') {
         axios.post('chanNameList/' + id_list, {
           name: event.target.value
         }).then(function (response) {
-          _this3.getAll();
+          _this4.getAll();
         });
       } else {
         this.getAll();
@@ -5178,16 +5224,16 @@ __webpack_require__.r(__webpack_exports__);
       this.getAll();
     },
     checkMove: function checkMove(e) {
-      var _this4 = this;
+      var _this5 = this;
 
       setTimeout(function () {
-        return _this4.lists.map(function (list, index) {
+        return _this5.lists.map(function (list, index) {
           list.order = index + 1;
         });
       }, 500);
       setTimeout(function () {
-        return axios.post('updatePositionList/' + _this4.board._id, {
-          lists: _this4.lists
+        return axios.post('updatePositionList/' + _this5.board._id, {
+          lists: _this5.lists
         }).then(function (response) {
           console.log(response.data);
         });
@@ -5783,26 +5829,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: [],
+  props: ['team'],
   components: {},
   data: function data() {
     return {};
   },
   created: function created() {},
-  methods: {}
+  methods: {
+    getBoards: function getBoards() {
+      this.get('getBoards');
+    }
+  }
 });
 
 /***/ }),
@@ -78527,7 +78565,7 @@ var render = function() {
     "div",
     { staticClass: "checkList" },
     _vm._l(_vm.checkLists, function(checkList) {
-      return _c("div", { staticClass: "row mb-2" }, [
+      return _c("div", { key: checkList._id, staticClass: "row mb-2" }, [
         _c("div", { staticClass: "col-9" }, [
           _c("h4", { staticStyle: { "font-weight": "blod" } }, [
             _c("i", { staticClass: "mdi mdi-checkbox-marked-outline" }),
@@ -80170,22 +80208,6 @@ var staticRenderFns = [
           _vm._v(" "),
           _c("div", { staticClass: "row" }, [
             _c("div", { staticClass: "broads mr-3 mt-3 col-sm-2" }, [
-              _c("p", [_vm._v("aaa")])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-sm-2 mr-3 mt-3 broads" }, [
-              _c("p", [_vm._v("aaa")])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-sm-2 mr-3 mt-3 broads" }, [
-              _c("p", [_vm._v("aaa")])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-sm-2 mr-3 mt-3 broads" }, [
-              _c("p", [_vm._v("aaa")])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-sm-2 mr-3 mt-3 broads" }, [
               _c("p", [_vm._v("aaa")])
             ])
           ])

@@ -8,7 +8,7 @@ use App\Models\checkList;
 use Carbon\Carbon; // dùng auth để đăng nhập
 use Illuminate\Http\Request;
 use Auth;
-use Mail;
+use App\Events\UpdateData; // realtime
 class taskController extends Controller
 {
     //
@@ -46,6 +46,9 @@ class taskController extends Controller
  			'time' => $time , 'date' => $date, 'reminder' => $reminder , 'option' => $request->reminder, 'active' => 0 ,
  		];
  		$card->save();
+        $time = Carbon::now();
+        $mess = 'đã thêm task '.$card->card_name.' này vào lúc'.$time;
+        Broadcast(new UpdateData(Auth::user(),$mess));
     }
     function changeActived(Request $request,$id_card)
     {
@@ -54,12 +57,18 @@ class taskController extends Controller
 		$users->toQuery()->update([
 		    'tasks.active' => $request->active,
 		]);
+        $time = Carbon::now();
+        $mess = '';
+        Broadcast(new UpdateData(Auth::user(),$mess));
     }
     function revokeTask($id_card)
     {
     	$card = cards::find($id_card);
  		$card->tasks= null;
  		$card->save();
+        $time = Carbon::now();
+        $mess = 'đã xóa task '.$card->card_name.' này vào lúc'.$time;
+        Broadcast(new UpdateData(Auth::user(),$mess));
     }
 
 }

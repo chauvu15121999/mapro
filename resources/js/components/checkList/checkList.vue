@@ -1,6 +1,6 @@
 <template>
 	<div class="checkList">
-		<div v-for="checkList in checkLists" class="row mb-2">
+		<div v-for="checkList in checkLists" :key="checkList._id" class="row mb-2">
 			<div  class="col-9">
 	            <h4 style="font-weight: blod;"><i class="mdi mdi-checkbox-marked-outline"></i> {{checkList.checkList_name}}</h4>
         	</div>
@@ -67,8 +67,12 @@ import item from './item.vue';
 	 		}
 	 	},
 	 	created(){
+	 		
 	 	},
 	 	updated(){
+	 	},
+	 	computed: {
+
 	 	},
 	 	methods: {
 	 		deleteCheckList(data){

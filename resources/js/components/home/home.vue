@@ -163,6 +163,11 @@
         created() {
             this.getListTeam();
             this.getAllBoards();
+            Echo.channel('update').listen('updateData',(e) => {
+                // this.getListTeam();
+                this.getAllBoards();
+                // load lại dữ liệu  
+            });
         },
         methods: {
             //Thêm nhóm

@@ -8,7 +8,7 @@ use App\Models\checkList;
 use Carbon\Carbon; // dùng auth để đăng nhập
 use Illuminate\Http\Request;
 use Auth;
-
+use App\Events\UpdateData; // realtime
 class checkListController extends Controller
 {
     //
@@ -26,6 +26,9 @@ class checkListController extends Controller
 		$checkList->time_duo = [];
 		$checkList->save();
 		cards::find($id_card)->push('checkList',$checkList->_id);
+		$time = Carbon::now();
+        $mess = 'đã thêm checkList '.$checkList->checkList_name.' này vào lúc'.$time;
+        Broadcast(new UpdateData(Auth::user(),$mess));
 	}
 
 	function getCheckList($id_card)
@@ -35,7 +38,11 @@ class checkListController extends Controller
 	}
 	function deleteCheckList($id,$id_card)
 	{
-		checkList::find($id)->delete();
+		$checkList = checkList::find($id);
+		$time = Carbon::now();
+        $mess = 'đã xóa checkList '.$checkList->checkList_name.' này vào lúc'.$time;
+        Broadcast(new UpdateData(Auth::user(),$mess));
+        checkList::find($id)->delete();
 		cards::find($id_card)->pull('checkList',$id);
 	}
 	function addItem(Request $Request , $id_checklist)
@@ -48,7 +55,10 @@ class checkListController extends Controller
 		$id = count($count[0]->item) + 1; 
 		$name = $Request->name ; 
 		$item = array('id' => $id ,'name' => $name , 'active' => 0);
-		checkList::find($id_checklist)->push('item',$item);
+		$time = Carbon::now();
+        $mess = '';
+        Broadcast(new UpdateData(Auth::user(),$mess));
+		checkList::find($id_checklist)->push('item',$item);	
 	}
 	function getItem($id_checklist)
 	{
@@ -71,6 +81,9 @@ class checkListController extends Controller
 			}
 		$t->item = $items;
 		$t->save();
+		$time = Carbon::now();
+        $mess = '';
+        Broadcast(new UpdateData(Auth::user(),$mess));
 	}
 	function deleteItem(Request $Request,$id_checklist){
 	$item = checkList::where('_id',$id_checklist)->get();
@@ -82,5 +95,8 @@ class checkListController extends Controller
 				}
 			}
 	checkList::where('_id', $id_checklist)->update(['item' => $items]);
+		$time = Carbon::now();
+        $mess = '';
+         Broadcast(new UpdateData(Auth::user(),$mess));
 	}
 }

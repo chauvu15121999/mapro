@@ -119,6 +119,10 @@
 	 	},
 	 	created(){
 	 		this.getAllItem();
+	 		 Echo.channel('update').listen('updateData',(e) => {
+                this.getAllItem();
+                // load lại dữ liệu  
+          });
 	 		
 	 	},
 	 	updated(){
