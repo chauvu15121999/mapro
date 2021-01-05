@@ -77,6 +77,7 @@
                 v-if="isShowMenu == true"
                 :stylist="styleList"
                 :list = "getList"
+                :user="user"
                 v-on:removeList="removeList()"
                 @close="isShowMenu = false"
                 v-on:addCard="addCard"

@@ -138,7 +138,7 @@
 <script>
     import background from './listBackgroud.vue'
     export default {
-        props: ['member','board'],
+        props: ['member','board','users'],
         components: {
           background
         },
@@ -178,10 +178,15 @@
             })
           },
           remove(){
-            if(confirm("Bạn có chắc chắn muốn xóa ? ")){
+            if(this.users.role == 1){
+              if(confirm("Bạn có chắc chắn muốn xóa ? ")){
                 window.location.assign('removeBoards/'+this.board._id);
               }
+            }else{
+              alert("chỉ có admin mới có quyền xóa bảng này")
             }
+          }
+            
         },
         
 

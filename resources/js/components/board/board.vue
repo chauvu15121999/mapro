@@ -46,6 +46,7 @@
           v-if="isShowMenu == true"
           :member="Member.getMembers"
           :board="board"
+          :users="users"
           v-on:updateBackground="updateBackground()"
           v-on:close="isShowMenu = false"/>
         <chat 
@@ -167,12 +168,10 @@
         methods: {
           // Lấy user 
            getUser(){
-                var test = 0;
                 for(var i = 0; i < this.Member.getMembers.length; i ++){
                     if (this.Member.getMembers[i].user_email == this.user.email)
                     {
                         this.users =  this.Member.getMembers[i];
-                          test = 1;
                     }
                 }
             },

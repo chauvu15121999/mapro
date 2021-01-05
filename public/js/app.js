@@ -2589,6 +2589,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -2648,12 +2649,9 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     // Lấy user 
     getUser: function getUser() {
-      var test = 0;
-
       for (var i = 0; i < this.Member.getMembers.length; i++) {
         if (this.Member.getMembers[i].user_email == this.user.email) {
           this.users = this.Member.getMembers[i];
-          test = 1;
         }
       }
     },
@@ -3280,7 +3278,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['member', 'board'],
+  props: ['member', 'board', 'users'],
   components: {
     background: _listBackgroud_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
@@ -3325,8 +3323,12 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     remove: function remove() {
-      if (confirm("Bạn có chắc chắn muốn xóa ? ")) {
-        window.location.assign('removeBoards/' + this.board._id);
+      if (this.users.role == 1) {
+        if (confirm("Bạn có chắc chắn muốn xóa ? ")) {
+          window.location.assign('removeBoards/' + this.board._id);
+        }
+      } else {
+        alert("chỉ có admin mới có quyền xóa bảng này");
       }
     }
   }
@@ -4204,12 +4206,16 @@ __webpack_require__.r(__webpack_exports__);
     remove: function remove() {
       var _this8 = this;
 
-      if (confirm("Bạn có muốn xóa thẻ này ?")) {
-        axios.get('removeCard/' + this.card._id).then(function (response) {
-          _this8.$emit('close');
+      if (this.user._id === this.card.by_user) {
+        if (confirm("Bạn có muốn xóa thẻ này ?")) {
+          axios.get('removeCard/' + this.card._id).then(function (response) {
+            _this8.$emit('close');
 
-          _this8.$emit('updateCard');
-        });
+            _this8.$emit('updateCard');
+          });
+        }
+      } else {
+        alert("chỉ có người tạo mới có thể xóa thẻ này !");
       }
     }
   }
@@ -5079,6 +5085,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -5242,7 +5249,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['stylist', 'list'],
+  props: ['stylist', 'list', 'user'],
   components: {},
   data: function data() {
     return {};
@@ -5252,11 +5259,17 @@ __webpack_require__.r(__webpack_exports__);
     deleteList: function deleteList() {
       var _this = this;
 
-      axios.get('removeList/' + this.list._id).then(function (response) {
-        console.log(response.data);
+      if (this.user._id === this.list.by_user) {
+        if (confirm("Bạn có muốn list thẻ này ?")) {
+          axios.get('removeList/' + this.list._id).then(function (response) {
+            console.log(response.data);
 
-        _this.$emit('removeList');
-      });
+            _this.$emit('removeList');
+          });
+        }
+      } else {
+        alert("chỉ có người tạo mới có thể list thẻ này !");
+      }
     },
     addCart: function addCart(position) {
       var data = {
@@ -11236,7 +11249,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* width */\n::-webkit-scrollbar {\r\n  width: 10px;\n}\r\n\r\n/* Track */\n::-webkit-scrollbar-track {\r\n  box-shadow: inset 0 0 5px grey; \r\n  border-radius: 10px;\n}\r\n \r\n/* Handle */\n::-webkit-scrollbar-thumb {\r\n  background: rgba(0,0,0,0.5);\r\n  border-radius: 10px;\n}\r\n\r\n/* Handle on hover */\n::-webkit-scrollbar-thumb:hover {\r\n  background: rgba(250,250,250,0.5);\n}\n.testimonial-group > .row {\r\n  overflow-x: auto;\r\n  white-space: nowrap;\r\n  min-height: 82vh;\r\n  max-height: 82vh;\r\n  /*min-width: 100%;*/\r\n  position: relative;\n}\n.testimonial-group > .row > .draggable-list > .addCard{\r\n    display: inline-block;\r\n    float: none;\n}\n.addCard{\r\n  position: relative;\r\n  padding-bottom: 20px; \r\n  padding-top: 18px;\n}\n.testimonial-group > .row >  .draggable-list{\r\n  display: inline-block;\r\n  float: none;\n}\n.testimonial-group > .row > .draggable-list > .listCard {\r\n  display: inline-block;\r\n  float: none;\n}\r\n/* Decorations */\n.listCard {\r\n  position: relative;\r\n  padding-bottom: 20px; \r\n  padding-top: 18px;\r\n  min-width: 20%;\n}\n.testimonial-group > .row > .draggable-list > .listCard > .group-lisCard{\r\n  display: inline-block;\r\n  float: none;\n}\n.group-lisCard{\r\n  background-color: #D8D3D3;\r\n  border-radius: 5px;\n}\n.body-listCard{\r\n  overflow-y: auto;\r\n  white-space: pre-line;\r\n  max-height: 65vh;\n}\n.header-lisCard-add{\r\n  cursor: pointer;\n}\n.header-lisCard-add:hover {\r\n background-color:  #CBC3C3;\n}\n.name-list{\r\n\tbackground-color: #D8D3D3;\r\n\tcolor: black;\r\n\tborder: none;\r\n\tcursor: pointer;\n}\n.name-list:focus{\r\n\tbackground-color: white;\r\n\tcolor: black;\r\n\tborder: 2px solid #5977F8;\r\n  \tborder-inline-style: solid;\n}\n.listMove{\r\n  opacity: 0.5;\r\n  background: black;\n}\r\n\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* width */\n::-webkit-scrollbar {\r\n  width: 10px;\n}\r\n\r\n/* Track */\n::-webkit-scrollbar-track {\r\n  box-shadow: inset 0 0 5px grey; \r\n  border-radius: 10px;\n}\r\n \r\n/* Handle */\n::-webkit-scrollbar-thumb {\r\n  background: rgba(0,0,0,0.5);\r\n  border-radius: 10px;\n}\r\n\r\n/* Handle on hover */\n::-webkit-scrollbar-thumb:hover {\r\n  background: rgba(250,250,250,0.5);\n}\n.testimonial-group > .row {\r\n  overflow-x: auto;\r\n  white-space: nowrap;\r\n  min-height: 82vh;\r\n  max-height: 82vh;\r\n  /*min-width: 100%;*/\r\n  position: relative;\n}\n.testimonial-group > .row > .draggable-list > .addCard{\r\n    display: inline-block;\r\n    float: none;\n}\n.addCard{\r\n  position: relative;\r\n  padding-bottom: 20px; \r\n  padding-top: 18px;\n}\n.testimonial-group > .row >  .draggable-list{\r\n  display: inline-block;\r\n  float: none;\n}\n.testimonial-group > .row > .draggable-list > .listCard {\r\n  display: inline-block;\r\n  float: none;\n}\r\n/* Decorations */\n.listCard {\r\n  position: relative;\r\n  padding-bottom: 20px; \r\n  padding-top: 18px;\r\n  min-width: 20%;\n}\n.testimonial-group > .row > .draggable-list > .listCard > .group-lisCard{\r\n  display: inline-block;\r\n  float: none;\n}\n.group-lisCard{\r\n  background-color: #D8D3D3;\r\n  border-radius: 5px;\n}\n.body-listCard{\r\n  overflow-y: auto;\r\n  white-space: pre-line;\r\n  max-height: 65vh;\n}\n.header-lisCard-add{\r\n  cursor: pointer;\n}\n.header-lisCard-add:hover {\r\n background-color:  #CBC3C3;\n}\n.name-list{\r\n\tbackground-color: #D8D3D3;\r\n\tcolor: black;\r\n\tborder: none;\r\n\tcursor: pointer;\n}\n.name-list:focus{\r\n\tbackground-color: white;\r\n\tcolor: black;\r\n\tborder: 2px solid #5977F8;\r\n  \tborder-inline-style: solid;\n}\n.listMove{\r\n  opacity: 0.5;\r\n  background: black;\n}\r\n\r\n", ""]);
 
 // exports
 
@@ -76520,7 +76533,11 @@ var render = function() {
             _vm._v(" "),
             _vm.isShowMenu == true
               ? _c("menuBoards", {
-                  attrs: { member: _vm.Member.getMembers, board: _vm.board },
+                  attrs: {
+                    member: _vm.Member.getMembers,
+                    board: _vm.board,
+                    users: _vm.users
+                  },
                   on: {
                     updateBackground: function($event) {
                       return _vm.updateBackground()
@@ -79391,7 +79408,11 @@ var render = function() {
         _vm._v(" "),
         _vm.isShowMenu == true
           ? _c("menuList", {
-              attrs: { stylist: _vm.styleList, list: _vm.getList },
+              attrs: {
+                stylist: _vm.styleList,
+                list: _vm.getList,
+                user: _vm.user
+              },
               on: {
                 removeList: function($event) {
                   return _vm.removeList()

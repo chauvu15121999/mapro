@@ -36,7 +36,7 @@
 </style>
 <script>
     export default{
-      props: ['stylist','list'],
+      props: ['stylist','list','user'],
       components: {
       },
       data(){
@@ -48,11 +48,17 @@
       },
       methods: {
         deleteList(){
+          if(this.user._id === this.list.by_user){
+        if(confirm("Bạn có muốn list thẻ này ?")){
           axios.get('removeList/'+this.list._id)
           .then(response => {
             console.log(response.data);
             this.$emit('removeList');
           });
+            }
+          }else{
+            alert("chỉ có người tạo mới có thể list thẻ này !");
+          }
         },
         addCart(position){
           var data = {

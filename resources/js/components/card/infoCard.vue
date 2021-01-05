@@ -427,12 +427,17 @@
           })
         },
         remove(){
-          if(confirm("Bạn có muốn xóa thẻ này ?")){
-            axios.get('removeCard/'+this.card._id).then(response => {
-              this.$emit('close');  
-              this.$emit('updateCard');
-            });
+          if(this.user._id === this.card.by_user){
+            if(confirm("Bạn có muốn xóa thẻ này ?")){
+              axios.get('removeCard/'+this.card._id).then(response => {
+                this.$emit('close');  
+                this.$emit('updateCard');
+              });
+            }
+          }else{
+            alert("chỉ có người tạo mới có thể xóa thẻ này !");
           }
+
         }
     }
   }
