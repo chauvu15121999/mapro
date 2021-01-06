@@ -122,7 +122,11 @@
 	 		 Echo.channel('updateC.'+this.card._id).listen('updateCards',(e) => {
                 this.getAllItem();
                 // load lại dữ liệu  
-          });
+				// axios.post('pushNoficationCard'+this.card._id,{
+    //               user : e.user,
+    //               content: e.message,
+    //             });
+          	});
 	 		
 	 	},
 	 	updated(){

@@ -119,7 +119,7 @@ import infoCard from './infoCard'
                 // load lại dữ liệu
                 // axios.post('pushNoficationBoard'+this.board._id,{
                 //   user : e.user,
-                //   content: e.mess,
+                //   content: e.message,
                 // });
           });
       },	 
@@ -132,7 +132,7 @@ import infoCard from './infoCard'
           })
         },
         handleAddCard(){
-          axios.post('addCard',{
+          axios.post('addCard/'+this.board._id,{
               cart_name: this.inputNameCard,
               list_id: this.list._id,
               user : this.user._id,
@@ -170,7 +170,7 @@ import infoCard from './infoCard'
         },
         updateCard(){
             axios.get('updateCard/'+this.board._id,{
-              
+
             });
         }
     	}

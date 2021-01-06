@@ -2645,7 +2645,11 @@ __webpack_require__.r(__webpack_exports__);
     Echo.channel('updateB.' + this.board._id).listen('updateBoards', function (e) {
       _this.getInfoBoard();
 
-      _this.getMember(); // load lại dữ liệu  
+      _this.getMember(); // load lại dữ liệu 
+      // axios.post('pushNoficationBoard'+this.board._id,{
+      //   user : e.user,
+      //   content: e.message,
+      // }); 
 
     });
   },
@@ -3626,7 +3630,7 @@ __webpack_require__.r(__webpack_exports__);
       _this.getCards(); // load lại dữ liệu
       // axios.post('pushNoficationBoard'+this.board._id,{
       //   user : e.user,
-      //   content: e.mess,
+      //   content: e.message,
       // });
 
     });
@@ -3642,7 +3646,7 @@ __webpack_require__.r(__webpack_exports__);
     handleAddCard: function handleAddCard() {
       var _this3 = this;
 
-      axios.post('addCard', {
+      axios.post('addCard/' + this.board._id, {
         cart_name: this.inputNameCard,
         list_id: this.list._id,
         user: this.user._id,
@@ -4099,9 +4103,9 @@ __webpack_require__.r(__webpack_exports__);
       _this.getAllFile();
 
       _this.getTasks(); // load lại dữ liệu
-      // axios.post('pushNoficationBoard'+this.board._id,{
+      // axios.post('pushNoficationCard'+this.card._id,{
       //   user : e.user,
-      //   content: e.mess,
+      //   content: e.message,
       // });
 
     });
@@ -4660,6 +4664,10 @@ __webpack_require__.r(__webpack_exports__);
     this.getAllItem();
     Echo.channel('updateC.' + this.card._id).listen('updateCards', function (e) {
       _this.getAllItem(); // load lại dữ liệu  
+      // axios.post('pushNoficationCard'+this.card._id,{
+      //               user : e.user,
+      //               content: e.message,
+      //             });
 
     });
   },
@@ -5185,7 +5193,11 @@ __webpack_require__.r(__webpack_exports__);
 
     this.getAll();
     Echo.channel('updateB.' + this.board._id).listen('updateBoards', function (e) {
-      _this.getAll(); // load lại dữ liệu  
+      _this.getAll(); // load lại dữ liệu 
+      // axios.post('pushNoficationBoard'+this.board._id,{
+      //   user : e.user,
+      //   content: e.message,
+      // }); 
 
     });
   },

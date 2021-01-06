@@ -214,7 +214,11 @@ import menuList from './menuList.vue'
     		this.getAll();
           Echo.channel('updateB.'+this.board._id).listen('updateBoards',(e) => {
                 this.getAll();
-                // load lại dữ liệu  
+                // load lại dữ liệu 
+                // axios.post('pushNoficationBoard'+this.board._id,{
+                //   user : e.user,
+                //   content: e.message,
+                // }); 
           });
     	},
       updated(){

@@ -315,9 +315,9 @@
                 this.getAllFile();
                 this.getTasks();
                  // load lại dữ liệu
-                // axios.post('pushNoficationBoard'+this.board._id,{
+                // axios.post('pushNoficationCard'+this.card._id,{
                 //   user : e.user,
-                //   content: e.mess,
+                //   content: e.message,
                 // });
 
           });

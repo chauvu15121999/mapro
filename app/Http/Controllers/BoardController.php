@@ -275,8 +275,10 @@ class BoardController extends Controller
         $user_name = $request->user['user_name'];
         $user_id = $request->user['_id'];
         $avatar = $request->user['avatar'];
-        $content = $request->content;
-        $nofication = array('content' => $content, 'user_name' => $user_name, 'user_id' => $user_id ,   'avatar' => $avatar);
-        Boards::find($id)->push('activity',[$chat]);
+        $content =  $user_name.' '.$request->content;
+        if($request->content != ''){
+             $nofication = array('content' => $content, 'user_name' => $user_name, 'user_id' => $user_id ,   'avatar' => $avatar);
+            Boards::find($id)->push('activity',[$nofication]);  
+        }
       }
 }
