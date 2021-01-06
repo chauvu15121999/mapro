@@ -22,7 +22,7 @@ class listController extends Controller {
 		$list->save();
 		$time = Carbon::now();
         $mess = 'đã thêm list '. $Request->list_name .' vào lúc: '.$time;
-        Broadcast(new updateBoards(Auth::user(),$mess,$Request->id_board));
+        Broadcast(new updateBoards(Auth::user(),$mess,$Request->id_board))->toOthers();
 		return response()->json($list);
 		// Realtime
 	}
@@ -38,13 +38,13 @@ class listController extends Controller {
 		$list->save();
 			$time = Carbon::now();
 	        $mess = 'đã thêm list '. $list->list_name .' vào lúc: '.$time;
-	        Broadcast(new updateBoards(Auth::user(),$mess,$list->board));
+	        Broadcast(new updateBoards(Auth::user(),$mess,$list->board))->toOthers();
 	}
 	public function remove($id){
 		$list = listCart::find($id);
 		$time = Carbon::now();
 	    $mess = 'đã xóa list '. $list->list_name .' vào lúc: '.$time;
-	    Broadcast(new updateBoards(Auth::user(),$mess,$list->board));
+	    Broadcast(new updateBoards(Auth::user(),$mess,$list->board))->toOthers();
         $card = cards::where('list_id',$id)->get();
             foreach ($card as $key => $value) {
              checkList::where('card_id',$value['_id'])->delete();
@@ -63,7 +63,7 @@ class listController extends Controller {
 			}
 		}
 		$time = Carbon::now();
-        $mess = 'list  đã thay đổi vị trí lúc '.$time;
-        Broadcast(new updateBoards(Auth::user(),$mess,$id_board));	
+        $mess = '';
+        Broadcast(new updateBoards(Auth::user(),$mess,$id_board))->toOthers();	
 	}
 }

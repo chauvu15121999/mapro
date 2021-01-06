@@ -47,6 +47,7 @@
           :member="Member.getMembers"
           :board="board"
           :users="users"
+          :nofication="nofication"
           v-on:updateBackground="updateBackground()"
           v-on:close="isShowMenu = false"/>
         <chat 
@@ -152,6 +153,7 @@
                   }],
                   isShowInfoMember: false,
                   getOneMember : '',
+                  nofication: [],
               }
           }
         },
@@ -165,9 +167,11 @@
                 this.getInfoBoard();
                 this.getMember();
                 // load lại dữ liệu 
-                // axios.post('pushNoficationBoard'+this.board._id,{
+                // axios.post('pushNoficationBoard/'+this.board._id,{
                 //   user : e.user,
                 //   content: e.message,
+                // }).then(response => {
+                //   this.getActivity();
                 // }); 
             });
         },
@@ -241,7 +245,14 @@
           },
           ShowChat(){
             this.isShowChat = !this.isShowChat;
-          }
+          },
+        //   getActivity(){
+        //   axios.get('getNoficationBoard/'+this.board._id,{
+
+        //   }).then(response =>{
+        //     this.nofication = response.data;
+        //   })
+        // }
     },
 
 }

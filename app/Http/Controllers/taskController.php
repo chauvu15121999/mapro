@@ -48,7 +48,7 @@ class taskController extends Controller
  		$card->save();
         $time = Carbon::now();
         $mess = 'đã thêm task '.$card->card_name.' này vào lúc'.$time;
-        Broadcast(new updateCards(Auth::user(),$mess,$id_card));
+        Broadcast(new updateCards(Auth::user(),$mess,$id_card))->toOthers();
     }
     function changeActived(Request $request,$id_card)
     {
@@ -59,7 +59,7 @@ class taskController extends Controller
 		]);
         $time = Carbon::now();
         $mess = '';
-        Broadcast(new updateCards(Auth::user(),$mess,$id_card));
+        Broadcast(new updateCards(Auth::user(),$mess,$id_card))->toOthers();
     }
     function revokeTask($id_card)
     {
@@ -68,7 +68,7 @@ class taskController extends Controller
  		$card->save();
         $time = Carbon::now();
         $mess = 'đã xóa task '.$card->card_name.' này vào lúc'.$time;
-        Broadcast(new updateCards(Auth::user(),$mess,$id_card));
+        Broadcast(new updateCards(Auth::user(),$mess,$id_card))->toOthers();
     }
 
 }

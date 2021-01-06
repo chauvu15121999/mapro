@@ -2590,6 +2590,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -2630,7 +2631,8 @@ __webpack_require__.r(__webpack_exports__);
           }
         }],
         isShowInfoMember: false,
-        getOneMember: ''
+        getOneMember: '',
+        nofication: []
       }
     };
   },
@@ -2646,9 +2648,11 @@ __webpack_require__.r(__webpack_exports__);
       _this.getInfoBoard();
 
       _this.getMember(); // load lại dữ liệu 
-      // axios.post('pushNoficationBoard'+this.board._id,{
+      // axios.post('pushNoficationBoard/'+this.board._id,{
       //   user : e.user,
       //   content: e.message,
+      // }).then(response => {
+      //   this.getActivity();
       // }); 
 
     });
@@ -2730,7 +2734,13 @@ __webpack_require__.r(__webpack_exports__);
     },
     ShowChat: function ShowChat() {
       this.isShowChat = !this.isShowChat;
-    }
+    } //   getActivity(){
+    //   axios.get('getNoficationBoard/'+this.board._id,{
+    //   }).then(response =>{
+    //     this.nofication = response.data;
+    //   })
+    // }
+
   }
 });
 
@@ -3628,7 +3638,7 @@ __webpack_require__.r(__webpack_exports__);
     this.getCards();
     Echo.channel('updateB.' + this.board._id).listen('updateBoards', function (e) {
       _this.getCards(); // load lại dữ liệu
-      // axios.post('pushNoficationBoard'+this.board._id,{
+      // axios.post('pushNoficationBoard/'+this.board._id,{
       //   user : e.user,
       //   content: e.message,
       // });
@@ -4106,6 +4116,8 @@ __webpack_require__.r(__webpack_exports__);
       // axios.post('pushNoficationCard'+this.card._id,{
       //   user : e.user,
       //   content: e.message,
+      // }).then(response => {
+      //   this.getActivity();
       // });
 
     });
@@ -4273,7 +4285,13 @@ __webpack_require__.r(__webpack_exports__);
     updateTask: function updateTask() {
       this.getTasks();
       this.$emit('updateCard');
-    }
+    } // getActivity(){
+    //   axios.get('getActivityCard/'+this.card._id,{
+    //   }).then(response =>{
+    //     this.nofication = response.data;
+    //   })
+    // }
+
   }
 });
 
@@ -4664,7 +4682,7 @@ __webpack_require__.r(__webpack_exports__);
     this.getAllItem();
     Echo.channel('updateC.' + this.card._id).listen('updateCards', function (e) {
       _this.getAllItem(); // load lại dữ liệu  
-      // axios.post('pushNoficationCard'+this.card._id,{
+      // axios.post('pushNoficationCard/'+this.card._id,{
       //               user : e.user,
       //               content: e.message,
       //             });
@@ -5194,7 +5212,7 @@ __webpack_require__.r(__webpack_exports__);
     this.getAll();
     Echo.channel('updateB.' + this.board._id).listen('updateBoards', function (e) {
       _this.getAll(); // load lại dữ liệu 
-      // axios.post('pushNoficationBoard'+this.board._id,{
+      // axios.post('pushNoficationBoard/'+this.board._id,{
       //   user : e.user,
       //   content: e.message,
       // }); 
@@ -76611,7 +76629,8 @@ var render = function() {
                   attrs: {
                     member: _vm.Member.getMembers,
                     board: _vm.board,
-                    users: _vm.users
+                    users: _vm.users,
+                    nofication: _vm.nofication
                   },
                   on: {
                     updateBackground: function($event) {

@@ -318,6 +318,8 @@
                 // axios.post('pushNoficationCard'+this.card._id,{
                 //   user : e.user,
                 //   content: e.message,
+                // }).then(response => {
+                //   this.getActivity();
                 // });
 
           });
@@ -470,7 +472,14 @@
         updateTask(){
            this.getTasks();
             this.$emit('updateCard');
-        }
+        },
+        // getActivity(){
+        //   axios.get('getActivityCard/'+this.card._id,{
+
+        //   }).then(response =>{
+        //     this.nofication = response.data;
+        //   })
+        // }
     }
   }
 </script>

@@ -126,7 +126,7 @@ Route::post('revokeTask/{id}','taskController@revokeTask');
 Route::get('getMess/{idBoard}','BoardController@getMess');
 Route::post('sendMess/{idBoard}','BoardController@sendMess');
 // Thông báo realtime -------------------------------------------------------
-Route::get('getNoficationBoard{id}','BoardController@getNofication');
-Route::post('pushNoficationBoard{id}','BoardController@pushNofication');
-Route::get('getNoficationCard{id}','cardController@getNofication');
-Route::post('pushNoficationCard{id}','cardController@pushNofication');
+Route::get('getNoficationBoard/{id}','BoardController@getNofication');
+Route::post('pushNoficationBoard/{id}','BoardController@pushNofication');
+Route::get('getNoficationCard/{id}','cardController@getNofication');
+Route::post('pushNoficationCard/{id}','cardController@pushNofication');

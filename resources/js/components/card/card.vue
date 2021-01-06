@@ -117,7 +117,7 @@ import infoCard from './infoCard'
           Echo.channel('updateB.'+this.board._id).listen('updateBoards',(e) => {
                 this.getCards();
                 // load lại dữ liệu
-                // axios.post('pushNoficationBoard'+this.board._id,{
+                // axios.post('pushNoficationBoard/'+this.board._id,{
                 //   user : e.user,
                 //   content: e.message,
                 // });

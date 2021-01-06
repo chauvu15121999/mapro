@@ -28,7 +28,7 @@ class checkListController extends Controller
 		cards::find($id_card)->push('checkList',$checkList->_id);
 		$time = Carbon::now();
         $mess = 'đã thêm checkList '.$checkList->checkList_name.' này vào lúc'.$time;
-        Broadcast(new updateCards(Auth::user(),$mess,$id_card));
+        Broadcast(new updateCards(Auth::user(),$mess,$id_card))->toOthers();
 	}
 
 	function getCheckList($id_card)
@@ -41,7 +41,7 @@ class checkListController extends Controller
 		$checkList = checkList::find($id);
 		$time = Carbon::now();
         $mess = 'đã xóa checkList '.$checkList->checkList_name.' này vào lúc'.$time;
-        Broadcast(new updateCards(Auth::user(),$mess,$id_card));
+        Broadcast(new updateCards(Auth::user(),$mess,$id_card))->toOthers();
         checkList::find($id)->delete();
 		cards::find($id_card)->pull('checkList',$id);
 	}
@@ -57,7 +57,7 @@ class checkListController extends Controller
 		$item = array('id' => $id ,'name' => $name , 'active' => 0);
 		$time = Carbon::now();
         $mess = '';
-        Broadcast(new updateCards(Auth::user(),$mess,$id_card));
+        Broadcast(new updateCards(Auth::user(),$mess,$id_card))->toOthers();
 		checkList::find($id_checklist)->push('item',$item);	
 	}
 	function getItem($id_checklist)
@@ -83,7 +83,7 @@ class checkListController extends Controller
 		$t->save();
 		$time = Carbon::now();
         $mess = '';
-        Broadcast(new updateCards(Auth::user(),$mess,$id_card));
+        Broadcast(new updateCards(Auth::user(),$mess,$id_card))->toOthers();
 	}
 	function deleteItem(Request $Request,$id_checklist,$id_card){
 	$item = checkList::where('_id',$id_checklist)->get();
@@ -97,6 +97,6 @@ class checkListController extends Controller
 	checkList::where('_id', $id_checklist)->update(['item' => $items]);
 		$time = Carbon::now();
         $mess = '';
-         Broadcast(new updateCards(Auth::user(),$mess,$id_card));
+         Broadcast(new updateCards(Auth::user(),$mess,$id_card))->toOthers();
 	}
 }
