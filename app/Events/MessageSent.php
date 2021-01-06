@@ -33,7 +33,7 @@ class MessageSent implements ShouldBroadcast
      *
      * @var Message
      */
-    public $message;
+    public $idBoards;
 
     /**
      * Create a new event instance.
