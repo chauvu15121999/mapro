@@ -2639,10 +2639,10 @@ __webpack_require__.r(__webpack_exports__);
 
     this.getInfoBoard();
     this.getMember();
-    Echo.channel('chat').listen('MessageSent', function (e) {
+    Echo.channel('chat.' + this.board._id).listen('MessageSent', function (e) {
       _this.isShowChat = true; // load lại dữ liệu  
     });
-    Echo.channel('updateB').listen('updateBoards', function (e) {
+    Echo.channel('updateB.' + this.board._id).listen('updateBoards', function (e) {
       _this.getInfoBoard();
 
       _this.getMember(); // load lại dữ liệu  
@@ -2901,7 +2901,7 @@ __webpack_require__.r(__webpack_exports__);
 
     this.loadMessage(); // Lắng nghe sự kiện 
 
-    Echo.channel('chat').listen('MessageSent', function (e) {
+    Echo.channel('chat.' + this.board._id).listen('MessageSent', function (e) {
       _this.loadMessage(); // load lại dữ liệu  
 
     });
@@ -3600,6 +3600,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -3621,8 +3622,12 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.getCards();
-    Echo.channel('updateC').listen('updateCards', function (e) {
-      _this.getCards(); // load lại dữ liệu  
+    Echo.channel('updateB.' + this.board._id).listen('updateBoards', function (e) {
+      _this.getCards(); // load lại dữ liệu
+      // axios.post('pushNoficationBoard'+this.board._id,{
+      //   user : e.user,
+      //   content: e.mess,
+      // });
 
     });
   },
@@ -3661,7 +3666,7 @@ __webpack_require__.r(__webpack_exports__);
         });
       }, 500);
       setTimeout(function () {
-        return axios.post('updatePositionCard', {
+        return axios.post('updatePositionCard/' + _this4.board._id, {
           cards: _this4.cards
         }).then(function (response) {// console.log(this.cards);
         });
@@ -3670,7 +3675,7 @@ __webpack_require__.r(__webpack_exports__);
     // Kiểm tra xem có thẻ nào vừa đc thêm vô không
     onAdd: function onAdd(e, id_list) {
       var id = e.item.getAttribute("data-id");
-      axios.post('changeListOfCard/' + id, {
+      axios.post('changeListOfCard/' + id + '/' + this.board._id, {
         id_list: id_list
       }).then(function (response) {// console.log('sucsesss');
       });
@@ -3678,6 +3683,9 @@ __webpack_require__.r(__webpack_exports__);
     showInfoCard: function showInfoCard(card) {
       this.InfoCard = card;
       this.isInfo = true;
+    },
+    updateCard: function updateCard() {
+      axios.get('updateCard/' + this.board._id, {});
     }
   }
 });
@@ -4017,7 +4025,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['InfoCard', 'list', 'user', 'memberBoard'],
+  props: ['InfoCard', 'list', 'user', 'memberBoard', 'board'],
   components: {
     allMember: _allMember_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     infoMember: _infoMember_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
@@ -4083,20 +4091,23 @@ __webpack_require__.r(__webpack_exports__);
     this.getCheckList();
     this.getAllFile();
     this.getTasks();
-    Echo.channel('updateC').listen('updateCards', function (e) {
+    Echo.channel('updateC.' + this.card._id).listen('updateCards', function (e) {
       _this.getMemberCard();
 
       _this.getCheckList();
 
       _this.getAllFile();
 
-      _this.getTasks(); // load lại dữ liệu  
+      _this.getTasks(); // load lại dữ liệu
+      // axios.post('pushNoficationBoard'+this.board._id,{
+      //   user : e.user,
+      //   content: e.mess,
+      // });
 
     });
   },
   updated: function updated() {
-    this.checkMembers();
-    this.changeNameCard();
+    this.checkMembers(); // this.changeNameCard();         
   },
   methods: {
     // Kiểm tra user đang đăng nhập
@@ -4116,33 +4127,30 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     // Thay đổi tên
-    changeNameCard: function changeNameCard() {
-      var _this2 = this;
-
-      axios.post('changeNameCard/' + this.card._id, {
+    changeNameCard: function changeNameCard(e) {
+      axios.post('changeNameCard/' + this.card._id + '/' + this.board._id, {
         name: this.card.card_name
-      }).then(function (response) {
-        _this2.$emit('updateCard');
+      }).then(function (response) {// this.$emit('updateCard');
       });
     },
     // Lấy danh sách member
     getMemberCard: function getMemberCard() {
-      var _this3 = this;
+      var _this2 = this;
 
       axios.get('getMemberCard/' + this.card._id, {}).then(function (response) {
-        _this3.Members.getMembers = response.data;
-
-        _this3.$emit('updateCard');
+        _this2.Members.getMembers = response.data;
       });
     },
     // Hàm tham gia card
     Join: function Join() {
-      var _this4 = this;
+      var _this3 = this;
 
       axios.post('joinCard/' + this.card._id, {
         user: this.user
       }).then(function (response) {
-        _this4.getMemberCard();
+        _this3.getMemberCard();
+
+        _this3.$emit('updateCard');
       });
     },
     // hàm mở tab mời 
@@ -4178,28 +4186,30 @@ __webpack_require__.r(__webpack_exports__);
     },
     // Lấy tất cả các checklist
     getCheckList: function getCheckList() {
-      var _this5 = this;
+      var _this4 = this;
 
       axios.get('getCheckList/' + this.card._id, {}).then(function (response) {
-        _this5.checkList.checkLists = response.data;
-
-        _this5.$emit('updateCard');
+        _this4.checkList.checkLists = response.data;
       });
     },
+    // Hàm nhận xóa checklist
     hanldeDeleteCheckList: function hanldeDeleteCheckList(data) {
       this.getCheckList();
+      this.$emit('updateCard');
     },
     hanldeRef: function hanldeRef(e) {
       this.$refs.fileInputAttachment.click();
     },
     hanldeAddAttchment: function hanldeAddAttchment(e) {
-      var _this6 = this;
+      var _this5 = this;
 
       this.files.fileUpload = this.$refs.fileInputAttachment.files[0];
       var data = new FormData();
       data.append('files', this.files.fileUpload);
       axios.post("uploadFiles/" + this.card._id, data).then(function (response) {
-        _this6.getAllFile();
+        _this5.getAllFile();
+
+        _this5.$emit('updateCard');
       })["catch"](function (err) {
         if (err.response.status === 413) {
           alert("File quá lớn , kích cỡ tối đa là 10MB");
@@ -4207,12 +4217,10 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     getAllFile: function getAllFile() {
-      var _this7 = this;
+      var _this6 = this;
 
       axios.get('getAllFile/' + this.card._id).then(function (response) {
-        _this7.files.getFiles = response.data;
-
-        _this7.$emit('updateCard');
+        _this6.files.getFiles = response.data;
       });
     },
     hanldeShowAddTask: function hanldeShowAddTask(e) {
@@ -4221,28 +4229,46 @@ __webpack_require__.r(__webpack_exports__);
       this.task.style.left = e.pageX + 'px';
     },
     getTasks: function getTasks() {
-      var _this8 = this;
+      var _this7 = this;
 
       axios.get('getTask/' + this.card._id).then(function (response) {
-        _this8.task.tasks = response.data;
-
-        _this8.$emit('updateCard');
+        _this7.task.tasks = response.data;
       });
     },
     remove: function remove() {
-      var _this9 = this;
+      var _this8 = this;
 
       if (this.user._id === this.card.by_user) {
         if (confirm("Bạn có muốn xóa thẻ này ?")) {
           axios.get('removeCard/' + this.card._id).then(function (response) {
-            _this9.$emit('close');
+            _this8.$emit('close');
 
-            _this9.$emit('updateCard');
+            _this8.$emit('updateCard');
           });
         }
       } else {
         alert("chỉ có người tạo mới có thể xóa thẻ này !");
       }
+    },
+    handleCheckMember: function handleCheckMember() {
+      this.getMemberCard();
+      this.$emit('updateCard');
+    },
+    hanldeAddCheckList: function hanldeAddCheckList() {
+      this.getCheckList();
+      this.$emit('updateCard');
+    },
+    hanldeAddTask: function hanldeAddTask() {
+      this.getTasks();
+      this.$emit('updateCard');
+    },
+    handleDeleteFile: function handleDeleteFile() {
+      this.getAllFile();
+      this.$emit('updateCard');
+    },
+    updateTask: function updateTask() {
+      this.getTasks();
+      this.$emit('updateCard');
     }
   }
 });
@@ -4632,7 +4658,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.getAllItem();
-    Echo.channel('update').listen('updateData', function (e) {
+    Echo.channel('updateC.' + this.card._id).listen('updateCards', function (e) {
       _this.getAllItem(); // load lại dữ liệu  
 
     });
@@ -4644,7 +4670,7 @@ __webpack_require__.r(__webpack_exports__);
     addItem: function addItem(data) {
       var _this2 = this;
 
-      axios.post('addItem/' + this.checkList._id, {
+      axios.post('addItem/' + this.checkList._id + '/' + this.card._id, {
         name: this.item.inputAdd
       }).then(function (response) {
         _this2.item.isShowAddItem = false;
@@ -4667,7 +4693,7 @@ __webpack_require__.r(__webpack_exports__);
     actived: function actived(e, data) {
       var _this4 = this;
 
-      axios.post('changeActived/' + this.checkList._id, {
+      axios.post('changeActived/' + this.checkList._id + '/' + this.card._id, {
         active: e.target.value,
         data: data
       }).then(function (response) {
@@ -4698,7 +4724,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this5 = this;
 
       if (confirm("Do you really want to delete?")) {
-        axios.post('deleteItem/' + this.checkList._id, {
+        axios.post('deleteItem/' + this.checkList._id + '/' + this.card._id, {
           item: data
         }).then(function (response) {
           _this5.getAllItem();
@@ -4892,7 +4918,7 @@ __webpack_require__.r(__webpack_exports__);
 
     this.getListTeam();
     this.getAllBoards();
-    Echo.channel('update').listen('updateData', function (e) {
+    Echo.channel('updateB').listen('updateBoards', function (e) {
       // this.getListTeam();
       _this.getAllBoards(); // load lại dữ liệu  
 
@@ -5158,7 +5184,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.getAll();
-    Echo.channel('updateB').listen('updateBoards', function (e) {
+    Echo.channel('updateB.' + this.board._id).listen('updateBoards', function (e) {
       _this.getAll(); // load lại dữ liệu  
 
     });
@@ -11134,7 +11160,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* width */\n.add-Card{\r\n  border-width: 1px;\r\n  border-style: outset;\n}\n.addCard_input::-moz-placeholder {\r\n  color: #BFBDBD;\n}\n.addCard_input:-ms-input-placeholder {\r\n  color: #BFBDBD;\n}\n.addCard_input::placeholder {\r\n  color: #BFBDBD;\n}\n.card{\r\n  border-width: 1px;\r\n  border-style: outset;\r\n  background-color: white;\r\n  cursor: pointer;\n}\n.card:hover {\r\n  background-color: #F7F7F7;\n}\n.cardMove{\r\n    opacity: 0.5;\r\n  background: black;\n}\r\n\r\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\r\n/* width */\n.add-Card{\r\n  border-width: 1px;\r\n  border-style: outset;\n}\n.addCard_input::-moz-placeholder {\r\n  color: #BFBDBD;\n}\n.addCard_input:-ms-input-placeholder {\r\n  color: #BFBDBD;\n}\n.addCard_input::placeholder {\r\n  color: #BFBDBD;\n}\n.card{\r\n  border-width: 1px;\r\n  border-style: outset;\r\n  background-color: white;\r\n  cursor: pointer;\n}\n.card:hover {\r\n  background-color: #F7F7F7;\n}\n.cardMove{\r\n    opacity: 0.5;\r\n  background: black;\n}\r\n\r\n", ""]);
 
 // exports
 
@@ -77663,13 +77689,14 @@ var render = function() {
               InfoCard: _vm.InfoCard,
               list: _vm.list,
               user: _vm.user,
+              board: _vm.board,
               memberBoard: _vm.memberBoard
             },
             on: {
               close: function($event) {
                 _vm.isInfo = false
               },
-              updateCard: _vm.getCards
+              updateCard: _vm.updateCard
             }
           })
         : _vm._e(),
@@ -77964,7 +77991,7 @@ var render = function() {
                             staticClass: "col-12",
                             attrs: { task: _vm.task.tasks, card: _vm.card },
                             on: {
-                              updateTask: _vm.getTasks,
+                              updateTask: _vm.updateTask,
                               show: _vm.hanldeShowAddTask
                             }
                           })
@@ -78141,7 +78168,7 @@ var render = function() {
               stylist: _vm.Members.ShowMember.styleShowMember
             },
             on: {
-              handleCheckMember: _vm.getMemberCard,
+              handleCheckMember: _vm.handleCheckMember,
               close: function($event) {
                 _vm.Members.ShowMember.isShowMember = false
               }
@@ -78158,7 +78185,7 @@ var render = function() {
               memberCards: _vm.Members.getMembers
             },
             on: {
-              handleCheckMember: _vm.getMemberCard,
+              handleCheckMember: _vm.handleCheckMember,
               close: function($event) {
                 _vm.Members.ShowAllMember.isShowAllMember = false
                 _vm.Members.ShowAllMember.styleShowALlMember.top = 0
@@ -78175,7 +78202,7 @@ var render = function() {
               user: _vm.user
             },
             on: {
-              hanldeAddCheckList: _vm.getCheckList,
+              hanldeAddCheckList: _vm.hanldeAddCheckList,
               close: function($event) {
                 _vm.checkList.isShowAddCheckList = false
               }
@@ -78192,7 +78219,7 @@ var render = function() {
               task: _vm.task.tasks
             },
             on: {
-              hanldeAddTask: _vm.getTasks,
+              hanldeAddTask: _vm.hanldeAddTask,
               close: function($event) {
                 _vm.task.isShowAddTask = false
               }

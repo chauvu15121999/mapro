@@ -212,7 +212,7 @@ import menuList from './menuList.vue'
     	},
     	 created(){
     		this.getAll();
-          Echo.channel('updateB').listen('updateBoards',(e) => {
+          Echo.channel('updateB.'+this.board._id).listen('updateBoards',(e) => {
                 this.getAll();
                 // load lại dữ liệu  
           });

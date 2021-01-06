@@ -16,12 +16,12 @@ use Illuminate\Support\Facades\Broadcast;
 // Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 //     return (int) $user->id === (int) $id;
 // });
-Broadcast::channel('chat',function ($user) {
+Broadcast::channel('chat.{id}',function ($user) {
   return Auth::check(); 	
 });
-Broadcast::channel('updateB',function($user) {
+Broadcast::channel('updateB.{id}',function($user) {
   return Auth::check(); 	
 });
-Broadcast::channel('updateC',function($user) {
+Broadcast::channel('updateC.{id}',function($user) {
   return Auth::check(); 	
 });

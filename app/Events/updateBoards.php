@@ -28,16 +28,22 @@ class updateBoards implements ShouldBroadcast
      * @var Message
      */
     public $message;
-
+/**
+     * id details
+     *
+     * @var id
+     */
+    public $id;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(User $user,$message)
+    public function __construct(User $user,$message,$id)
     {
         $this->user = $user;
         $this->message = $message;
+        $this->id = $id;
     }
 
     /**
@@ -47,6 +53,6 @@ class updateBoards implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('updateB');
+        return new Channel('updateB.'.$this->id);
     }
 }

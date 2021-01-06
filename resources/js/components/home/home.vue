@@ -163,7 +163,7 @@
         created() {
             this.getListTeam();
             this.getAllBoards();
-            Echo.channel('update').listen('updateData',(e) => {
+            Echo.channel('updateB').listen('updateBoards',(e) => {
                 // this.getListTeam();
                 this.getAllBoards();
                 // load lại dữ liệu  

@@ -119,7 +119,7 @@
 	 	},
 	 	created(){
 	 		this.getAllItem();
-	 		 Echo.channel('update').listen('updateData',(e) => {
+	 		 Echo.channel('updateC.'+this.card._id).listen('updateCards',(e) => {
                 this.getAllItem();
                 // load lại dữ liệu  
           });
@@ -130,7 +130,7 @@
 	 	},
 	 	methods: {
 	 		addItem(data){
-	 			axios.post('addItem/'+this.checkList._id,{
+	 			axios.post('addItem/'+this.checkList._id+'/'+this.card._id,{
 	 				name: this.item.inputAdd,
 	 			}).then(response => {
 	 				this.item.isShowAddItem = false;
@@ -147,7 +147,7 @@
 	 			})
 	 		},
 	 		actived(e,data){
-	 			axios.post('changeActived/'+this.checkList._id,{
+	 			axios.post('changeActived/'+this.checkList._id+'/'+this.card._id,{
 	 				active: e.target.value,
 	 				data: data,
 	 			}).then(response => {
@@ -171,7 +171,7 @@
 	 		},
 	 		deleteItem(data){
 	 			if(confirm("Do you really want to delete?")){
-		 			axios.post('deleteItem/'+this.checkList._id,{
+		 			axios.post('deleteItem/'+this.checkList._id+'/'+this.card._id,{
 		 				item : data,
 		 			}).then(response => {
 		 				this.getAllItem();

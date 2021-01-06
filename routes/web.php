@@ -92,25 +92,26 @@ Route::post('chanNameList/{id}','listController@chanNameList');
 Route::get('removeList/{id}','listController@remove');
 Route::post('updatePositionList/{id_broad}','listController@updatePosition');
 // card ------------------------------------------------------------------
-Route::post('addCard','cardController@addCard');
+Route::post('addCard/{id_booars}','cardController@addCard');
 Route::get('getAllCard/{id_list}','cardController@getAllCard');
-Route::post('changeListOfCard/{id_cart}','cardController@changeListOfCard');
-Route::post('updatePositionCard','cardController@updatePositionCard');
-Route::post('changeNameCard/{id}','cardController@changeNameCard');
+Route::post('changeListOfCard/{id_cart}/{id_booars}','cardController@changeListOfCard');
+Route::post('updatePositionCard/{id_booars}','cardController@updatePositionCard');
+Route::post('changeNameCard/{id}/{id_booars}','cardController@changeNameCard');
 Route::post('joinCard/{id}','cardController@joinCard');
 Route::get('getMemberCard/{id}','cardController@getMember');
 Route::get('removeCard/{id}','cardController@removeCard');
 Route::post('addMemberToCard/{id}','cardController@addMember');
 Route::post("changeDescription/{id}",'cardController@changeDescription');
+Route::get("updateCard/{id_board}",'cardController@updateCard');
 
 // CheckList -------------------------------------------------------------
 Route::get('getCheckList/{id_card}','checkListController@getCheckList');
 Route::post('addCheckList/{id_card}','checkListController@addCheckList');
 Route::post('deleteCheckList/{id}/{id_card}','checkListController@deleteCheckList');
-Route::post('addItem/{id_checklist}','checkListController@addItem');
+Route::post('addItem/{id_checklist}/{id_card}','checkListController@addItem');
 Route::get('getItem/{id_checklist}','checkListController@getItem');
-Route::post('changeActived/{id_checklist}','checkListController@changeActived');
-Route::post('deleteItem/{id_checklist}','checkListController@deleteItem');
+Route::post('changeActived/{id_checklist}/{id_card}','checkListController@changeActived');
+Route::post('deleteItem/{id_checklist}/{id_card}','checkListController@deleteItem');
 // File ------------------------------------------------------------------
 Route::get('getAllFile/{id_card}','cardController@getAllFile');
 Route::post('uploadFiles/{id_card}','cardController@updateFile');
@@ -124,3 +125,8 @@ Route::post('revokeTask/{id}','taskController@revokeTask');
 // ChatRealTime -----------------------------------------------------------
 Route::get('getMess/{idBoard}','BoardController@getMess');
 Route::post('sendMess/{idBoard}','BoardController@sendMess');
+// Thông báo realtime -------------------------------------------------------
+Route::get('getNoficationBoard{id}','BoardController@getNofication');
+Route::post('pushNoficationBoard{id}','BoardController@pushNofication');
+Route::get('getNoficationCard{id}','cardController@getNofication');
+Route::post('pushNoficationCard{id}','cardController@pushNofication');

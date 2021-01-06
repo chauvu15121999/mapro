@@ -39,7 +39,7 @@
                   :task="task.tasks"
                   :card="card"
                    class="col-12"
-                   v-on:updateTask="getTasks"
+                   v-on:updateTask="updateTask"
                    v-on:show="hanldeShowAddTask"
                 />
               </div>
@@ -150,7 +150,7 @@
             :Members="Members.ShowMember.info"
             :card="card"
             :stylist="Members.ShowMember.styleShowMember"
-            v-on:handleCheckMember="getMemberCard"
+            v-on:handleCheckMember="handleCheckMember"
             @close="Members.ShowMember.isShowMember = false"
               />
         <!-- end -->
@@ -161,7 +161,7 @@
             :card="card"
             :memberBoard="memberBoard"
             :memberCards="Members.getMembers"
-            v-on:handleCheckMember="getMemberCard"
+            v-on:handleCheckMember="handleCheckMember"
             @close="Members.ShowAllMember.isShowAllMember = false; Members.ShowAllMember.styleShowALlMember.top = 0;"
           />
           <!-- end -->
@@ -171,7 +171,7 @@
                 :stylist="checkList.style"
                 :card="card"
                 :user="user"
-                v-on:hanldeAddCheckList="getCheckList"
+                v-on:hanldeAddCheckList="hanldeAddCheckList"
                 @close="checkList.isShowAddCheckList = false"
             />
           <!-- end -->
@@ -183,7 +183,7 @@
                 :card="card"
                 :user="user"
                 :task="task.tasks"
-                v-on:hanldeAddTask="getTasks"
+                v-on:hanldeAddTask="hanldeAddTask"
                 @close="task.isShowAddTask = false" 
             />
           <!-- end -->
@@ -245,7 +245,7 @@
     import addTask from '../task/addTask.vue';
     import tasks from '../task/task.vue';
     export default {
-        props: ['InfoCard','list','user','memberBoard'],
+        props: ['InfoCard','list','user','memberBoard','board'],
         components: {
             allMember,
             infoMember,
@@ -309,16 +309,22 @@
           this.getCheckList();
           this.getAllFile();
           this.getTasks();
-          Echo.channel('updateC').listen('updateCards',(e) => {
+          Echo.channel('updateC.'+this.card._id).listen('updateCards',(e) => {
                 this.getMemberCard();
                 this.getCheckList();
                 this.getAllFile();
-                this.getTasks(); // load lại dữ liệu  
+                this.getTasks();
+                 // load lại dữ liệu
+                // axios.post('pushNoficationBoard'+this.board._id,{
+                //   user : e.user,
+                //   content: e.mess,
+                // });
+
           });
         },
         updated(){
           this.checkMembers();
-          this.changeNameCard();         
+          // this.changeNameCard();         
         },
         methods: {
           // Kiểm tra user đang đăng nhập
@@ -336,11 +342,11 @@
                 }
             },
             // Thay đổi tên
-          changeNameCard(){
-            axios.post('changeNameCard/'+this.card._id,{
+          changeNameCard(e){
+            axios.post('changeNameCard/'+this.card._id+'/'+this.board._id,{
                 name: this.card.card_name,
             }).then(response =>{
-              this.$emit('updateCard');
+              // this.$emit('updateCard');
             });
           },
           // Lấy danh sách member
@@ -348,7 +354,6 @@
             axios.get('getMemberCard/'+this.card._id,{
             }).then(response => {
                 this.Members.getMembers = response.data;
-                this.$emit('updateCard');
             });
           },
           // Hàm tham gia card
@@ -357,6 +362,7 @@
                   user: this.user,
               }).then(response => {
                 this.getMemberCard();
+                this.$emit('updateCard');
               })
           },
           // hàm mở tab mời 
@@ -392,12 +398,13 @@
           getCheckList(){
             axios.get('getCheckList/'+this.card._id,{
             }).then(response => {
-              this.checkList.checkLists = response.data;
-              this.$emit('updateCard');
+              this.checkList.checkLists = response.data;    
             })  
           },
+          // Hàm nhận xóa checklist
           hanldeDeleteCheckList(data){
             this.getCheckList();
+            this.$emit('updateCard');
           },
           hanldeRef(e){
             this.$refs.fileInputAttachment.click();
@@ -409,6 +416,7 @@
             data.append('files', this.files.fileUpload);
             axios.post("uploadFiles/"+this.card._id, data).then(response =>{
               this.getAllFile();
+              this.$emit('updateCard');
             }).catch(err => {
               if(err.response.status === 413){
                 alert("File quá lớn , kích cỡ tối đa là 10MB");
@@ -418,7 +426,6 @@
         getAllFile(){
           axios.get('getAllFile/'+this.card._id).then(response => {
             this.files.getFiles = response.data;
-            this.$emit('updateCard');
           })
         },
         hanldeShowAddTask(e){
@@ -429,7 +436,6 @@
         getTasks(){
           axios.get('getTask/'+this.card._id).then(response =>{
               this.task.tasks = response.data;
-              this.$emit('updateCard');
           })
         },
         remove(){
@@ -444,6 +450,26 @@
             alert("chỉ có người tạo mới có thể xóa thẻ này !");
           }
 
+        },
+        handleCheckMember(){
+          this.getMemberCard();
+          this.$emit('updateCard');
+        },
+        hanldeAddCheckList(){
+          this.getCheckList();
+          this.$emit('updateCard');
+        },
+        hanldeAddTask(){
+          this.getTasks();
+          this.$emit('updateCard');
+        },
+        handleDeleteFile(){
+          this.getAllFile();
+          this.$emit('updateCard');
+        },
+        updateTask(){
+           this.getTasks();
+            this.$emit('updateCard');
         }
     }
   }

@@ -44,8 +44,9 @@
       :InfoCard = "InfoCard"
       :list="list"
       :user="user"
+      :board="board"
       :memberBoard="memberBoard"
-      v-on:updateCard="getCards"
+      v-on:updateCard="updateCard"
       >
       </infoCard>
         <li v-if="addCard.checkPosition == 1 && addCard.isAddCard == true && addCard.id_list  == list._id"  class="mt-1 mb-1 col-12  h-auto  ">
@@ -113,9 +114,13 @@ import infoCard from './infoCard'
     	},
       created(){
         this.getCards();
-          Echo.channel('updateC').listen('updateCards',(e) => {
+          Echo.channel('updateB.'+this.board._id).listen('updateBoards',(e) => {
                 this.getCards();
-                // load lại dữ liệu  
+                // load lại dữ liệu
+                // axios.post('pushNoficationBoard'+this.board._id,{
+                //   user : e.user,
+                //   content: e.mess,
+                // });
           });
       },	 
     	methods : {
@@ -144,7 +149,7 @@ import infoCard from './infoCard'
           setTimeout(() => this.cards.map((card,index) =>{
                 card.order = index + 1;
               }), 500);
-          setTimeout(() => axios.post('updatePositionCard',{
+          setTimeout(() => axios.post('updatePositionCard/'+this.board._id,{
                 cards : this.cards,
               }).then(response => {
                 // console.log(this.cards);
@@ -153,7 +158,7 @@ import infoCard from './infoCard'
         // Kiểm tra xem có thẻ nào vừa đc thêm vô không
         onAdd(e , id_list){
           let id = e.item.getAttribute("data-id");
-          axios.post('changeListOfCard/'+id,{
+          axios.post('changeListOfCard/'+id+'/'+this.board._id,{
             id_list : id_list,
           }).then(response =>{
             // console.log('sucsesss');
@@ -162,6 +167,11 @@ import infoCard from './infoCard'
         showInfoCard(card){
           this.InfoCard = card;
           this.isInfo = true;
+        },
+        updateCard(){
+            axios.get('updateCard/'+this.board._id,{
+              
+            });
         }
     	}
     }

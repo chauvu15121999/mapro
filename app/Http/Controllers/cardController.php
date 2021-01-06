@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\Response; 
 use Illuminate\Support\Facades\File; // dùng để chỉnh sửa file 
-use App\Events\updateCards; // realtime
+use App\Events\updateCards;
+use App\Events\updateBoards; // realtime
 class cardController extends Controller
 {
     //
@@ -19,7 +20,7 @@ class cardController extends Controller
     	$cards = cards::where('list_id',$id_list)->orderBy('order')->get();
     	return response()->json($cards);
     }
-    public function addCard(Request $Request)
+    public function addCard(Request $Request , $id_boards)
     {
     	$Request->validate(
     		['cart_name' => 'required'],
@@ -45,20 +46,24 @@ class cardController extends Controller
     	$card->save();
         $time = Carbon::now();
         $mess = 'đã thêm thẻ '. $card->card_name .' vào lúc: '.$time;
-        Broadcast(new updateCards(Auth::user(),$mess));
+        Broadcast(new updateBoards(Auth::user(),$mess,$id_boards));
+    }
+    function updateCard($id_boards)
+    {
+        Broadcast(new updateBoards(Auth::user(),'',$id_boards));
     }
     // thay đổi id list của thẻ
-    public function changeListOfCard(Request $Request,$id)
+    public function changeListOfCard(Request $Request,$id,$id_boards)
     {
     	$card = cards::find($id);
     	$card->list_id = $Request->id_list;
     	$card->save();
         $time = Carbon::now();
         $mess = 'thẻ '. $card->card_name .' đã thay đổi vị trí lúc '.$time;
-        Broadcast(new updateCards(Auth::user(),$mess));
+        Broadcast(new updateBoards(Auth::user(),$mess,$id_boards));
     }
     // thay đổi vị trí thẻ
-    public function updatePositionCard(Request $Request)
+    public function updatePositionCard(Request $Request,$id_boards)
     {
     	$allCard = cards::all();
 		foreach($allCard as $card){
@@ -71,9 +76,9 @@ class cardController extends Controller
 		}
         $time = Carbon::now();
         $mess = 'thẻ '. $card->card_name .' đã thay đổi vị trí lúc '.$time;
-        Broadcast(new updateCards(Auth::user(),$mess));
+        Broadcast(new updateBoards(Auth::user(),$mess,$id_boards));
     }
-    public function changeNameCard(Request $Request , $id){
+    public function changeNameCard(Request $Request , $id,$id_boards){
     	$card = cards::find($id);
         $name_old = $card->card_name;
     	$card->card_name = $Request->name;
@@ -81,7 +86,7 @@ class cardController extends Controller
         $time = Carbon::now();
         $mess = 'thẻ '. $name_old .' đã thay đổi tên thành '.$card->card_name.' trí lúc '.$time;
         if($name_old != $card->card_name){
-            Broadcast(new updateCards(Auth::user(),$mess));
+            Broadcast(new updateBoards(Auth::user(),$mess,$id_boards));
         }
     }
     public function getMember($id)
@@ -97,7 +102,7 @@ class cardController extends Controller
           array('user_name' => Auth::user()->user_name, 'user_email' => Auth::user()->email, 'role' => 1 , 'avatar' => Auth::user()->avatar )
             ];
         $card->save();
-        Broadcast(new updateCards(Auth::user(),' '));
+        Broadcast(new updateCards(Auth::user(),'',$id));
     }
     public function addMember(Request $Request, $id)
     {
@@ -114,13 +119,13 @@ class cardController extends Controller
     	}else{
     		cards::find($id)->pull('members',[$Request->members]);
     	}
-        Broadcast(new updateCards(Auth::user(),' '));
+        Broadcast(new updateCards(Auth::user(),' ',$id));
     }
     public function changeDescription(Request $Request , $id){
     	$card = cards::find($id);
     	$card->description = $Request->description;
     	$card->save();
-        Broadcast(new updateCards(Auth::user(),' '));
+        Broadcast(new updateCards(Auth::user(),' ',$id),);
     }
     function updateFile(Request $request , $id)
     {
@@ -148,7 +153,7 @@ class cardController extends Controller
                 $card->push('attachment', array($file));
                 $time = Carbon::now();
                 $mess = 'đã cập nhật file '. $file_name .' vào lúc: '.$time;
-                Broadcast(new updateCards(Auth::user(),$mess))->toOrther();
+                Broadcast(new updateCards(Auth::user(),$mess,$id));
              }else{
                 echo "Tải tập tin thất bại";
              }
@@ -176,13 +181,13 @@ class cardController extends Controller
         cards::find($id)->pull('attachment',[$request->attachment]);
         $time = Carbon::now();
         $mess = 'đã xóa file '. $request->attachment['file_save'] .' vào lúc: '.$time;
-        Broadcast(new updateCards(Auth::user(),$mess));
+        Broadcast(new updateCards(Auth::user(),$mess,$id));
     }
     function removeCard($id){
         $C = cards::find($id);
         $time = Carbon::now();
         $mess = 'đã xóa thẻ'. $C->card_name .' vào lúc: '.$time;
-        Broadcast(new updateCards(Auth::user(),$mess));
+        Broadcast(new updateCards(Auth::user(),$mess,$id));
         $card = cards::where('_id',$id)->get();
         foreach ($card as $key => $value) {
              checkList::where('card_id',$value['_id'])->delete();

@@ -28,7 +28,7 @@ class checkListController extends Controller
 		cards::find($id_card)->push('checkList',$checkList->_id);
 		$time = Carbon::now();
         $mess = 'đã thêm checkList '.$checkList->checkList_name.' này vào lúc'.$time;
-        Broadcast(new updateCards(Auth::user(),$mess));
+        Broadcast(new updateCards(Auth::user(),$mess,$id_card));
 	}
 
 	function getCheckList($id_card)
@@ -41,11 +41,11 @@ class checkListController extends Controller
 		$checkList = checkList::find($id);
 		$time = Carbon::now();
         $mess = 'đã xóa checkList '.$checkList->checkList_name.' này vào lúc'.$time;
-        Broadcast(new updateCards(Auth::user(),$mess));
+        Broadcast(new updateCards(Auth::user(),$mess,$id_card));
         checkList::find($id)->delete();
 		cards::find($id_card)->pull('checkList',$id);
 	}
-	function addItem(Request $Request , $id_checklist)
+	function addItem(Request $Request , $id_checklist,$id_card)
 	{
 		$Request->validate(
 				['name' => 'required'],
@@ -57,7 +57,7 @@ class checkListController extends Controller
 		$item = array('id' => $id ,'name' => $name , 'active' => 0);
 		$time = Carbon::now();
         $mess = '';
-        Broadcast(new updateCards(Auth::user(),$mess));
+        Broadcast(new updateCards(Auth::user(),$mess,$id_card));
 		checkList::find($id_checklist)->push('item',$item);	
 	}
 	function getItem($id_checklist)
@@ -65,7 +65,7 @@ class checkListController extends Controller
 		$item = checkList::where('_id',$id_checklist)->get();
 		return json_encode($item[0]->item);
 	}
-	function changeActived(Request $Request , $id_checklist)
+	function changeActived(Request $Request , $id_checklist,$id_card)
 	{
 		$item = checkList::where('_id',$id_checklist)->get();
 		$items = $item[0]->item;
@@ -83,9 +83,9 @@ class checkListController extends Controller
 		$t->save();
 		$time = Carbon::now();
         $mess = '';
-        Broadcast(new updateCards(Auth::user(),$mess));
+        Broadcast(new updateCards(Auth::user(),$mess,$id_card));
 	}
-	function deleteItem(Request $Request,$id_checklist){
+	function deleteItem(Request $Request,$id_checklist,$id_card){
 	$item = checkList::where('_id',$id_checklist)->get();
 		$items = $item[0]->item;
 		$t = checkList::find($id_checklist);
@@ -97,6 +97,6 @@ class checkListController extends Controller
 	checkList::where('_id', $id_checklist)->update(['item' => $items]);
 		$time = Carbon::now();
         $mess = '';
-         Broadcast(new updateCards(Auth::user(),$mess));
+         Broadcast(new updateCards(Auth::user(),$mess,$id_card));
 	}
 }

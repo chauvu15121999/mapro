@@ -158,10 +158,10 @@
         created() {
             this.getInfoBoard();
             this.getMember();
-            Echo.channel('chat').listen('MessageSent',(e) => {
+            Echo.channel('chat.'+this.board._id).listen('MessageSent',(e) => {
                this.isShowChat = true;  // load lại dữ liệu  
             });
-            Echo.channel('updateB').listen('updateBoards',(e) => {
+            Echo.channel('updateB.'+this.board._id).listen('updateBoards',(e) => {
                 this.getInfoBoard();
                 this.getMember();
                 // load lại dữ liệu  
