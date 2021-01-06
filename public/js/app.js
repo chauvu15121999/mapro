@@ -3700,6 +3700,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     updateCard: function updateCard() {
       axios.get('updateCard/' + this.board._id, {});
+      this.getCards();
     }
   }
 });

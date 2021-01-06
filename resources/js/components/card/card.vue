@@ -172,6 +172,7 @@ import infoCard from './infoCard'
             axios.get('updateCard/'+this.board._id,{
 
             });
+            this.getCards();
         }
     	}
     }
