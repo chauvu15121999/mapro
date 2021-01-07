@@ -46,7 +46,7 @@
           v-if="isShowMenu == true"
           :member="Member.getMembers"
           :board="board"
-          :users="users"
+          :users="users" 
           v-on:updateBackground="updateBackground()"
           v-on:close="isShowMenu = false"/>
         <chat 
