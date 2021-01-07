@@ -2631,8 +2631,7 @@ __webpack_require__.r(__webpack_exports__);
           }
         }],
         isShowInfoMember: false,
-        getOneMember: '',
-        nofication: []
+        getOneMember: ''
       }
     };
   },
@@ -76630,8 +76629,7 @@ var render = function() {
                   attrs: {
                     member: _vm.Member.getMembers,
                     board: _vm.board,
-                    users: _vm.users,
-                    nofication: _vm.nofication
+                    users: _vm.users
                   },
                   on: {
                     updateBackground: function($event) {

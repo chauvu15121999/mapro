@@ -47,7 +47,7 @@
           :member="Member.getMembers"
           :board="board"
           :users="users"
-          :nofication="nofication"
+        
           v-on:updateBackground="updateBackground()"
           v-on:close="isShowMenu = false"/>
         <chat 
@@ -153,7 +153,6 @@
                   }],
                   isShowInfoMember: false,
                   getOneMember : '',
-                  nofication: [],
               }
           }
         },
