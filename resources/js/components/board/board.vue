@@ -47,7 +47,6 @@
           :member="Member.getMembers"
           :board="board"
           :users="users"
-        
           v-on:updateBackground="updateBackground()"
           v-on:close="isShowMenu = false"/>
         <chat 
@@ -245,13 +244,6 @@
           ShowChat(){
             this.isShowChat = !this.isShowChat;
           },
-        //   getActivity(){
-        //   axios.get('getNoficationBoard/'+this.board._id,{
-
-        //   }).then(response =>{
-        //     this.nofication = response.data;
-        //   })
-        // }
     },
 
 }

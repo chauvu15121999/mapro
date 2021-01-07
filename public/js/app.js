@@ -2590,7 +2590,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
@@ -2733,13 +2732,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     ShowChat: function ShowChat() {
       this.isShowChat = !this.isShowChat;
-    } //   getActivity(){
-    //   axios.get('getNoficationBoard/'+this.board._id,{
-    //   }).then(response =>{
-    //     this.nofication = response.data;
-    //   })
-    // }
-
+    }
   }
 });
 
