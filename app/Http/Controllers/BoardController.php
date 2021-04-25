@@ -64,6 +64,7 @@ class BoardController extends Controller
                     'background.url' => $url,
                     )
           );
+          // Realtime
           $time = Carbon::now();
           $mess = 'đã cập nhật background bảng vào lúc: '.$time;
           Broadcast(new updateBoards(Auth::user(),$mess,$id))->toOthers();
@@ -109,6 +110,7 @@ class BoardController extends Controller
         $board =  Boards::where('_id',$id)->get();
         return response()->json($board[0]);
       }
+      //  thay đổi tên bảng 
       public function chanNameBoards(Request $Request,$id)
       {
         # code...
@@ -120,6 +122,7 @@ class BoardController extends Controller
          $board->save();
            
       }
+      //  Mời thành viên
       public function InviteMember(Request $Request,$id)
       {
         # code...
@@ -183,7 +186,7 @@ class BoardController extends Controller
         $email = $Request->email;
         $board =  Boards::where('_id',$id)->get();
         foreach ($board[0]->members as $key => $value) {
-          # code...
+          # lấy member cần cập nhật
             if($value['user_email'] == $email){
               if($permission == 0){
                 Boards::where('_id', $id)->update(array('members.'.$key.'.role' => $permission));

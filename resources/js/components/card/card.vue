@@ -19,6 +19,7 @@
           </div>
 
         </li>
+      <!-- Danh sách các thẻ trong lis -->
       <draggable    v-model="cards" draggable=".card"  
       :options="{animation: 200, handle:'.card', group:'visiblity'}" 
       @change="checkMove()"
@@ -29,7 +30,8 @@
           <div v-on:click="showInfoCard(card)" class="list-cart-details" style="height: auto  min-width: 100%; ">
             <p style="height: auto; max-width: 240px;">{{card.card_name}}</p>
             <img
-              v-for="member in card.members" 
+              v-for="member in card.members"
+              :key="member.user_email" 
               :src="member.avatar.encoded" class="image_member rounded-circle " alt=""><br>
             <span v-if="card.tasks != null" 
             :style="card.tasks.active == 0 ? 'backgroundColor: yellow;' : 'backgroundColor: #09F636;'">{{card.tasks.reminder}}</span>
@@ -38,6 +40,8 @@
           </div> 
         </li>
       </draggable>
+      <!-- end -->
+      <!-- Thông tin thẻ  -->
       <infoCard 
       v-if="isInfo == true"
       @close="isInfo = false"
@@ -49,6 +53,7 @@
       v-on:updateCard="updateCard"
       >
       </infoCard>
+      <!-- end -->
         <li v-if="addCard.checkPosition == 1 && addCard.isAddCard == true && addCard.id_list  == list._id"  class="mt-1 mb-1 col-12  h-auto  ">
           <div class="row add-Cart">
             <TextareaAutosize

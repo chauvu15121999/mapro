@@ -12,6 +12,7 @@
             <span class="status" v-else ><span class="mdi mdi-earth"></span>public</span><br>
             <button v-on:click="isEdit = true" type="button" class="btn btn-gradient-info btn-fw mt-2"><i class="mdi mdi-pencil mr-2"></i>Edit team details</button>
           </div>
+          <!-- Thông tin team -->
           <div class="col-sm-7 " v-if="isEdit">
               <div v-if="errors_exist" class="alert alert-danger" role="alert">
                   Whoops! Something didn't work. 
@@ -46,6 +47,7 @@
           </div>                 
         </div>
       </div>
+      <!--  nút nhấn  -->
       <div class="row">
         <div class="col-sm-12 d-flex justify-content-center mb-n5" >
           <div v-bind:class="{active: isBroads}" v-on:click="showBroads"  class="action col-sm-1 mt-sm-5 ml-sm-2">
@@ -61,10 +63,13 @@
       </div>       
     </div>
     <div class=" bot col-sm-12 mt-auto  flex-row flex-nowrap">
+      <!-- Conponent BoardTeam -->
       <broads v-if="isBroads">
       </broads>
+      <!-- Conponent memberTeam -->
       <member :user="user" v-bind:team="team" v-if="isMembers">>
-      </member> 
+      </member>
+      <!-- Conponent settingTeam --> 
       <setting v-if="isSetting">
       </setting>
     </div>  
@@ -177,6 +182,7 @@
                 });
                 
            },
+           // Nút nhấn show component
            showBroads(){
               this.isBroads = true;
               this.isMembers = false;

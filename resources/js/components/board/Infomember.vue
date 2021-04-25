@@ -1,6 +1,6 @@
 <template>
     <div :style="stylist" class="inviteMember col-lg-3 col-sm-6 col-10">
-      <div class="test">
+      <div class="infoMember">
         <div class="row  mt-2 pb-2" style="border-bottom: 1px solid #DEDCDC">     
             <div v-if="show == 0" class="col-sm-12">
                 <img :src="Infomember.avatar.encoded" class="img_member rounded-circle ml-2" />
@@ -114,6 +114,7 @@
                 this.Members['user_name'] = this.Members['user_email'].slice(0,name);
             }
           },
+          // Kiểm tra xem có phải admin k ?
           checkAdmin(){
             if(this.user.role == 1){
               this.show = 1;

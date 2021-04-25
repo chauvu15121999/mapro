@@ -9,6 +9,7 @@
         v-autowidth="{maxWidth: '960px', minWidth: '20px', comfortZone: 0}"
         v-model="boards.board_name" @change="this.changeName"
         class="name_board mr-2" type="text" />
+        <!-- Hiển thị thành viên trong board -->
         <span v-for=" member in Member.getMembers.slice(0,5)" class="ml-n2"> <img 
           :src="member.avatar.encoded" class="image_member rounded-circle " 
           v-on:click="handleShowInfoMember($event ,member)"
@@ -16,6 +17,7 @@
           <button
           v-on:click="handleShowInfoMember($event,Member.getMembers) "
           v-if="Member.getMembers.length > 5 " type="button" class="image_member btn btn-light rounded-circle btn-sm">+{{Member.getMembers.length - 5}} </button>
+          <!-- Thông tin thành viên trong board -->
           <Infomember 
           v-if="Member.isShowInfoMember"
           v-bind:stylist="Member.inviteStyle"
@@ -39,6 +41,7 @@
         <button style="z-index: 1000;" v-on:click="isShowMenu = true" type="button" class="btn btn-secondary btn-sm float-right mx-auto">
           Show menu
         </button>
+        <!-- Hiển thị chat -->
         <button style="z-index: 1000; height: 35px;" v-on:click="ShowChat" type="button" class="btn btn-gradient-info btn-rounded btn-icon float-right mr-2">
           <i class="mdi mdi-facebook-messenger"></i>
         </button>
@@ -60,13 +63,14 @@
 
     </div>
     <!-- List Card -->
-
+<!-- Danh sách task -->
     <List 
       :board = "board"
       :user = "user"
       :memberBoard="Member.getMembers"
     >  
     </List>
+<!-- Danh sách task -->
 
     <!-- End list Card -->
   </div>
@@ -177,7 +181,7 @@
           this.getUser();
         },
         methods: {
-          // Lấy user 
+          // Lấy user đang đăng nhập.
            getUser(){
                 for(var i = 0; i < this.Member.getMembers.length; i ++){
                     if (this.Member.getMembers[i].user_email == this.user.email)
@@ -186,14 +190,16 @@
                     }
                 }
             },
+            // Lấy thông tin
           getInfoBoard(){
             axios.get('getInfoBoard/'+this.board._id)
             .then(response => {
                 this.boards = response.data;
             })
           },
+          // Thay đổi tên bảng 
           changeName(event){
-            if( event.target.value != ''){
+            if( event.target.value != ''){ //Nếu giá trị khác rỗng thì cập nhật lại tên 
               axios.post('chanNameBoards/'+this.board._id,{
                 name : event.target.value
              }).then(response =>{
@@ -203,17 +209,20 @@
                 this.getInfoBoard()
             }          
           },
+          // Mở component mòi thành viên 
           invite(e){
               this.Member.isInvite = !this.Member.isInvite;
               this.Member.inviteStyle.left = e.pageX + 'px'; // lấy vị trí click
               this.Member.inviteStyle.top = e.pageY + '%';// lấy vị trí click
           },
+          // Lấy các thành viên của board 
           getMember(){
             axios.get('getMemberBoard/'+this.board._id,)
             .then(response =>{
                 this.Member.getMembers = response.data;
             });
           },
+          //  thêm thành viên 
           addMember(){
             this.Member.isInvite = false;
             axios.get('getMemberBoard/'+this.board._id,)
@@ -221,6 +230,7 @@
                 this.Member.getMembers = response.data;
             });    
           },
+          // hiển thị thông tin thành viên cụ thể 
           handleShowInfoMember(e,data){
             this.Member.isInvite = false;
             this.Member.isShowInfoMember = !this.Member.isShowInfoMember;
@@ -228,6 +238,7 @@
             this.Member.inviteStyle.top = e.pageY + '%';// lấy vị trí click
             this.Member.getOneMember = data;
           },
+          //  Thay đổi thông tin thành viên 
           changeInfoMember(){
               this.Member.isShowInfoMember = false;
               axios.get('getMemberBoard/'+this.board._id,)
@@ -235,12 +246,14 @@
                 this.Member.getMembers = response.data;
               });
           },
+          //  Cập nhật hình nền 
           updateBackground(){
               axios.get('getInfoBoard/'+this.board._id)
               .then(response => {
                   this.boards = response.data;
               })  
           },
+          // Hiển thị khung chat 
           ShowChat(){
             this.isShowChat = !this.isShowChat;
           },

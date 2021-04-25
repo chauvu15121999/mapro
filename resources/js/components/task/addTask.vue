@@ -101,11 +101,12 @@ select option {
       },
     	methods: {
         getNow() {
+          // Nếu chưa có task sẽ lấy ngày tháng hiện tại.
           if(this.task === null){
             const today = new Date();
             this.date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate() + 1 );
             this.time = today.getHours() + ":" + today.getMinutes();
-          }else{
+          }else{ // nếu có rồi thì sẽ lấy ngày tháng trong db.
             this.date = this.task.date;
             this.time = this.task.time;
             this.option = this.task.option;

@@ -122,6 +122,11 @@ Route::post('addTask/{id_card}','taskController@addTask');
 Route::get('getTask/{id}','taskController@getTask');
 Route::post('changeActivedTask/{id}','taskController@changeActived');
 Route::post('revokeTask/{id}','taskController@revokeTask');
+//----------------------------------------------------------------------
+Route::get('getComment/{id_card}','cardController@getALlCommnet');
+Route::post('addCommnet/{id_card}','cardController@addComment');
+Route::post('editComment/{id_card}','cardController@editComment');
+Route::post('deleteComment/{id_card}','cardController@deleteComment');
 // ChatRealTime -----------------------------------------------------------
 Route::get('getMess/{idBoard}','BoardController@getMess');
 Route::post('sendMess/{idBoard}','BoardController@sendMess');

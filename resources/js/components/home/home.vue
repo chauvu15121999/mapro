@@ -190,11 +190,11 @@
                   this.boards = response.data;
               })
             },
+            // Điều hướng đến trang board  
             redirect(id,name){
                 console.log(id +  name);
                 window.location = "b/" + id  +'/'+ name ; 
             }
-          },
-            // lấy danh sách background          
+          },        
     }
 </script>

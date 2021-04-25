@@ -16,6 +16,7 @@
                   <input v-model="list.list_name"
                   @change="chageNameList($event , list._id)"  
                   style="height: 30px; width: 100%;"  class="col-11  border-info name-list">
+                  <!-- Hiển thị menu -->
                   <button v-on:click='showMenu($event , list)'    type="button" class="col-1 w-100 h-100 btn btn-inverse-dark btn-icon">
                             <i class="mdi mdi-more"></i>
                   </button>
@@ -253,6 +254,7 @@ import menuList from './menuList.vue'
     				this.lists = response.data;
     			});
     		},
+        // Thay đổi tên 
     		chageNameList(event,id_list){
     			if( event.target.value != ''){
 	              axios.post('chanNameList/'+id_list,{
@@ -274,10 +276,13 @@ import menuList from './menuList.vue'
           this.isShowMenu = false;
           this.getAll();
         },
+        // Kiểm tra nếu có sự sắp xếp thứ tự các danh sách 
           checkMove: function(e){
+            // Cập nhật order
              setTimeout(() => this.lists.map((list,index) =>{
                 list.order = index + 1;
               }), 500);
+             // Cập nhật vào csdl
               setTimeout(() => axios.post('updatePositionList/' + this.board._id,{
                 lists : this.lists,
               }).then(response => {

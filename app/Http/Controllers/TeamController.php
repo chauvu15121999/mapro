@@ -14,7 +14,7 @@ use App\Http\Controllers\MailController;
 use Illuminate\Validation\Rule;
 class TeamController extends Controller
 {
-    //
+    // thêm 1 team mới 
     public function addTeam(Request $Request)
     {
     	# code...
@@ -37,11 +37,8 @@ class TeamController extends Controller
     	$team->type_team = $Request->typeteam;
     	$team->desciption = $Request->desciption;
     	$team->by_user = Auth::user()->id;
-      if(Auth::user()->avatar != ''){
-          $avatar = Auth::user()->avatar;
-      }else{
-          $avatar = '';
-      }
+      // Nếu mà user chưa có avarta thì tạo avarta cho user 
+      $avatar = Auth::user()->avatar;
     	$team->members = [
           array('user_email' => Auth::user()->email, 'role' => 1 , 'avatar' => $avatar )
             ];
@@ -50,7 +47,7 @@ class TeamController extends Controller
       // return redirect('login.html');
       return redirect('team/'.$team->team_name.'/'.$team->_id);
     }
-
+    // Lấy tất cả team của user 
     public function getAll(Request $require)
     {
       # code...
@@ -70,6 +67,7 @@ class TeamController extends Controller
       $team = Team::find($id);
       return json_encode($team);
     }
+    // Cập nhật thông tin team
     public function postEditTeam(Request $Request,$id)
     {
       # code...\
@@ -94,6 +92,7 @@ class TeamController extends Controller
       $team->save();
       return json_encode($team);
     }
+    // Mời thêm thành viên vào team
     public function addMemberTeam(Request $Request, $id)
     {
       # code...
@@ -107,11 +106,11 @@ class TeamController extends Controller
         $Team = Team::find($id);
         $team = Team::where('_id',$id)->get();
         $member = '';
+        // Kiểm tra người dùng đã được mời hay chưa ?
+
         foreach($team[0]->members as $value){
           if($value['user_email'] == trim($Request->members)){
             $member = '';
-          }else{
-            $member = $Request->members;
           }
         }
         if($member != ''){
@@ -125,7 +124,7 @@ class TeamController extends Controller
             $team = Team::find($id)->push('members',[$members]);
             // thêm member vào csdl
             $user = Auth::user()->email; // lấy user hiện tại 
-            $link = url()->previous(); //
+            $link = url()->previous(); // lấy url của team
             $result = new MailController(); // gọi tới hàm gửi  lấy địa chỉ url hiện tại mail
             $result = $result->team_mail($Request->members,$link,$user);
             return $this->getMemOfTeam($id);
@@ -135,16 +134,14 @@ class TeamController extends Controller
              422); 
         }
     }
+    // Lấy thành viên trong team
     public function getMemOfTeam($id)
     {
         $team = Team::where('_id',$id)->get();
         $members = $team[0]->members;
         return json_encode($team[0]->members);
-        // foreach ($members as $key => $value) {
-        //   # code...
-        //   echo $value['user_email'].'<br>';
-        // }
     }
+    // Xóa thành viên
      public function deleteMember($id,$email)
     {
       $Team = Team::find($id);

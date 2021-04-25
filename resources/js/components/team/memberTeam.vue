@@ -77,7 +77,8 @@
             this.getMember();
         },
         methods: {
-           addMember(){
+        // Mời thành viên 
+        addMember(){
                  axios.post('addMemberTeam/'+this.team._id,{
                         members: this.emailMember,
                  })
@@ -91,6 +92,7 @@
                       }
                 })
            },
+           // Lấy các thành viên trong team
         getMember(){
             axios.get('getMemberTeam/'+this.team._id,{
                  })
@@ -104,6 +106,7 @@
                       }
                 })
             },
+        // Xóa thành viên trong team 
         DeleteMember(email){
                 this.axios.get("deleteMember/"+this.team._id+"/"+email,{     
                 })

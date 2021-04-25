@@ -11,7 +11,7 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
-        "axios": "^0.19",
+        "axios": "^0.21.1",
         "bootstrap": "^4.0.0",
         "cross-env": "^7.0.3",
         "jquery": "^3.2",
@@ -38,6 +38,8 @@
         "vue-moment": "^4.1.0",
         "vue-router": "^2.8.1",
         "vue-textarea-autosize": "^1.1.1",
+        "vue2-editor": "^2.10.2",
+        "vue2-timeago": "^1.2.12",
         "vuedraggable": "^2.24.3"
     }
 }

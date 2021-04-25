@@ -16,14 +16,14 @@ class CreateTableCardsTable extends Migration
         Schema::create('cards', function (Blueprint $table) {
             $table->increments('id');
             $table->string('cart_name');
-            $table->string('list_id');
-            $table->string('broad_id');
+            $table->string('list_id'); // Thuộc list nào 
+            $table->string('broad_id'); 
             $table->string('by_user');
-            $table->string('order');
-            $table->string('check_list');
+            $table->string('order'); // sắp xếp 
+            $table->string('check_list'); // danh sách 
             $table->string('time_duo');
-            $table->string('members');
-            $table->string('activity');
+            $table->string('members'); // array 
+            $table->string('activity'); 
             $table->timestamps();
         });
 

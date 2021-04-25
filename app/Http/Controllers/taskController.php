@@ -23,6 +23,8 @@ class taskController extends Controller
     	$date = $request->date;
     	$dt = $date.' '.$time;
         $dt = Carbon::parse($dt);
+        //  tính toán thời gian 
+        // Trước bao nhiêu phút
     	if($request->reminder == 'at' || $request->reminder == 'None'){
     		$reminder = $dt;
     	}elseif ($request->reminder == '5m') {

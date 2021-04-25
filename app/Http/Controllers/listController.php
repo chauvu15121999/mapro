@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Auth;
 use App\Events\updateBoards; // realtime
 class listController extends Controller {
-	//
+	// thêm list 
 	public function addList(Request $Request) {
 		# code...
 		$list = new listCart();
@@ -26,10 +26,13 @@ class listController extends Controller {
 		return response()->json($list);
 		// Realtime
 	}
+	// Lấy toàn bộ
 	public function getAll($id_board) {
+		// sắp xếp theo order.
 		$list = listCart::where('board', $id_board)->orderBy('order')->get();
 		return response()->json($list);
 	}
+	//  Thay đổi tên
 	public function chanNameList(Request $Request, $id) {
 		# code...
 		$list = listCart::find($id);
@@ -40,6 +43,7 @@ class listController extends Controller {
 	        $mess = 'đã thêm list '. $list->list_name .' vào lúc: '.$time;
 	        Broadcast(new updateBoards(Auth::user(),$mess,$list->board))->toOthers();
 	}
+	//  Xóa 
 	public function remove($id){
 		$list = listCart::find($id);
 		$time = Carbon::now();
@@ -52,11 +56,14 @@ class listController extends Controller {
         cards::where('list_id',$id)->delete();
         $list->delete();
 	}
+	//  Cập nhật vi trí 
 	public function updatePosition(Request $Request, $id_board){
 		$listCart = listCart::where('board',$id_board)->get();
+		// Lấy toàn bộ 
 		foreach($listCart as $list){
 			$id = $list->id;
 			foreach ($Request->lists as $l) {
+				// Kiểm tra cần cập nhật list nào 
 				if($l['_id'] == $id){
 					listCart::where('_id', $id)->update(['order' => $l['order']]);
 				}

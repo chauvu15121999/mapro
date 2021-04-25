@@ -22,15 +22,16 @@ class UserController extends Controller
 
       $user = User::where('email',$request->Email)->first();
 
-      //Kiểm tra nếu có email rồi thì sẽ cập nhật thêm password
+      //Kiểm tra nếu đã tồn tại email rồi thì sẽ cập nhật thêm password
       if($user){
         $email = $user->email;
         $password = $user->password;
+        // Cập nhật thêm password.
         if($email == $request->Email && $password == '')
         {DB::table('users')->where('email', $email)->
                 update(['password' => bcrypt($request->password)]);
                 return redirect('login.html')->with('thongbao','Đăng ký thành công mời bạn đăng nhập');}
-      }else{ // Nếu chưa có thì sẽ thêm mới vào database
+      }else{ // Nếu chưa tồn tại thì sẽ thêm mới vào database
         $request->validate(
               [
                 'user_name' => 'required|min:3',
@@ -56,6 +57,7 @@ class UserController extends Controller
           $user->email = $request->Email;
           $user->email_verified_at = null;
           $user->activity = [];
+          // Tạo avatar cho user
           $user->avatar = Avatar::create($request->user_name)->toBase64();
           $user->password = bcrypt($request->password);
           $user->role = 0;
@@ -79,6 +81,7 @@ class UserController extends Controller
       $user = User::find($id);
       return json_encode($user);
     }
+    // Cập nhật hồ sơ cá nhân 
     public function postInfo(Request $Request,$id)
     {
       # code...

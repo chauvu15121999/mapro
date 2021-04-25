@@ -4,7 +4,7 @@
             <h4 style="font-weight: blod;"><i class="mdi mdi-attachment"></i> file</h4>
         </div>
         <div  class="col-12">
-        	<div v-for="file in files" class="row mt-2 ml-2 file">
+        	<div v-for="file in files" :key="file.file_name" class="row mt-2 ml-2 file">
         		<div class="col-3 tyoe-file">
         			<!-- Xem file loại gì -->
         			<h4 class="mt-4 ml-4" v-if="file.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'">Docx</h4>

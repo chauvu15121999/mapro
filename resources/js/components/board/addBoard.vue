@@ -110,6 +110,7 @@ select option {
         v-bind:disabled="isButtonDisabled"
         :style="isButtonDisabled ? { 'cursor': 'not-allowed' } : { 'cursor': 'pointer' }" 
         class="d-block btn btn-success btn-sm mb-2">Create Board</button>
+        <!-- đây để chuyển hướng  -->
         <input type="hidden" name="_token" :value="csrf">
       </form>
 		</div>
@@ -126,7 +127,7 @@ select option {
       <!-- end listBackgroud -->
 		</section>
     <!-- end -->
-    <!-- Chọn background mặc định -->
+    <!-- nếu k thì Chọn background mặc định -->
 		<div v-else  class="col-lg-3 col-sm-6 col-12 background">
 				<ul>
 				    <li class="mr-1" v-for="background in listBackgrouds">
@@ -169,6 +170,7 @@ select option {
               	listAllBackgroud: [], // lag
                 id_background : "5ff10b29e4d2ea2b69d1e46d", // id defaul
                 image : '', // lấy link hình 
+                // <!-- đây để chuyển hướng  -->
                 csrf: document.head.querySelector('meta[name="csrf-token"]').content
               }
         },
@@ -190,6 +192,7 @@ select option {
               this.isButtonDisabled = false;
             }
           },
+          //   Lấy toàn bộ background
         	handleBackground(){
         		this.selectMoreBackground = true;
         		axios.get('getAllBackgrouds',{
@@ -198,6 +201,7 @@ select option {
         			this.listAllBackgroud = response.data
         		})
         	},
+          //  Lấy toàn bộ background
         	getBackgrouds(){
         		axios.get('getBackgrouds',{
         		})
@@ -205,11 +209,13 @@ select option {
         			this.listBackgrouds = response.data
         		})
         	},
+          //  Cập nhật hình 
           images(data){
               this.id_background =  data;
               // console.log(this.id_background);
               this.getOneBackgroud();
           },
+          //  Lấy 1 hình ra để hiển thị
           getOneBackgroud(){
             axios.post('getOneBackgroud',{
               id_background : this.id_background,

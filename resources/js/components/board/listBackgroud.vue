@@ -61,6 +61,7 @@ img{
         	// this.getAllBackgrouds();	
         },
         methods: {
+          // Lấy id background bỏ ra component cha để cập nhật background
         	pickeds(e){
         		this.$emit('hanldeListBackground',e.target.value);
         	}
