@@ -72,10 +72,12 @@
 
 <script>
 import TimeAgo from "vue2-timeago";
+import { VueEditor } from "vue2-editor";
 export default {
-  props: ["user", "card"],
+  props: ["user", "card",'nofication','userReceinofication'],
   components: {
     TimeAgo,
+    VueEditor
   },
   data() {
     return {
@@ -87,14 +89,25 @@ export default {
   },
   mounted() {
     this.getAllComments();
+      Echo.channel("updateC." + this.card._id).listen("updateCards", (e) => {
+        this.getAllComments();
+      });
   },
+	computed: {
+			id_board() {
+			    return this.$route.params.id_board;
+			}
+		},
   methods: {
     Add() {
       axios
-        .post("addCommnet/" + this.card._id, {
+        .post("api/addCommnet/" + this.card._id, {
           content: this.content,
-          user: this.user.user_name,
+          user: this.user,
           avarta: this.user.avatar,
+          nofication: 'add comment ' + this.nofication,
+          userReceived: this.userReceinofication,
+          id_board: this.id_board
         })
         .then((Response) => {
           console.log(Response.data);
@@ -103,7 +116,7 @@ export default {
         });
     },
     getAllComments() {
-      axios.get("getComment/" + this.card._id).then((Response) => {
+      axios.get("api/getComment/" + this.card._id).then((Response) => {
         this.comments = Response.data;
       });
     },
@@ -120,9 +133,13 @@ export default {
       $("#edit-ref-"+id).addClass('edit-hidden');
     },
     edit(data){
-      axios.post("editComment/"+this.card._id,{
+      axios.post("api/editComment/"+this.card._id,{
         id: data.id,
-        content: data.content
+        content: data.content,
+        user: this.user,
+        nofication: 'edit comment ' + this.nofication,
+        userReceived: this.userReceinofication,
+        id_board: this.id_board
       }).then(Response => {
         console.log(Response.data);
         this.getAllComments();
@@ -130,8 +147,12 @@ export default {
       })
     },
     deleteComment(data){
-      axios.post("deleteComment/"+this.card._id,{
-        id: data
+      axios.post("api/deleteComment/"+this.card._id,{
+        id: data,
+        user: this.user,
+        nofication: 'delete comment ' + this.nofication,
+        userReceived: this.userReceinofication,
+         id_board: this.id_board
       }).then(Response => {
         console.log(Response.data);
         this.getAllComments(); 

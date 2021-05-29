@@ -5,10 +5,11 @@ use App\Models\listCart;
 use App\Models\User;
 use App\Models\cards;
 use App\Models\checkList;
+use App\Models\nofications;
 use Carbon\Carbon; // dùng auth để đăng nhập
 use Illuminate\Http\Request;
 use Auth;
-use App\Events\updateCards; // realtime
+use App\Events\updateCards; 
 class checkListController extends Controller
 {
     //
@@ -27,8 +28,16 @@ class checkListController extends Controller
 		$checkList->save();
 		cards::find($id_card)->push('checkList',$checkList->_id);
 		$time = Carbon::now();
+		$finduser = User::where('email', $Request->userReceived)->first();
+        if($finduser == true){
+			$nofication = ['user_send' => $Request->user
+            ,'content' => $Request->nofication,'time' => $time->toDayDateTimeString(),
+            'id_board' => $Request->id_board ];
+          nofications::where('user_id',$finduser->_id)->push('content',[$nofication]);
+        }
         $mess = 'đã thêm checkList '.$checkList->checkList_name.' này vào lúc'.$time;
-        Broadcast(new updateCards(Auth::user(),$mess,$id_card))->toOthers();
+        Broadcast(new updateCards(User::find($Request->user['_id']),$mess,$id_card))->toOthers();
+		
 	}
 
 	function getCheckList($id_card)
@@ -36,14 +45,22 @@ class checkListController extends Controller
 		$checkList = checkList::where('card_id',$id_card)->get();
 		return response()->json($checkList);
 	}
-	function deleteCheckList($id,$id_card)
+	function deleteCheckList(Request $request, $id,$id_card)
 	{
 		$checkList = checkList::find($id);
 		$time = Carbon::now();
         $mess = 'đã xóa checkList '.$checkList->checkList_name.' này vào lúc'.$time;
-        Broadcast(new updateCards(Auth::user(),$mess,$id_card))->toOthers();
+		$finduser = User::where('email', $request->userReceived)->first();
+        if($finduser == true){
+			$nofication = ['user_send' => $request->user
+            ,'content' => $request->nofication,'time' => $time->toDayDateTimeString(),
+            'id_board' => $request->id_board ];
+          nofications::where('user_id',$finduser->_id)->push('content',[$nofication]);
+        }
         checkList::find($id)->delete();
 		cards::find($id_card)->pull('checkList',$id);
+		Broadcast(new updateCards(User::find($request->user['_id']),$mess,$id_card))->toOthers();
+		
 	}
 	function addItem(Request $Request , $id_checklist,$id_card)
 	{
@@ -57,8 +74,10 @@ class checkListController extends Controller
 		$item = array('id' => $id ,'name' => $name , 'active' => 0);
 		$time = Carbon::now();
         $mess = '';
-        Broadcast(new updateCards(Auth::user(),$mess,$id_card))->toOthers();
 		checkList::find($id_checklist)->push('item',$item);	
+        Broadcast(new updateCards(User::find($Request->user['_id']),$mess,$id_card))->toOthers();
+		
+	
 	}
 	function getItem($id_checklist)
 	{
@@ -83,7 +102,8 @@ class checkListController extends Controller
 		$t->save();
 		$time = Carbon::now();
         $mess = '';
-        Broadcast(new updateCards(Auth::user(),$mess,$id_card))->toOthers();
+        Broadcast(new updateCards(User::find($Request->user['_id']),$mess,$id_card))->toOthers();
+		
 	}
 	function deleteItem(Request $Request,$id_checklist,$id_card){
 	$item = checkList::where('_id',$id_checklist)->get();
@@ -94,9 +114,10 @@ class checkListController extends Controller
 					unset($items[$key]);
 				}
 			}
-	checkList::where('_id', $id_checklist)->update(['item' => $items]);
+		checkList::where('_id', $id_checklist)->update(['item' => $items]);
 		$time = Carbon::now();
         $mess = '';
-         Broadcast(new updateCards(Auth::user(),$mess,$id_card))->toOthers();
+        Broadcast(new updateCards(User::find($Request->user['_id']),$mess,$id_card))->toOthers();
+		
 	}
 }

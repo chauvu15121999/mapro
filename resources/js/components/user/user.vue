@@ -1,36 +1,36 @@
 <template>
   <div  class="row mt-5">
-    <div class="top col-sm-12 h-auto mt-auto jumbotron flex-row flex-nowrap">
-      <div class="row">
+    <div class="top pb-4 col-sm-12 h-auto mt-auto jumbotron flex-row flex-nowrap">
+      <div class="row pb-3">
         <div class="col-sm-12 d-flex  justify-content-center mt-3">
           <div class="col-sm-5">
-            <img class="img_team rounded-circle" v-bind:src="Info.avatar.encoded"  alt="">
+            <img class="img_team rounded-circle" v-bind:src="InfoUser.avarta"  alt="">
           </div>
           <div class="col-sm-7" >
-            <h2 class="" >{{Info.user_name}}</h2>
-            <p>{{Info.email}}</p>
+            <h2 class="" >{{InfoUser.name}}</h2>
+            <p>{{InfoUser.email}}</p>
           </div>             
         </div>
       </div>
-     <div class="row mt-5">
-        <div class="col-sm-12 d-flex justify-content-center mb-n5" >
-          <div v-bind:class="{active: isProfile}" v-on:click="showProfile"  class="action col-sm-1  ml-sm-2">
-            <p  class="ml-2 mt-3  h-25 link">Profile</p>
+     <div class="row">
+        <div class="col-sm-12 d-flex justify-content-center " >
+          <div :class="{active: $route.path.includes('profile')}" v-on:click="showProfile" 
+          class="action col-xl-1 col-md-2 col-4 ml-sm-2 mt-0">
+            <p  class="ml-lg-3 ml-4 mt-3  link">Profile</p>
           </div>
-          <div v-bind:class="{active: isActivity}" v-on:click="showActivity"  class="action col-sm-1  ml-sm-2">
-            <p class="ml-2 mt-3  h-25 link">Activity</p>
-          </div>                              
+          <div :class="{active: $route.path.includes('activity')}" v-on:click="showActivity" 
+          class="action col-xl-1  col-md-2 col-4 ml-sm-2 mt-0">
+            <p class="ml-lg-3 ml-4 mt-3  h-25 link">Activity</p>
+          </div>  
+          <div :class="{active: $route.path.includes('board')}"  v-on:click="showBoards" 
+          class="action col-xl-1  col-md-2 col-4  ml-sm-2 mt-0">
+            <p class="ml-lg-3 ml-4 mt-3  h-25 link">Boards</p>
+          </div>                             
         </div>
       </div>     
     </div>
 	<div class=" bot col-sm-12 mt-auto  flex-row flex-nowrap">
-      <profile 
-      	v-on:update="update()"
-      	:user="Info" 
-      	v-if="isProfile">
-      </profile>
-      <activity v-if="isActivity">>
-      </activity> 
+      <router-view :user='user'></router-view>
     </div>   
   </div>
 </template>
@@ -84,6 +84,7 @@
 <script>
     import profile  from '../user/profile.vue';
     import activity  from '../user/activity.vue'; // vue addteam
+    import _ from 'lodash';
     export default {
         props: ['user'],
         components: {
@@ -92,45 +93,29 @@
         },
         data() {
               return{
-                 Info : {
-                    avatar: {
-                        encoded: '',
-                    }
-                 },
-                 isProfile: true,
-                 isActivity: false,
               }
         },
-        created() {
-         	this.getUser();
-        },
-        updata(){
-          this.getUser();
+        computed: {
+          InfoUser() {
+            return {
+                'name': this.user.user_name,
+                'email': this.user.email,
+                'avarta': this.user.avatar.encoded
+            }
+          },
         },
         methods: {
-          // hàm lấy data 
-	          getUser(){
-                axios.get('getInfoUser/'+this.user._id)
-               .then(response => {
-                   this.Info = response.data
-               })
-               .catch(error => {
-                    if(error.response.status === 422) {
-                         this.errors_exist = true;
-                        this.errors = error.response.data.errors || {};
-                      }
-               })
-            },
             update(data){
             	this.Info = data;
             },
             showProfile(){
-            	this.isProfile = true;
-            	this.isActivity = false;
+              this.$router.push({ name: 'profile'});
             },
             showActivity(){
-            	this.isProfile = false;
-            	this.isActivity = true;
+             this.$router.push({ name: 'activity'});
+            },
+            showBoards(){
+             this.$router.push({ name: 'boardOfUSer'});
             }
           }
         

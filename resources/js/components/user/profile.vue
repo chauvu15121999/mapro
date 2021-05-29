@@ -17,12 +17,12 @@
           <div  v-if="errors_exist" class="alert alert-danger col-sm-12" role="alert">
                   Whoops! Something didn't work. 
                   <ul>
-                    <div v-for="error in errors">
+                    <div v-for="(error,index) in errors" :key="index">
                       <li>{{ error[0] }}</li>
                     </div>
                   </ul>
           </div>
-          <div class="card col-sm-12">
+          <div class=" col-sm-12">
                   <div class="card-body">
                     <h4 class="card-title">Thông tin tài khoản</h4>
                       <div class="form-group">

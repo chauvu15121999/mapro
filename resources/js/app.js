@@ -20,15 +20,19 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('board', require('./components/board/board.vue').default);
-Vue.component('homepages', require('./components/home/home.vue').default);
+// Vue.component('homepages', require('./components/home/home.vue').default);
 Vue.component('team', require('./components/team/team.vue').default);
 Vue.component('user', require('./components/user/user.vue').default);
 Vue.component('admin', require('./components/admin/admin.vue').default);
+Vue.component('App', require('./components/App.vue').default);
 import TextareaAutosize from 'vue-textarea-autosize'
  
 Vue.use(TextareaAutosize)
 import VueInputAutowidth from 'vue-input-autowidth'
- 
+// import VueRouter from 'vue-router'
+import router  from './router';
+
+
 Vue.use(VueInputAutowidth)
 /**
 
@@ -36,7 +40,6 @@ Vue.use(VueInputAutowidth)
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-
-const app = new Vue({
-    el: '#app',
-});
+ const app = new Vue({
+    router
+  }).$mount('#app')

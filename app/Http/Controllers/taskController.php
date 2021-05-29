@@ -5,10 +5,11 @@ use App\Models\listCart;
 use App\Models\User;
 use App\Models\cards;
 use App\Models\checkList;
+use App\Models\nofications;
 use Carbon\Carbon; // dùng auth để đăng nhập
 use Illuminate\Http\Request;
 use Auth;
-use App\Events\updateCards; // realtime
+use App\Events\updateCards;
 class taskController extends Controller
 {
     //
@@ -47,10 +48,18 @@ class taskController extends Controller
  		$card->tasks=[
  			'time' => $time , 'date' => $date, 'reminder' => $reminder , 'option' => $request->reminder, 'active' => 0 ,
  		];
+		 $finduser = User::where('email', $request->userReceived)->first();
+        if($finduser == true){
+          $nofication = ['user_send' => $request->user
+            ,'content' => $request->nofication,'time' => $time,
+            'id_board' => $request->id_board ];
+          nofications::where('user_id',$finduser->_id)->push('content',[$nofication]);
+        }
  		$card->save();
         $time = Carbon::now();
         $mess = 'đã thêm task '.$card->card_name.' này vào lúc'.$time;
-        Broadcast(new updateCards(Auth::user(),$mess,$id_card))->toOthers();
+        Broadcast(new updateCards(User::find($request->user['_id']),$mess,$id_card))->toOthers();
+        
     }
     function changeActived(Request $request,$id_card)
     {
@@ -61,16 +70,32 @@ class taskController extends Controller
 		]);
         $time = Carbon::now();
         $mess = '';
-        Broadcast(new updateCards(Auth::user(),$mess,$id_card))->toOthers();
+		$finduser = User::where('email', $request->userReceived)->first();
+        if($finduser == true){
+          $nofication = ['user_send' => $request->user
+          ,'content' => $request->nofication,'time' => $time->toDayDateTimeString(),
+          'id_board' => $request->id_board ];
+          nofications::where('user_id',$finduser->_id)->push('content',[$nofication]);
+        }
+        Broadcast(new updateCards(User::find($request->user['_id']),$mess,$id_card))->toOthers();
+        
     }
-    function revokeTask($id_card)
+    function revokeTask(Request $Request,$id_card)
     {
     	$card = cards::find($id_card);
  		$card->tasks= null;
  		$card->save();
         $time = Carbon::now();
         $mess = 'đã xóa task '.$card->card_name.' này vào lúc'.$time;
-        Broadcast(new updateCards(Auth::user(),$mess,$id_card))->toOthers();
+		$finduser = User::where('email', $Request->userReceived)->first();
+        if($finduser == true){
+          $nofication = ['user_send' => $Request->user
+          ,'content' => $Request->nofication,'time' => $time->toDayDateTimeString(),
+          'id_board' => $Request->id_board ];
+          nofications::where('user_id',$finduser->_id)->push('content',[$nofication]);
+        }
+        Broadcast(new updateCards(User::find($Request->user['_id']),$mess,$id_card))->toOthers();
+        
     }
 
 }

@@ -155,10 +155,15 @@ import VueChatScroll from 'vue-chat-scroll'
           	list_messages: [],
           }
         },
-        created() {
+      computed: {
+          id_board() {
+            return this.$route.params.id_board
+          }
+        },
+        mounted() {
         	this.loadMessage();
           // Lắng nghe sự kiện 
-           Echo.channel('chat.'+this.board._id).listen('MessageSent',(e) => {
+           Echo.channel('chat.'+this.id_board).listen('MessageSent',(e) => {
                this.loadMessage();  // load lại dữ liệu  
             });
         },
@@ -168,7 +173,7 @@ import VueChatScroll from 'vue-chat-scroll'
                 setTimeout(() => this.$emit('close'), 500);
             },
             loadMessage() {
-                axios.get('getMess/'+this.board._id)
+                axios.get('api/getMess/'+this.id_board)
                     .then(response => {
                         this.list_messages = response.data;
                     }).catch(error => {
@@ -176,7 +181,7 @@ import VueChatScroll from 'vue-chat-scroll'
                     });
             },
             sendMessage() {
-                axios.post('sendMess/'+this.board._id, {
+                axios.post('api/sendMess/'+this.id_board, {
                         message: this.message,
                         user: this.user
                   }).then(response => {

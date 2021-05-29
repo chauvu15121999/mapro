@@ -13,8 +13,8 @@
           </div>
         </div>
         <div  class="row mt-1" >
-          <div v-on:click="deleteList()" class="col-lg-12 select_list_menu">
-             <p class="mt-1">Delete this list</p>
+          <div v-on:click="storage()" class="col-lg-12 select_list_menu">
+             <p class="mt-1">storage this list</p>
           </div>
         </div>
     </div>
@@ -47,11 +47,12 @@
       updated(){
       },
       methods: {
-        deleteList(){
+        storage(){
           if(this.user._id === this.list.by_user){
-        if(confirm("Bạn có muốn list thẻ này ?")){
-          axios.get('removeList/'+this.list._id)
-          .then(response => {
+        if(confirm("Bạn có muốn lưu trữ thẻ này ?")){
+          axios.post('api/stogareList/'+this.list._id , 
+          {user: this.user})
+          .then((response) => {
             console.log(response.data);
             this.$emit('removeList');
           });

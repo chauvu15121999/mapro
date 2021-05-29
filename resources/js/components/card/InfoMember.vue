@@ -38,7 +38,7 @@
 </style>
 <script>
     export default{
-    	props: ['stylist','Members','card'],
+    	props: ['stylist','Members','card','user'],
       components: {
           
       },
@@ -55,8 +55,9 @@
 
     	methods: {
         handleRemoveMember(){
-        axios.post('addMemberToCard/'+this.card._id,{
+        axios.post('api/addMemberToCard/'+this.card._id,{
           members : this.member,
+          user: this.user
         }).then(response =>{
             this.$emit('close');
             this.$emit('handleCheckMember');

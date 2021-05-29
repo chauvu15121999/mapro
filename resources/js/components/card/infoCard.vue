@@ -31,17 +31,11 @@
           <!-- Member -->
           <div class="row">
             <div class="ml-4 pl-4 col-12">
-              <p style="color: #888585; font-weight: blod">MEMBERS</p>
+              <p style="color: #888585; font-weight: blod">REPORTER</p>
             </div>
             <div class="ml-4 pl-4 col-6">
-              <img
-                v-for="member in Members.getMembers"
-                :key="member.user_email"
-                v-on:click="handleShowInfoMember($event, member)"
-                :src="member.avatar.encoded"
-                class="image_member rounded-circle"
-                alt=""
-              />
+                  <img :src="reporterOfCard.avarta" class="img_member rounded-circle ml-2" />
+                  <span>{{reporterOfCard.name}}</span>
             </div>
           </div>
           <div class="row mt-3 mb-2">
@@ -51,6 +45,9 @@
                   v-if="task.tasks != null"
                   :task="task.tasks"
                   :card="card"
+                  :nofication="noficationOfCard"
+                  :userReceinofication="userReceinofication"
+                  :user="user"
                   class="col-12"
                   v-on:updateTask="updateTask"
                   v-on:show="hanldeShowAddTask"
@@ -61,7 +58,11 @@
           <!-- End Member -->
           <!-- Description -->
           <div class="row mt-2">
-            <description class="col-lg-12" :card="card" />
+            <description class="col-lg-12" 
+            :nofication="noficationOfCard"
+            :userReceinofication="userReceinofication"
+            :card="card"
+            :user="user" />
           </div>
           <!-- EndDescription -->
           <!-- CheckList -->
@@ -69,6 +70,9 @@
             <checkList
               class="col-lg-12 ml-2"
               :card="card"
+              :nofication="noficationOfCard"
+              :userReceinofication="userReceinofication"
+              :user="user"
               :checkLists="checkList.checkLists"
               v-on:hanldeDeleteCheckList="hanldeDeleteCheckList"
             />
@@ -80,6 +84,9 @@
               class="col-lg-12"
               :files="files.getFiles"
               :card="card"
+              :nofication="noficationOfCard"
+              :userReceinofication="userReceinofication"
+              :user="user"
               v-on:handleDeleteFile="getAllFile()"
             />
           </div>
@@ -88,6 +95,8 @@
           <div class="row mt-2">
             <comments 
               class="col-lg-12" 
+              :nofication="noficationOfCard"
+              :userReceinofication="userReceinofication"
               :card="card" 
               :user="user" />
           </div>
@@ -97,30 +106,29 @@
         <div class="col-xl-3 col-lg-3 col-sm-3 col-4">
           <!-- SUGGESTED -->
           <div class="row">
-            <div class="col-9">
-              <p style="color: #888585; font-weight: blod; font-size: 12px">
-                SUGGESTED
+            <div class="col-9 pt-1 pb-1">
+              <p style="color: #888585; font-weight: blod; font-size: 12px m-0">
+                ASSIGNEE
               </p>
             </div>
-            <div class="col-1">
+            <div class="col-1 mt-3">
               <i
                 class="mdi mdi-settings-box"
                 style="color: #888585; font-size: 20px"
               ></i>
             </div>
           </div>
-          <!-- join -->
-          <div v-if="Members.checkMember != 1" v-on:click="Join()" class="row">
-            <div class="col-11 selector pt-2">
-              <span class="select_name"
-                ><i class="select_name mdi mdi-account-outline"></i> Join</span
-              >
+          <!-- assignee -->
+          <div v-if="assignOFCard" class="row">
+            <div class="col-11">
+                <img :src="assignOFCard.avarta" class="img_member rounded-circle ml-2" />
+                <span>{{assignOFCard.name}}</span>
             </div>
           </div>
           <!-- end join -->
           <!-- end SUGGESTED -->
           <!--   ADD TO CARD  -->
-          <div class="row mt-3">
+          <div class="row">
             <div class="col-10">
               <p style="color: #888585; font-weight: blod; font-size: 12px">
                 ADD TO CARD
@@ -134,7 +142,7 @@
               class="col-11 selector pt-2"
             >
               <span class="select_name"
-                ><i class=" mdi mdi-account-outline"></i>Members</span
+                ><i class=" mdi mdi-account-outline"></i>Assignee</span
               >
             </div>
           </div>
@@ -185,9 +193,9 @@
             </div>
           </div>
           <div class="row">
-            <div v-on:click="remove" class="col-11 selector pt-2">
+            <div v-on:click="storage" class="col-11 selector pt-2">
               <span class="select_name"
-                ><i class="mdi mdi-timelapse"></i> Remove</span
+                ><i class="mdi mdi-timelapse"></i> Storage</span
               >
             </div>
           </div>
@@ -200,6 +208,7 @@
       v-if="Members.ShowMember.isShowMember == true"
       :Members="Members.ShowMember.info"
       :card="card"
+      :user="user"
       :stylist="Members.ShowMember.styleShowMember"
       v-on:handleCheckMember="handleCheckMember"
       @close="Members.ShowMember.isShowMember = false"
@@ -210,6 +219,7 @@
       v-if="Members.ShowAllMember.isShowAllMember == true"
       :stylist="Members.ShowAllMember.styleShowALlMember"
       :card="card"
+      :user="user"
       :memberBoard="memberBoard"
       :memberCards="Members.getMembers"
       v-on:handleCheckMember="handleCheckMember"
@@ -225,6 +235,8 @@
       :stylist="checkList.style"
       :card="card"
       :user="user"
+      :nofication="noficationOfCard"
+      :userReceinofication="userReceinofication"
       v-on:hanldeAddCheckList="hanldeAddCheckList"
       @close="checkList.isShowAddCheckList = false"
     />
@@ -235,6 +247,8 @@
       :stylist="task.style"
       :card="card"
       :user="user"
+      :nofication="noficationOfCard"
+      :userReceinofication="userReceinofication"
       :task="task.tasks"
       v-on:hanldeAddTask="hanldeAddTask"
       @close="task.isShowAddTask = false"
@@ -285,6 +299,10 @@
   color: #888585;
   font-size: 15px;
 }
+.img_member{
+  width: 30px;
+  height: 30px;
+}
 /* end */
 </style>
 <script>
@@ -297,6 +315,7 @@ import comments from "../comments/comment.vue";
 import file from "./file.vue";
 import addTask from "../task/addTask.vue";
 import tasks from "../task/task.vue";
+import _ from 'lodash';
 export default {
   props: ["InfoCard", "list", "user", "memberBoard", "board"],
   components: {
@@ -313,14 +332,8 @@ export default {
   data() {
     return {
       card: this.InfoCard,
+      memberCard: '',
       Members: {
-        getMembers: [
-          {
-            avatar: {
-              encoded: "",
-            },
-          },
-        ],
         ShowAllMember: {
           isShowAllMember: false,
           styleShowALlMember: {
@@ -360,69 +373,74 @@ export default {
       },
     };
   },
-  created() {
-    this.getMemberCard();
+  created(){
+    this.getInfoCard();
+  },
+  mounted() {
+    // this.getMemberCard();
     this.getCheckList();
     this.getAllFile();
     this.getTasks();
-    Echo.channel("updateC." + this.card._id).listen("updateCards", (e) => {
-      this.getMemberCard();
+    Echo.channel("updateC." + this.InfoCard._id).listen("updateCards", (e) => {
       this.getCheckList();
       this.getAllFile();
       this.getTasks();
-      // load lại dữ liệu
-      // axios.post('pushNoficationCard'+this.card._id,{
-      //   user : e.user,
-      //   content: e.message,
-      // }).then(response => {
-      //   this.getActivity();
-      // });
     });
   },
   updated() {
-    this.checkMembers();
+    // this.checkMembers();
     // this.changeNameCard();
   },
-  methods: {
-    // Kiểm tra user đang đăng nhập
-    checkMembers() {
-      let check = 0;
-      for (var i = 0; i < this.Members.getMembers.length; i++) {
-        if (this.user.email == this.Members.getMembers[i].user_email) {
-          check = 1;
+  computed: {
+      reporterOfCard(){
+        return {
+          "name": _.get(this.memberCard, 'by_user.user_name') || '',
+          "avarta": _.get(this.memberCard,'by_user.avatar.encoded'),
+          "email": _.get(this.memberCard,'by_user.email')
         }
+      },
+      assignOFCard(){
+        if(this.memberCard.assign != null){
+             return {
+              "name": _.get(this.memberCard, 'assign.user_name') || '',
+              "avarta": _.get(this.memberCard,'assign.avatar.encoded'),
+              "email": _.get(this.memberCard,'assign.user_email')
+            }
+        }else{
+          return null
+        }
+      },
+      noficationOfCard(){
+        let name_board = this.board.board_name
+        let name_card = this.InfoCard.card_name
+        return 'card name '+ name_card + ' in board ' + name_board
+      },
+      userReceinofication(){
+        if(this.InfoCard.assign){
+          if(this.InfoCard.by_user._id === this.user._id){
+            return this.InfoCard.assign.user_email
+          }else{
+            return this.InfoCard.by_user.email
+          }
+            
+        }
+      },
+      id_board() {
+        return this.$route.params.id_board;
       }
-      if (check == 1) {
-        this.Members.checkMember = 1;
-      } else {
-        this.Members.checkMember = 0;
-      }
-    },
-    // Thay đổi tên
+  },
+  methods: {
     changeNameCard(e) {
       axios
-        .post("changeNameCard/" + this.card._id + "/" + this.board._id, {
+        .post("api/changeNameCard/" + this.card._id + "/" + this.board._id, {
           name: this.card.card_name,
+          user: this.user,
+          id_board : this.id_board,
+          nofication: 'have change name ' + this.noficationOfCard,
+          userReceinofication: +this.userReceinofication
         })
         .then((response) => {
           // this.$emit('updateCard');
-        });
-    },
-    // Lấy danh sách member
-    getMemberCard() {
-      axios.get("getMemberCard/" + this.card._id, {}).then((response) => {
-        this.Members.getMembers = response.data;
-      });
-    },
-    // Hàm tham gia card
-    Join() {
-      axios
-        .post("joinCard/" + this.card._id, {
-          user: this.user,
-        })
-        .then((response) => {
-          this.getMemberCard();
-          this.$emit("updateCard");
         });
     },
     // hàm mở tab mời
@@ -458,7 +476,7 @@ export default {
     },
     // Lấy tất cả các checklist
     getCheckList() {
-      axios.get("getCheckList/" + this.card._id, {}).then((response) => {
+      axios.get("api/getCheckList/" + this.card._id, {}).then((response) => {
         this.checkList.checkLists = response.data;
       });
     },
@@ -470,12 +488,16 @@ export default {
     hanldeRef(e) {
       this.$refs.fileInputAttachment.click();
     },
-    hanldeAddAttchment(e) {
+   hanldeAddAttchment(e) {
       this.files.fileUpload = this.$refs.fileInputAttachment.files[0]; // Lấy tên file
       const data = new FormData(); // Tạo 1 đối tượng lưu file
-      data.append("files", this.files.fileUpload); // Lưu file vào đối tượng
+      data.append("files", this.files.fileUpload);
+      data.append("user", this.user._id);  
+      data.append("nofication", 'add file to '+this.noficationOfCard); 
+      data.append("id_board", this.id_board);
+      data.append("userReceived", +this.userReceinofication);       // Lưu file vào đối tượng
       axios
-        .post("uploadFiles/" + this.card._id, data)
+        .post("api/uploadFiles/" + this.card._id,data)
         .then((response) => {
           this.getAllFile();
           this.$emit("updateCard");
@@ -487,7 +509,7 @@ export default {
         });
     },
     getAllFile() {
-      axios.get("getAllFile/" + this.card._id).then((response) => {
+      axios.get("api/getAllFile/" + this.card._id).then((response) => {
         this.files.getFiles = response.data;
       });
     },
@@ -497,14 +519,14 @@ export default {
       this.task.style.left = e.pageX + "px";
     },
     getTasks() {
-      axios.get("getTask/" + this.card._id).then((response) => {
+      axios.get("api/getTask/" + this.card._id).then((response) => {
         this.task.tasks = response.data;
       });
     },
-    remove() {
-      if (this.user._id === this.card.by_user) {
-        if (confirm("Bạn có muốn xóa thẻ này ?")) {
-          axios.get("removeCard/" + this.card._id).then((response) => {
+    storage() {
+      if (this.user._id === this.card.by_user._id) {
+        if (confirm("Bạn có muốn lưu trữ thẻ này ?")) {
+          axios.post("api/stogareCard/" + this.card._id, {user: this.user}).then((response) => {
             this.$emit("close");
             this.$emit("updateCard");
           });
@@ -514,8 +536,9 @@ export default {
       }
     },
     handleCheckMember() {
-      this.getMemberCard();
-      this.$emit("updateCard");
+      this.Members.ShowAllMember.isShowAllMember = false
+      this.getInfoCard();
+      this.$emit("updateCard");    
     },
     hanldeAddCheckList() {
       this.getCheckList();
@@ -533,13 +556,12 @@ export default {
       this.getTasks();
       this.$emit("updateCard");
     },
-    // getActivity(){
-    //   axios.get('getActivityCard/'+this.card._id,{
-
-    //   }).then(response =>{
-    //     this.nofication = response.data;
-    //   })
-    // }
+    getInfoCard(){
+      axios.get('api/card/'+this.InfoCard._id)
+      .then((response) => {
+        this.memberCard = response.data
+      })
+    }
   },
 };
 </script>

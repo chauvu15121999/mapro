@@ -1,6 +1,5 @@
 <template>
-  <div class="container-fluid page-body-wrapper">
-
+  <div class="container-fluid page-body-wrapper mt-5">
     <div class="container-fluid page-body-wrapper">
         <!-- partial:partials/_sidebar.html -->
         <!-- nav -->
@@ -51,6 +50,7 @@
             v-bind:listTeam="list_teams"
             v-if="isAddBorad"  
             v-on:close="isAddBorad = false" 
+            :user="user"
           ></addBoard>
         <!-- partial -->
         <div class="main-panel mt-n1">
@@ -65,9 +65,9 @@
                   <div class="row mt-2 col-sm-12">
                       <div 
                         v-for="board in boards"
-                        v-if="board.team == 0"
+                        v-if="board.team == 0  && board.storage == false"
                         :style="{ 'background-image': 'url(' + board.background.url + ')' }"
-                        v-on:click="redirect(board._id,board.board_name)"
+                        v-on:click="redirect(board._id)"
                         class="col-lg-2 col-sm-3 col-5 ml-4 mt-2 board-home">
                           <p class="text-left mt-2 font-weight-bold">{{board.board_name}}</p>
                       </div>
@@ -89,9 +89,9 @@
                   <div class="row mt-2 col-sm-12">
                       <div 
                         v-for="board in boards"
-                        v-if="board.team == teams._id"
+                        v-if="board.team == teams._id && board.storage == false"
                         :style="{ 'background-image': 'url(' + board.background.url + ')' }"
-                        v-on:click="redirect(board._id,board.board_name)"
+                        v-on:click="redirect(board._id)"
                         class="col-lg-2 col-sm-3 col-5 ml-4 mt-2 board-home">
                           <p class="text-left mt-2 font-weight-bold">{{board.board_name}}</p>
                       </div>
@@ -147,7 +147,7 @@
     import addTeam  from '../team/addteam.vue'; // vue addteam
     import addBoard  from '../board/addBoard.vue';
     export default {
-        props: ['user','teamtype',],
+        props: ['user','teamtype'],
         components: {
             addTeam,
             addBoard
@@ -163,10 +163,9 @@
         created() {
             this.getListTeam();
             this.getAllBoards();
-            Echo.channel('updateB').listen('updateBoards',(e) => {
-                // this.getListTeam();
+            Echo.channel('updateU'+this.user._id).listen('updateUser',(e) => {
                 this.getAllBoards();
-                // load lại dữ liệu  
+                console.log('test');
             });
         },
         methods: {
@@ -176,7 +175,7 @@
             }, 
             // lấy danh sách team
             getListTeam(){
-                axios.get('getAllTeam')
+                axios.post('api/getAllTeam',{user: this.user})
                .then(response => {
                    this.list_teams = response.data
                })
@@ -185,15 +184,15 @@
                })
             },
             getAllBoards(){
-              axios.get('getAllBoards')
-              .then(response =>{
+              axios.post('api/getAllBoards',{
+                  user: this.user
+                }).then(response =>{
                   this.boards = response.data;
               })
             },
             // Điều hướng đến trang board  
-            redirect(id,name){
-                console.log(id +  name);
-                window.location = "b/" + id  +'/'+ name ; 
+            redirect(id_board){
+                 this.$router.push( {name: 'board', params: {id_board}} );
             }
           },        
     }

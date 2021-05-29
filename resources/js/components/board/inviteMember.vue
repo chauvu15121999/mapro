@@ -48,7 +48,7 @@
 <script>
 import VueLoadingButton from "vue-loading-button";
     export default{
-    	props: ['stylist','boards'],
+    	props: ['stylist','boards','user'],
       components: {
         VueLoadingButton
       },
@@ -78,7 +78,8 @@ import VueLoadingButton from "vue-loading-button";
       },
     	addMember(){
               this.isLoading = true;
-	            axios.post('addMemberBoard/'+this.boards._id,{
+	            axios.post('api/addMemberBoard/'+this.boards._id,{
+                user: this.user,
 	              members : this.inputMember,
 	            }).then(response => {
                       this.$emit("addMember");

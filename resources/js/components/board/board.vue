@@ -10,7 +10,7 @@
         v-model="boards.board_name" @change="this.changeName"
         class="name_board mr-2" type="text" />
         <!-- Hiển thị thành viên trong board -->
-        <span v-for=" member in Member.getMembers.slice(0,5)" class="ml-n2"> <img 
+        <span v-for=" member in Member.getMembers.slice(0,5)" :key="member.user_email" class="ml-n2"> <img 
           :src="member.avatar.encoded" class="image_member rounded-circle " 
           v-on:click="handleShowInfoMember($event ,member)"
           /></span>
@@ -21,17 +21,19 @@
           <Infomember 
           v-if="Member.isShowInfoMember"
           v-bind:stylist="Member.inviteStyle"
-          :board="board"
+          :board="boards"
           :AllMembers="Member.getMembers"
           :Members="Member.getOneMember"
           :user="users"
+          :user_login="user"
           v-on:changeInfoMember="changeInfoMember()"
           v-on:close="Member.isShowInfoMember = false"
           ></Infomember> 
   <!-- Mời thêm thành viên -->
    <button v-on:click="invite($event)" class="ml-2 btn btn-secondary btn-sm">Mời</button>
         <inviteMember
-        :boards="board"
+        :boards="boards"
+        :user='user'
         v-bind:stylist="Member.inviteStyle" 
         v-if="Member.isInvite"
         v-on:addMember="addMember()"
@@ -48,8 +50,9 @@
         <menuBoards 
           v-if="isShowMenu == true"
           :member="Member.getMembers"
-          :board="board"
-          :users="users" 
+          :board="boards"
+          :users="users"
+          :user="user" 
           v-on:updateBackground="updateBackground()"
           v-on:close="isShowMenu = false"/>
         <chat 
@@ -65,7 +68,7 @@
     <!-- List Card -->
 <!-- Danh sách task -->
     <List 
-      :board = "board"
+      :board = "boards"
       :user = "user"
       :memberBoard="Member.getMembers"
     >  
@@ -159,22 +162,21 @@
               }
           }
         },
-        created() {
+        computed: {
+          id_board() {
+            return this.$route.params.id_board
+          }
+        },
+        mounted() {
             this.getInfoBoard();
             this.getMember();
-            Echo.channel('chat.'+this.board._id).listen('MessageSent',(e) => {
+            Echo.channel('chat.'+this.id_board).listen('MessageSent',(e) => {
                this.isShowChat = true;  // load lại dữ liệu  
             });
-            Echo.channel('updateB.'+this.board._id).listen('updateBoards',(e) => {
+            Echo.channel('updateB.'+this.id_board).listen('updateBoards',(e) => {
                 this.getInfoBoard();
                 this.getMember();
-                // load lại dữ liệu 
-                // axios.post('pushNoficationBoard/'+this.board._id,{
-                //   user : e.user,
-                //   content: e.message,
-                // }).then(response => {
-                //   this.getActivity();
-                // }); 
+                console.log('board')
             });
         },
         updated(){
@@ -192,15 +194,18 @@
             },
             // Lấy thông tin
           getInfoBoard(){
-            axios.get('getInfoBoard/'+this.board._id)
+            axios.get('api/getInfoBoard/'+this.id_board)
             .then(response => {
                 this.boards = response.data;
+            }).catch((err) => {
+                this.$router.push({name: 'home'})
             })
           },
           // Thay đổi tên bảng 
           changeName(event){
             if( event.target.value != ''){ //Nếu giá trị khác rỗng thì cập nhật lại tên 
-              axios.post('chanNameBoards/'+this.board._id,{
+              axios.post('api/chanNameBoards/'+this.id_board,{
+                user: this.user,
                 name : event.target.value
              }).then(response =>{
                 console.log(response.data); 
@@ -217,7 +222,7 @@
           },
           // Lấy các thành viên của board 
           getMember(){
-            axios.get('getMemberBoard/'+this.board._id,)
+            axios.get('api/getMemberBoard/'+this.id_board,)
             .then(response =>{
                 this.Member.getMembers = response.data;
             });
@@ -225,7 +230,7 @@
           //  thêm thành viên 
           addMember(){
             this.Member.isInvite = false;
-            axios.get('getMemberBoard/'+this.board._id,)
+            axios.get('api/getMemberBoard/'+this.id_board,)
             .then(response =>{
                 this.Member.getMembers = response.data;
             });    
@@ -241,14 +246,14 @@
           //  Thay đổi thông tin thành viên 
           changeInfoMember(){
               this.Member.isShowInfoMember = false;
-              axios.get('getMemberBoard/'+this.board._id,)
+              axios.get('api/getMemberBoard/'+this.id_board,)
               .then(response =>{
                 this.Member.getMembers = response.data;
               });
           },
           //  Cập nhật hình nền 
           updateBackground(){
-              axios.get('getInfoBoard/'+this.board._id)
+              axios.get('api/getInfoBoard/'+this.id_board)
               .then(response => {
                   this.boards = response.data;
               })  

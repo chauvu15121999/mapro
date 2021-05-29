@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\nofications;
 use Illuminate\Support\Facades\Auth; // dùng auth để đăng nhập
 use Illuminate\Support\Str;
 use DB;
@@ -56,20 +57,23 @@ class UserController extends Controller
           $user->user_name = $request->user_name;
           $user->email = $request->Email;
           $user->email_verified_at = null;
-          $user->activity = [];
           // Tạo avatar cho user
           $user->avatar = Avatar::create($request->user_name)->toBase64();
           $user->password = bcrypt($request->password);
           $user->role = 0;
           $user->save();
-           return redirect('login.html')->with('thongbao','Đăng ký thành công mời bạn đăng nhập');
+          $nofi = new nofications;
+          $nofi->user_id = $user->_id;
+          $nofi->content = [];
+          $nofi->save();
+          return redirect('login.html')->with('thongbao','Đăng ký thành công mời bạn đăng nhập');
       }
     	
          
     }
      public function verified() // Kiểm tra đã xác thục email
     {      # code...
-       return redirect('home/'.Auth::user()->user_name.'/dashboard.html');
+       return redirect('/');
     }
     public function getProfile($id_user)
     {
@@ -108,5 +112,10 @@ class UserController extends Controller
     }else{
       return redirect('login_admin');
     }
+  }
+  function getNofications(Request $request, $id)
+  {
+      $nofication = nofications::where('user_id',$id)->get();
+      return response()->json($nofication[0]->content);
   }
 }

@@ -86,15 +86,15 @@ select option {
 	<div class="row">
     <!-- Phần bên trái layout chứa form  -->
 		<div :style="{ 'background-image': 'url(' + image + ')' }"  class="left col-sm-6">
-      <form action="AddBoard" method="post">
+      <!-- <form action="AddBoard" method="post"> -->
         <input name="name_boards" v-model="nameBoard"  type="text" placeholder="Add board title" class="col-sm-10 mt-3 title-board" />
-        <input type="text" name="id_background"  :value="id_background" class="d-none">
-        <input type="text" name="url"  :value="image" class="d-none">
+        <input v-model="id_background" type="text" name="id_background"  class="d-none">
+        <input v-model="image" type="text" name="url"   class="d-none">
       <!-- btn close -->
         <button class="close title-board mt-3" @click="$emit('close')"><i class="mdi mdi-close "></i></button> 
         <!-- end btn close  -->
         <!-- select team -->
-        <select style="cursor: pointer; max-width: 50%;" name="team" class="d-block mt-2 title-board">
+        <select v-model="team" style="cursor: pointer; max-width: 50%;" name="team" class="d-block mt-2 title-board">
           <option value="0">Personal Board</option>
           <option v-for="team in listTeam" :value="team._id">{{team.team_name}}</option>
         </select>
@@ -107,12 +107,13 @@ select option {
           <option value="2">public ( Bất kì ai cũng có thể thấy bảng này)</option>
         </select>
         <button  type="submit" 
+        v-on:click="AddBoard"
         v-bind:disabled="isButtonDisabled"
         :style="isButtonDisabled ? { 'cursor': 'not-allowed' } : { 'cursor': 'pointer' }" 
         class="d-block btn btn-success btn-sm mb-2">Create Board</button>
         <!-- đây để chuyển hướng  -->
         <input type="hidden" name="_token" :value="csrf">
-      </form>
+      <!-- </form> -->
 		</div>
     <!-- end left -->
     <!-- chọn nhiều background -->
@@ -156,7 +157,7 @@ select option {
 <script>
 	import listBackgroud from './listBackgroud.vue'
     export default {
-        props: ['listTeam'],
+        props: ['listTeam','user'],
         components: {
             listBackgroud
         },
@@ -164,6 +165,7 @@ select option {
               return{
                 nameBoard: '',
                 status: '',
+                team: '',
                 isButtonDisabled: true,
               	selectMoreBackground: false,
               	listBackgrouds: [], // 
@@ -195,7 +197,7 @@ select option {
           //   Lấy toàn bộ background
         	handleBackground(){
         		this.selectMoreBackground = true;
-        		axios.get('getAllBackgrouds',{
+        		axios.get('api/getAllBackgrouds',{
         		})
         		.then(response => {
         			this.listAllBackgroud = response.data
@@ -203,7 +205,7 @@ select option {
         	},
           //  Lấy toàn bộ background
         	getBackgrouds(){
-        		axios.get('getBackgrouds',{
+        		axios.get('api/getBackgrouds',{
         		})
         		.then(response => {
         			this.listBackgrouds = response.data
@@ -217,12 +219,27 @@ select option {
           },
           //  Lấy 1 hình ra để hiển thị
           getOneBackgroud(){
-            axios.post('getOneBackgroud',{
+            axios.post('api/getOneBackgroud',{
               id_background : this.id_background,
             })
             .then(response => {
               this.image = response.data
             })
+          },
+          AddBoard(){
+              axios.post('api/AddBoard',{ 
+                user: this.user,
+                name_boards: this.nameBoard,
+                team: this.team,
+                status: this.status,
+                url: this.image,
+                id_background: this.id_background 
+                })
+              .then(response => {
+                  console.log(response.data);
+                  var id_board = response.data._id
+                  this.$router.push( {name: 'board', params: {id_board}} );
+              })
           }
         },
         

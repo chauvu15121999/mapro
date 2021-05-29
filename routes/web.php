@@ -23,7 +23,7 @@ Route::get('/test', function () {
 	    return view('Mail.Tmail');
 	});
 Auth::routes(['verify' => true]);
-Route::get('/', function () {
+Route::get('index.html', function () {
     return view('frontend.layout.welcome');
 });
 // Đăng ký và xử lý đăng ký:
@@ -44,7 +44,7 @@ Route::get('logout.html','AuthController@getLogoutUser')->name('logout.html');
 Auth::routes();
 // xác thực email và gửi mail 
 Route::get('login_sucess.html', 'UserController@verified')->middleware('verified');
-Route::get('home/{any}', 'HomeController@index')->name('home')->middleware('verified')->where('any', '.*');;
+Route::get('/{any}', 'HomeController@index')->name('home')->middleware('verified')->where('any', '.*');;
 // quản lý profile cá nhân và cập nhật ---------------------------------------------------
 Route::get('profile/{user_name}','UserController@getProfile')->middleware('auth','verified')->name('profile');
 Route::get('getInfoUser/{id}','UserController@getInfo')->middleware('auth','verified')->name('profile');
@@ -53,7 +53,6 @@ Route::post('getInfoUser/{id}','UserController@postInfo')->middleware('auth','ve
 Route::get('sendhtmlemail','MailController@html_email');
 // Nhóm ----------------------------------------------------------------------------------------
 Route::post('addteam','TeamController@addTeam');
-Route::get('getAllTeam','TeamController@getAll');
 Route::get('team/{team_name}/{id}','TeamController@getTeamView')->middleware('auth','verified')->name('team');
 Route::get('getTeam/{id}','TeamController@getTeam')->middleware('auth','verified');
 // Cập nhật thông tin team
@@ -65,71 +64,70 @@ Route::get('deleteMember/{id}/{email}','TeamController@deleteMember')->middlewar
 
 // Bảng--------------------------------------------------------------------------------
 // lấy backgroud:
-Route::post('getOneBackgroud','BoardController@getOneBackgroud')->middleware('auth','verified');
-Route::get('getBackgrouds','BoardController@getBackgrouds')->middleware('auth','verified');
-Route::get('getAllBackgrouds','BoardController@getAllBackgrouds')->middleware('auth','verified');
-Route::post("updateBackground/{id}",'BoardController@updateBackground');
+// Route::post('getOneBackgroud','BoardController@getOneBackgroud')->middleware('auth','verified');
+// Route::get('getBackgrouds','BoardController@getBackgrouds')->middleware('auth','verified');
+// Route::get('getAllBackgrouds','BoardController@getAllBackgrouds')->middleware('auth','verified');
+// Route::post("updateBackground/{id}",'BoardController@updateBackground');
 // Thêm bảng mới:
-Route::post('AddBoard','BoardController@AddBoards')->middleware('auth','verified');
+// Route::post('AddBoard','BoardController@AddBoards')->middleware('auth','verified');
 // Lấy tất cả các bảng 
-Route::get('getAllBoards','BoardController@getAllBoards')->middleware('auth','verified');
-Route::get('b/{id}/{name}',"BoardController@showBoard")->middleware('auth','verified');
+// Route::get('b/{id}/{name}',"BoardController@showBoard")->middleware('auth','verified');
 // lấy thông tin 1 bảng 
-Route::get('getInfoBoard/{id}',"BoardController@getInfoBoard")->middleware('auth','verified');
+// Route::get('getInfoBoard/{id}',"BoardController@getInfoBoard")->middleware('auth','verified');
 // Sửa thông tin: 
 Route::post('chanNameBoards/{id}','BoardController@chanNameBoards');
 // Lấy thành viên trong bảng:
-Route::get('getMemberBoard/{id}','BoardController@getMemBer');
-Route::post('addMemberBoard/{id}','BoardController@InviteMember')->middleware('auth','verified');
-Route::post('changePermissions/{id}','BoardController@changePermissions');
-Route::post('removeMemberBoard/{id}','BoardController@removeMember');
-Route::get('removeBoards/{id}','BoardController@removeBoards');
+// Route::get('getMemberBoard/{id}','BoardController@getMemBer');
+// Route::post('addMemberBoard/{id}','BoardController@InviteMember')->middleware('auth','verified');
+// Route::post('changePermissions/{id}','BoardController@changePermissions');
+// Route::post('removeMemberBoard/{id}','BoardController@removeMember');
+// Route::get('removeBoards/{id}','BoardController@removeBoards');
 
 // List ---------------------------------------------------------------
-Route::post('addList','listController@addList');
-Route::get('getAllList/{id_broad}','listController@getAll');
-Route::post('chanNameList/{id}','listController@chanNameList');
-Route::get('removeList/{id}','listController@remove');
-Route::post('updatePositionList/{id_broad}','listController@updatePosition');
+// Route::post('addList','listController@addList');
+// Route::get('getAllList/{id_broad}','listController@getAll');
+// Route::post('chanNameList/{id}','listController@chanNameList');
+// Route::get('removeList/{id}','listController@remove');
+// Route::post('updatePositionList/{id_broad}','listController@updatePosition');
 // card ------------------------------------------------------------------
-Route::post('addCard/{id_booars}','cardController@addCard');
-Route::get('getAllCard/{id_list}','cardController@getAllCard');
-Route::post('changeListOfCard/{id_cart}/{id_booars}','cardController@changeListOfCard');
-Route::post('updatePositionCard/{id_booars}','cardController@updatePositionCard');
-Route::post('changeNameCard/{id}/{id_booars}','cardController@changeNameCard');
-Route::post('joinCard/{id}','cardController@joinCard');
-Route::get('getMemberCard/{id}','cardController@getMember');
-Route::get('removeCard/{id}','cardController@removeCard');
-Route::post('addMemberToCard/{id}','cardController@addMember');
-Route::post("changeDescription/{id}",'cardController@changeDescription');
-Route::get("updateCard/{id_board}",'cardController@updateCard');
+// Route::post('addCard/{id_booars}','cardController@addCard');
+// Route::get('api/getAllCard/{id_list}','cardController@getAllCard');
+// Route::post('changeListOfCard/{id_cart}/{id_booars}','cardController@changeListOfCard');
+// Route::post('updatePositionCard/{id_booars}','cardController@updatePositionCard');
+// Route::post('changeNameCard/{id}/{id_booars}','cardController@changeNameCard');
+// Route::post('joinCard/{id}','cardController@joinCard');
+// Route::get('getMemberCard/{id}','cardController@getMember');
+// Route::get('removeCard/{id}','cardController@removeCard');
+// Route::post('addMemberToCard/{id}','cardController@addMember');
+// Route::post("changeDescription/{id}",'cardController@changeDescription');
+// Route::get("updateCard/{id_board}",'cardController@updateCard');
 
-// CheckList -------------------------------------------------------------
-Route::get('getCheckList/{id_card}','checkListController@getCheckList');
-Route::post('addCheckList/{id_card}','checkListController@addCheckList');
-Route::post('deleteCheckList/{id}/{id_card}','checkListController@deleteCheckList');
-Route::post('addItem/{id_checklist}/{id_card}','checkListController@addItem');
-Route::get('getItem/{id_checklist}','checkListController@getItem');
-Route::post('changeActived/{id_checklist}/{id_card}','checkListController@changeActived');
-Route::post('deleteItem/{id_checklist}/{id_card}','checkListController@deleteItem');
-// File ------------------------------------------------------------------
-Route::get('getAllFile/{id_card}','cardController@getAllFile');
-Route::post('uploadFiles/{id_card}','cardController@updateFile');
-Route::get('getDownload/{file_name}/{name}','cardController@getDownload');
-Route::post('deleteFile/{id_card}','cardController@deleteFile');
-// Task --------------------------------------------------------------------
-Route::post('addTask/{id_card}','taskController@addTask');
-Route::get('getTask/{id}','taskController@getTask');
-Route::post('changeActivedTask/{id}','taskController@changeActived');
-Route::post('revokeTask/{id}','taskController@revokeTask');
-//----------------------------------------------------------------------
-Route::get('getComment/{id_card}','cardController@getALlCommnet');
-Route::post('addCommnet/{id_card}','cardController@addComment');
-Route::post('editComment/{id_card}','cardController@editComment');
-Route::post('deleteComment/{id_card}','cardController@deleteComment');
-// ChatRealTime -----------------------------------------------------------
-Route::get('getMess/{idBoard}','BoardController@getMess');
-Route::post('sendMess/{idBoard}','BoardController@sendMess');
+// // CheckList -------------------------------------------------------------
+// Route::get('getCheckList/{id_card}','checkListController@getCheckList');
+// Route::post('addCheckList/{id_card}','checkListController@addCheckList');
+// Route::post('deleteCheckList/{id}/{id_card}','checkListController@deleteCheckList');
+// Route::post('addItem/{id_checklist}/{id_card}','checkListController@addItem');
+// Route::get('getItem/{id_checklist}','checkListController@getItem');
+// Route::post('changeActived/{id_checklist}/{id_card}','checkListController@changeActived');
+// Route::post('deleteItem/{id_checklist}/{id_card}','checkListController@deleteItem');
+// // File ------------------------------------------------------------------
+// Route::get('getAllFile/{id_card}','cardController@getAllFile');
+// Route::post('uploadFiles/{id_card}','cardController@updateFile');
+// Route::get('getDownload/{file_name}/{name}','cardController@getDownload');
+// Route::post('deleteFile/{id_card}','cardController@deleteFile');
+// // Task --------------------------------------------------------------------
+// Route::post('addTask/{id_card}','taskController@addTask');
+// Route::get('getTask/{id}','taskController@getTask');
+// Route::post('changeActivedTask/{id}','taskController@changeActived');
+// Route::post('revokeTask/{id}','taskController@revokeTask');
+// //----------------------------------------------------------------------
+// Route::get('getComment/{id_card}','cardController@getALlCommnet');
+// Route::post('addCommnet/{id_card}','cardController@addComment');
+// Route::post('editComment/{id_card}','cardController@editComment');
+// Route::post('deleteComment/{id_card}','cardController@deleteComment');
+// // ChatRealTime -----------------------------------------------------------
+// Route::get('getMess/{idBoard}','BoardController@getMess');
+// Route::post('sendMess/{idBoard}','BoardController@sendMess');
 // Thông báo realtime -------------------------------------------------------
 Route::get('getNoficationBoard/{id}','BoardController@getNofication');
 Route::post('pushNoficationBoard/{id}','BoardController@pushNofication');

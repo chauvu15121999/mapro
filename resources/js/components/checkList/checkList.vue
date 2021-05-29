@@ -25,6 +25,7 @@
 				<item
 					:stylePercent="item"
 					:card="card"
+					:user="user"
 					:checkList = "checkList"
 					v-on:hanldeFinishItem="hanldeFinishItem"
 				/>	     		
@@ -50,7 +51,7 @@ import item from './item.vue';
 	 	components: {
 	 		item
 	 	},
-	 	props: ['card','checkLists'],
+	 	props: ['card','checkLists','user','nofication','userReceinofication'],
 	 	data(){
 	 		return{
 	 			item: {
@@ -66,16 +67,19 @@ import item from './item.vue';
 	 			},
 	 		}
 	 	},
-	 	created(){
-	 		
-	 	},
-	 	updated(){
-	 	},
+		computed: {
+			id_board() {
+			return this.$route.params.id_board;
+			}
+		},
 	 	methods: {
 	 		deleteCheckList(data){
 	 			if(confirm("Do you really want to delete?")){
-		 			axios.post('deleteCheckList/'+data+'/'+this.card._id,{
-
+		 			axios.post('api/deleteCheckList/'+data+'/'+this.card._id,{
+						user: this.user,
+						nofication: 'delete CheckList' + data.checkList_name + this.nofication,
+						id_board: this.id_board,
+            			userReceived: this.userReceinofication
 		 			}).then(response =>{
 		 				this.$emit('hanldeDeleteCheckList');
 		 			});

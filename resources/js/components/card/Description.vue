@@ -31,18 +31,27 @@
 }
 </style>
 <script >
-import { VueEditor, Quill } from "vue2-editor";
+import { VueEditor } from "vue2-editor";
 export default {
-  props: ["card"],
+  props: ["card","user",'nofication','userReceinofication'],
   data() {
     return {
       onEdit: false,
     };
   },
+  computed: {
+     id_board() {
+        return this.$route.params.id_board;
+      }
+  },
   methods: {
     changeDescription() {
-      axios.post("changeDescription/" + this.card._id, {
+      axios.post("api/changeDescription/" + this.card._id, {
         description: this.card.description,
+        user: this.user,
+        id_board: this.id_board,
+        nofication: 'update decreption in ' + this.nofication,
+        userReceived: this.userReceinofication
       }).then(Response =>{
 		  this.onEdit = false;
 	  });
@@ -53,6 +62,9 @@ export default {
       }
     },
   },
+  components: {
+    VueEditor
+  }
 };
 </script>
 <!-- <TextareaAutosize

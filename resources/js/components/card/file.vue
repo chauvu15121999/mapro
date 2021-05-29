@@ -37,21 +37,21 @@
 </style>
 <script >
 	 export default {
-	 	props: ['card','files'],
-	 	data(){
-	 		return{
-	 		}
-	 	},
-	 	created(){
-    	}, 
-	 	updated(){
-	 		
-	 	},
+	 	props: ['card','files','user','nofication','userReceinofication'],
+		computed: {
+			id_board() {
+				return this.$route.params.id_board;
+			}
+		},
 	 	methods: {
 	 		deleteFile(data){
 	 			if(confirm("Bạn chắc chắn muốn xóa file ?")){
-		 			axios.post('deleteFile/'+this.card._id,{
-		 				attachment: data
+		 			axios.post('api/deleteFile/'+this.card._id,{
+		 				attachment: data,
+						user: this.user,
+						id_board: this.id_board,
+						nofication: 'delete File'+ this.nofication,
+						userReceive: this.userReceinofication
 		 			}).then(response =>{
 		 				this.$emit('handleDeleteFile');
 		 			});

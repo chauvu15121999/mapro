@@ -98,7 +98,7 @@
 	 	components: {
 	 		
 	 	},
-	 	props: ['card','checkList','stylePercent'],
+	 	props: ['card','checkList','stylePercent','user'],
 	 	data(){
 	 		return{
 	 			item: {
@@ -121,11 +121,6 @@
 	 		this.getAllItem();
 	 		 Echo.channel('updateC.'+this.card._id).listen('updateCards',(e) => {
                 this.getAllItem();
-                // load lại dữ liệu  
-				// axios.post('pushNoficationCard/'+this.card._id,{
-    //               user : e.user,
-    //               content: e.message,
-    //             });
           	});
 	 		
 	 	},
@@ -134,8 +129,9 @@
 	 	},
 	 	methods: {
 	 		addItem(data){
-	 			axios.post('addItem/'+this.checkList._id+'/'+this.card._id,{
+	 			axios.post('api/addItem/'+this.checkList._id+'/'+this.card._id,{
 	 				name: this.item.inputAdd,
+					user: this.user
 	 			}).then(response => {
 	 				this.item.isShowAddItem = false;
 	 				this.item.inputAdd = '';
@@ -144,16 +140,17 @@
 	 			})
 	 		},
 	 		getAllItem(){
-	 			axios.get('getItem/'+this.checkList._id,{
+	 			axios.get('api/getItem/'+this.checkList._id,{
 
 	 			}).then(response => {
 	 				this.item.items = response.data;
 	 			})
 	 		},
 	 		actived(e,data){
-	 			axios.post('changeActived/'+this.checkList._id+'/'+this.card._id,{
+	 			axios.post('api/changeActived/'+this.checkList._id+'/'+this.card._id,{
 	 				active: e.target.value,
 	 				data: data,
+					 user: this.user
 	 			}).then(response => {
 	 				this.getAllItem();
 	 				setTimeout(() => this.$emit('hanldeFinishItem',this.item.items ), 500);
@@ -175,8 +172,9 @@
 	 		},
 	 		deleteItem(data){
 	 			if(confirm("Do you really want to delete?")){
-		 			axios.post('deleteItem/'+this.checkList._id+'/'+this.card._id,{
+		 			axios.post('api/deleteItem/'+this.checkList._id+'/'+this.card._id,{
 		 				item : data,
+						 user: this.user
 		 			}).then(response => {
 		 				this.getAllItem();
 		 				setTimeout(() => this.$emit('hanldeFinishItem',this.item.items ), 500);
