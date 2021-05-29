@@ -19,11 +19,11 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('board', require('./components/board/board.vue').default);
+// Vue.component('board', require('./components/board/board.vue').default);
 // Vue.component('homepages', require('./components/home/home.vue').default);
-Vue.component('team', require('./components/team/team.vue').default);
-Vue.component('user', require('./components/user/user.vue').default);
-Vue.component('admin', require('./components/admin/admin.vue').default);
+// Vue.component('team', require('./components/team/team.vue').default);
+// Vue.component('user', require('./components/user/user.vue').default);
+// Vue.component('admin', require('./components/admin/admin.vue').default);
 Vue.component('App', require('./components/App.vue').default);
 import TextareaAutosize from 'vue-textarea-autosize'
  
