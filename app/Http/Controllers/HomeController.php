@@ -29,7 +29,6 @@ class HomeController extends Controller
         $teamtype = typeteam::all();
         $user = Auth::user()->id;
         $team = Team::where('by_user',$user)->get();
-       
-        return view('backend.pages.home',compact('teamtype','team'));
+        return view('backend.layout.index',compact('teamtype','team'));
     }
 }

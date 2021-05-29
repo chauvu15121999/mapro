@@ -8,6 +8,7 @@ use DB;
 use Avatar;
 use Exception;
 use App\Models\User;
+use App\Models\nofications;
 use App\Models\admin;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -38,7 +39,7 @@ class AuthController extends Controller
           );
         if(Auth::attempt(['email'=>$request->Email,'password'=>$request->password]))
           {
-            return redirect('home/'.Auth::user()->user_name.'/dashboard.html');
+            return redirect('/');
           }
           else
           {
@@ -83,7 +84,11 @@ class AuthController extends Controller
                     'avatar' => Avatar::create($user->name)->toBase64(),
                     'social_type'=> 'google',
                     'password_gg' => encrypt('my-google'),
-                ]);  
+                ]);
+                $nofi = new nofications;
+                $nofi->user_id = $user->_id;
+                $nofi->content = [];
+                $nofi->save();
                 Auth::login($newUser);
                 return redirect('login_sucess.html');
             }

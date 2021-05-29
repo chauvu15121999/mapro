@@ -36,7 +36,7 @@
 </style>
 <script>
     export default{
-    	props: ['stylist','card','user'],
+    	props: ['stylist','card','user','nofication','userReceinofication'],
       components: {
           
       },
@@ -49,13 +49,18 @@
 
     	}, 
       computed: {
-
+        id_board() {
+          return this.$route.params.id_board;
+        }
       },
     	methods: {
         add(){
-          axios.post('addCheckList/'+this.card._id,{
+          axios.post('api/addCheckList/'+this.card._id,{
             checkList_name: this.inputAddCheckList,
             user: this.user,
+            id_board: this.id_board,
+            nofication: 'add Checklist' +  this.nofication,
+            userReceived: this.userReceinofication
           }).then(response => {
               this.$emit('close');
               this.$emit('hanldeAddCheckList')

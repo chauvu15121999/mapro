@@ -48,10 +48,10 @@ class TeamController extends Controller
       return redirect('team/'.$team->team_name.'/'.$team->_id);
     }
     // Lấy tất cả team của user 
-    public function getAll(Request $require)
+    public function getAll(Request $Request)
     {
       # code...
-        $team = Team::where('by_user',Auth::user()->id)->orWhere('members.user_email',Auth::user()->email)->get();
+      $team = Team::where('by_user',$Request->user['_id'])->orWhere('members.user_email',$Request->user['email'])->get();
         echo json_encode($team);
     }
     public function getTeamView($name , $id)

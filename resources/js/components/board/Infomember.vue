@@ -89,7 +89,7 @@
 </style>
 <script>
     export default{
-    	props: ['stylist','board','Members','user','AllMembers'],
+    	props: ['stylist','board','Members','user','AllMembers','user_login'],
       components: {
           
       },
@@ -125,7 +125,8 @@
               if(role != number){ // tra xem đang ở trạng thái quyền nào 
                  if(number == 1){ 
                   // chuyển qua admin
-                  axios.post('changePermissions/'+this.board._id,{
+                  axios.post('api/changePermissions/'+this.board._id,{
+                      user: this.user_login,
                       permission: number,
                       email: this.Infomember.user_email,
                     }).then(response =>{
@@ -142,7 +143,8 @@
                         }  
                   }
                   if(sum >= 2){
-                    axios.post('changePermissions/'+this.board._id,{
+                    axios.post('api/changePermissions/'+this.board._id,{
+                      user: this.user_login,
                       permission: number,
                       email: this.Infomember.user_email,
                     }).then(response =>{
@@ -165,7 +167,8 @@
                         }  
                   }
                   if(sum >= 2 || this.Infomember.role ==0 ){
-                    axios.post('removeMemberBoard/'+this.board._id,{
+                    axios.post('api/removeMemberBoard/'+this.board._id,{
+                        user: this.user_login,
                         Infomember: this.Infomember,
                     }).then(response =>{
                           this.$emit("changeInfoMember");

@@ -5,6 +5,7 @@ use App\Models\listCart;
 use App\Models\User;
 use App\Models\checkList;
 use App\Models\cards;
+use App\Models\nofications;
 use Carbon\Carbon; // dùng sử lý thời gian 
 use Illuminate\Http\Request;
 use Auth;
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\File; // dùng để chỉnh sửa file 
 use App\Events\updateCards;
 use App\Events\updateBoards; // realtime
+use Hamcrest\Arrays\IsArray;
+
 class cardController extends Controller
 {
     //
@@ -19,6 +22,9 @@ class cardController extends Controller
     {
     	$cards = cards::where('list_id',$id_list)->orderBy('order')->get();
     	return response()->json($cards);
+    }
+    function getCard($id){
+        return response()->json(cards::find($id));
     }
     public function addCard(Request $Request , $id_boards)
     {
@@ -31,6 +37,7 @@ class cardController extends Controller
     	$card->list_id = $Request->list_id;
     	$card->broad_id = $Request->broad;
     	$card->by_user = $Request->user;
+        $card->storage = false;
     	if($Request->position == 0){
 			$card->order = 1;
     	}else{
@@ -38,20 +45,18 @@ class cardController extends Controller
     	}
     	$card->attachment = [];
         $card->comments = [];
-    	$card->members = [
-
-            ];
+    	$card->assign = null;
         $card->tasks = null;
         $card->checkList = [];
     	$card->activity = [];
     	$card->save();
         $time = Carbon::now();
         $mess = 'đã thêm thẻ '. $card->card_name .' vào lúc: '.$time;
-        Broadcast(new updateBoards(Auth::user(),$mess,$id_boards))->toOthers();
+        Broadcast(new updateBoards(User::find($Request->user['_id']),$mess,$id_boards))->toOthers();
     }
-    function updateCard($id_boards)
+    function updateCard(Request $Request,$id_boards)
     {
-        Broadcast(new updateBoards(Auth::user(),'',$id_boards))->toOthers();
+        Broadcast(new updateBoards(User::find($Request->user['_id']),'',$id_boards))->toOthers();
     }
     // thay đổi id list của thẻ
     public function changeListOfCard(Request $Request,$id,$id_boards)
@@ -61,7 +66,7 @@ class cardController extends Controller
     	$card->save();
         $time = Carbon::now();
         $mess = '';
-        Broadcast(new updateBoards(Auth::user(),$mess,$id_boards))->toOthers();
+        Broadcast(new updateBoards(User::find($Request->user['_id']),$mess,$id_boards))->toOthers();
     }
     // thay đổi vị trí thẻ
     public function updatePositionCard(Request $Request,$id_boards)
@@ -77,7 +82,8 @@ class cardController extends Controller
 		}
         $time = Carbon::now();
         $mess = '';
-        Broadcast(new updateBoards(Auth::user(),$mess,$id_boards))->toOthers();
+        $user  = User::find($Request->user['_id']);
+        Broadcast(new updateBoards($user,$mess,$id_boards))->toOthers();
     }
     //  thay đổi tên thẻ 
     public function changeNameCard(Request $Request , $id,$id_boards){
@@ -87,55 +93,46 @@ class cardController extends Controller
     	$card->save();
         $time = Carbon::now();
         $mess = 'thẻ '. $name_old .' đã thay đổi tên thành '.$card->card_name.' trí lúc '.$time;
+        $user  = User::find($Request->user['_id']);
         if($name_old != $card->card_name){
-            Broadcast(new updateBoards(Auth::user(),$mess,$id_boards))->toOthers();
+            Broadcast(new updateBoards($user,$mess,$id_boards))->toOthers();
         }
     }
-    //  Lấy thành viên
-    public function getMember($id)
-    {
-    	$card = cards::find($id);
-    	$members = $card->members;
-    	echo json_encode($members);
-    }
-    // Tham gia thẻ 
-    public function joinCard($id)
-    {
-    	$card = cards::find($id);
-    	$card->members =  [
-          array('user_name' => Auth::user()->user_name, 'user_email' => Auth::user()->email, 'role' => 1 , 'avatar' => Auth::user()->avatar )
-            ];
-        $card->save();
-        Broadcast(new updateCards(Auth::user(),'',$id))->toOthers();
-    }
-    //  thêm và xóa thành viên
     public function addMember(Request $Request, $id)
     {
-    	$card = cards::where('_id',$id)->get();
-    	$email  = $Request->members['user_email'];
-    	$check = 0;
-        //  Kiểm tra xem thành viên có trong thẻ chưa 
-    	for ($i = 0 ; $i < count($card[0]->members) ; $i ++){
-    		if($email == $card[0]->members[$i]["user_email"]){
-    			$check = 1;
-    		}
-    	}
-    	if($check == 0){
-    		cards::find($id)->push('members',[$Request->members]);
-    	}else{
-    		cards::find($id)->pull('members',[$Request->members]);
-    	}
-        Broadcast(new updateCards(Auth::user(),' ',$id))->toOthers();
+        $time = Carbon::now();
+        $card = cards::find($id);
+        $card->assign = $Request->members;
+        $finduser = User::where('email', $Request->members['user_email'])->first();
+        if($finduser == true){
+          $nofication = ['user_send' => $Request->user 
+          ,'content' => 'assigned you to card ' . $card->card_name ,'time' => $time->toDayDateTimeString(), 
+          'id_board' => $Request->id_board ];
+          nofications::where('user_id',$finduser->_id)->push('content',[$nofication]);
+        }
+        $card->save();
+        Broadcast(new updateCards(User::find($Request->user['_id']),' ',$id))->toOthers();
+        
     }
     public function changeDescription(Request $Request , $id){
     	$card = cards::find($id);
     	$card->description = $Request->description;
+        $finduser = User::where('email', $Request->userReceived)->first();
+        $time = Carbon::now();
+        if($finduser == true){
+          $nofication = ['user_send' => $Request->user
+            ,'content' => $Request->nofication,'time' => $time->toDayDateTimeString(),
+            'id_board' => $Request->id_board ];
+          nofications::where('user_id',$finduser->_id)->push('content',[$nofication]);
+        }
     	$card->save();
-        Broadcast(new updateCards(Auth::user(),' ',$id),);
+        Broadcast(new updateCards(User::find($Request->user['_id']),' ',$id))->toOthers();
+        
     }
     // Hàm up file 
     function updateFile(Request $request , $id)
     {
+     
         if(isset($_FILES['files']))
         {
             $card = cards::find($id);
@@ -145,7 +142,7 @@ class cardController extends Controller
             $rand = rand(0,100000); // lấy 1 số random
             $file_name = $_FILES['files']['name'];// tên người dùng đưa lên  
             //tên file save vào database
-            $file_save = $id.'-'.$dt.'-'.Auth::user()->_id.'-'.$rand.'-@'.$file_name; 
+           $file_save = $id.'-'.$dt.'-'.$request->user.'-'.$rand.'-@'.$file_name; 
            $path = 'public/upload/user/'.$file_save; // Đường dẫn
            $tmp = $_FILES['files']['tmp_name']; 
            $size_file = $_FILES['files']['size'];
@@ -159,9 +156,18 @@ class cardController extends Controller
                     'type' =>  $type_file,
                     'time' => $dt);
                 $card->push('attachment', array($file));
-                $time = Carbon::now();
+                $time = Carbon::now('Asia/Ho_Chi_Minh');
+                $user = User::where('_id',$request->user)->first();
                 $mess = 'đã cập nhật file '. $file_name .' vào lúc: '.$time;
-                Broadcast(new updateCards(Auth::user(),$mess,$id))->toOthers();
+                $finduser = User::where('email', $request->userReceived)->first();
+                if($finduser == true){
+                  $nofication = ['user_send' => (object)$user->toArray()
+                    ,'content' => $request->nofication,'time' => $time->toDayDateTimeString() , 
+                    'id_board' => $request->id_board ];
+                  nofications::where('user_id',$finduser->_id)->push('content',[$nofication]);
+                }
+                Broadcast(new updateCards(User::find($request->user),$mess,$id))->toOthers();
+                
              }else{
                 echo "Tải tập tin thất bại";
              }
@@ -197,17 +203,21 @@ class cardController extends Controller
             'id' => $id ,
             'time_spam' => $time,
             'content' => $request->content,
-            'user_name' => $request->user,
+            'user_name' => $request->user['user_name'],
             'user_avatar' => $request->avarta
         ];
-        if($card->push('comments',array($comment))){
-            echo "success";
-        }else{
-            echo "fail";
-        }
+        $card->push('comments',array($comment));
+        $time = Carbon::now('Asia/Ho_Chi_Minh');
         $mess = 'đã thêm comment  vào lúc: '.$time;
-        Broadcast(new updateCards(Auth::user(),$mess,$id))->toOthers();
-        // // echo $time;
+        $finduser = User::where('email', $request->userReceived)->first();
+        if($finduser == true){
+          $nofication = ['user_send' => $request->user
+            ,'content' => $request->nofication,'time' => $time->toDayDateTimeString(),
+            'id_board' => $request->id_board ];
+          nofications::where('user_id',$finduser->_id)->push('content',[$nofication]);
+        }
+        Broadcast(new updateCards(User::find($request->user['_id']),'',$id))->toOthers();
+        
     }
     // Chỉnh sửa comment
     function editComment(Request $request,$id){
@@ -220,7 +230,17 @@ class cardController extends Controller
                $comments[$key]['content'] = $content;
             }
         }
+        $time = Carbon::now('Asia/Ho_Chi_Minh');
+        $finduser = User::where('email', $request->userReceived)->first();
+        if($finduser == true){
+            $nofication = ['user_send' => $request->user
+            ,'content' => $request->nofication,'time' => $time->toDayDateTimeString(),
+            'id_board' => $request->id_board ];
+          nofications::where('user_id',$finduser->_id)->push('content',[$nofication]);
+        }
         cards::where('_id','=',$id)->update(['comments'=>$comments]);
+        Broadcast(new updateCards(User::find($request->user['_id']),'',$id))->toOthers();
+        
     }
     function deleteComment(Request $request,$id){
         $card = cards::find($id);
@@ -231,7 +251,17 @@ class cardController extends Controller
                unset($comments[$key]);
             }
         }
+        $time = Carbon::now('Asia/Ho_Chi_Minh');
+        $finduser = User::where('email', $request->userReceived)->first();
+        if($finduser == true){
+            $nofication = ['user_send' => $request->user
+            ,'content' => $request->nofication,'time' => $time->toDayDateTimeString(),
+            'id_board' => $request->id_board ];
+          nofications::where('user_id',$finduser->_id)->push('content',[$nofication]);
+        }
         cards::where('_id','=',$id)->update(['comments'=>$comments]);
+        Broadcast(new updateCards(User::find($request->user['_id']),'',$id))->toOthers();
+        
     }
     public function getDownload($file_name,$name)
         {
@@ -250,27 +280,36 @@ class cardController extends Controller
         cards::find($id)->pull('attachment',[$request->attachment]);
         $time = Carbon::now();
         $mess = 'đã xóa file '. $request->attachment['file_save'] .' vào lúc: '.$time;
-        Broadcast(new updateCards(Auth::user(),$mess,$id))->toOthers();
+        $time = Carbon::now('Asia/Ho_Chi_Minh');
+        $finduser = User::where('email', $request->userReceived)->first();
+        if($finduser == true){
+            $nofication = ['user_send' => $request->user
+            ,'content' => $request->nofication,'time' => $time->toDayDateTimeString(),
+            'id_board' => $request->id_board ];
+          nofications::where('user_id',$finduser->_id)->push('content',[$nofication]);
+        }
+        Broadcast(new updateCards(User::find($request->user['_id']),$mess,$id))->toOthers();
+        
     }
     //  Xóa thẻ 
-    function removeCard($id){
+    function removeCard(Request $Request , $id){
         $C = cards::find($id);
         $time = Carbon::now();
         $mess = 'đã xóa thẻ'. $C->card_name .' vào lúc: '.$time;
-        Broadcast(new updateCards(Auth::user(),$mess,$id))->toOthers();
+        Broadcast(new updateCards(User::find($Request->user['_id']),$mess,$id))->toOthers();
         $card = cards::where('_id',$id)->get();
         foreach ($card as $key => $value) {
              checkList::where('card_id',$value['_id'])->delete();
         };
-        $C->delete();
-        
+        $C->delete();  
     }
-    // ---------------------------------------------------------------------------------
-    function getNofication($id)
-      {
-          $board = boards::find($id);
-          return response()->json($board->activity);
+    public function stogareCard(Request $Request, $id){
+        $card = cards::find($id);
+        $card->storage == true ? $card->storage = false : $card->storage = true;
+        $card->save();
+        Broadcast(new updateBoards(User::find($Request->user['_id']),'',$id))->toOthers();
       }
+    // ---------------------------------------------------------------------------------
     function pushNofication(Request $request,$id)
       {
         $user_name = $request->user['user_name'];

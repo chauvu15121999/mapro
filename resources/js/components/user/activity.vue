@@ -1,48 +1,70 @@
 <template>
     <div class="container">
-    <div class="row"> 
-      <div class="col-md-6 mx-auto">
-          <img src="https://a.trellocdn.com/prgb/dist/images/member-home/taco-privacy.ced1e262c59e0225e3aa.svg" alt="">
-          <h2>Manage your personal information</h2>
-          <div class="alert alert-success">
-              <p>This is an Atlassian account. Edit your personal information and visibility settings through your Atlassian profile.</p> 
-
-              <p>To learn more, view our Terms of Service or Privacy Policy.</p>
-          </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6 mx-auto grid-margin stretch-card">
-       
-                <div class="card">
+        <div class="col-lg-12 grid-margin stretch-card">
+                <div >
                   <div class="card-body">
-                    <h4 class="card-title">Thông tin hoạt động</h4>
-                    <form action="" method="post" class="forms-sample">
-                      <div class="form-group">
-                        <label for="exampleInputUsername1">Username</label>
-                        <input value="" name="user_name" type="text" class="form-control" id="exampleInputUsername1" placeholder="Username">
-                      </div>
-                      <div class="form-group">
-                        <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" value="" disabled="" class="form-control" id="exampleInputEmail1" placeholder="Email">
-                      </div>
-                        <div class="form-group">
-                        <label for="exampleInputUsername1">Tiểu sử</label>
-                        <textarea style="width: 100%;" name="description" id="" cols="50" rows="10"></textarea>
-                      </div>
-                      <button type="submit" class="btn btn-gradient-primary col-12 mr-2">save</button>
-                    </form>
+                    <h4 class="card-title">Nofications</h4>
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th> STT </th>
+                          <th> User </th>
+                          <th> Content  </th>
+                          <th> Time </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <template  v-for="(nofi, index) in orders"> 
+                        <tr class='nofications' @click="linkToBoard(nofi.id_board)" :key="index">
+                          <td class="pl-4">{{index + 1 }}</td>
+                          <td class="py-1 p-0">
+                            <img :src="nofi.user_send.avatar.encoded" class="img_member rounded-circle ml-2" />
+                            <span>{{nofi.user_send.user_name}}</span>
+                          </td>
+                          <td> {{nofi.content}} </td>
+                          <td>{{nofi.time}}</td>
+                        </tr>
+                        </template>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
-      </div>
-    </div>         
-  </div>  
+              </div>
+    </div>  
 </template>
 
 <style>
+  .nofications{
+    cursor: pointer;
+  }
 </style>
 <script>
-// import nav from './nav/nav'
+import _ from 'lodash';
     export default{
+      props: ['user'],
+      data() {
+        return {
+           nofications: null
+        } 
+      },
+      computed: {
+        orders: function () {
+          return _.reverse(this.nofications)
+        }
+      },
+      created() {
+        this.getNofications()
+      },
+      methods: {
+          getNofications(){
+            axios.get('api/getNofications/'+this.user._id)
+                .then((Response) => {
+                  this.nofications = Response.data
+            })
+          },
+          linkToBoard(id) {
+            this.$router.push({ name: 'board', params: { id_board: id } })
+          }
+      }
     }
 </script>

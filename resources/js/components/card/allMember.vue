@@ -45,7 +45,7 @@
 </style>
 <script>
     export default{
-    	props: ['stylist','memberBoard','memberCards','card'],
+    	props: ['stylist','memberBoard','memberCards','card','user'],
       components: {
           
       },
@@ -74,9 +74,12 @@
           }
         },
       handleCheckMember(member){
-        axios.post('addMemberToCard/'+this.card._id,{
+        axios.post('api/addMemberToCard/'+this.card._id,{
           members : member,
+          user: this.user,
+          id_board: this.$route.params.id_board
         }).then(response =>{
+            this.$emit('close');
             this.$emit('handleCheckMember');
         })
       }

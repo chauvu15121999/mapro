@@ -75,7 +75,7 @@
 	 	components: {
 
 	 	},
-	 	props: ['card','task'],
+	 	props: ['card','task','user','nofication','userReceinofication'],
 	 	data(){
 	 		return{
 	 			check: '',
@@ -127,8 +127,11 @@
 				}else{
 					this.checkDeadline();
 				}
-				axios.post('changeActivedTask/'+this.card._id,{
+				axios.post('api/changeActivedTask/'+this.card._id,{
 					active: active,
+					user: this.user,
+					nofication: 'update task '+ this.nofication,
+            		userReceived: this.userReceinofication
 				}).then(response => {
 					this.$emit('updateTask');
 				})

@@ -10,7 +10,7 @@
           <li @click="show = 1" class="list-group-item"> <span class="font-weight-bold">About This Board</span> <p>Add a description to your board</p></li>
           <li @click="show = 2" class="list-group-item">Change Background</li>
           <li class="list-group-item">Member</li>
-          <li  class="list-group-item"><button v-on:click="remove" class="btn-danger">Delete</button></li>
+          <li  class="list-group-item"><button v-on:click="remove" class="btn-danger">storage</button></li>
         </ul>
     </div>
     <div class="row activity-menu ml-1 mt-2 mb-2">
@@ -138,7 +138,7 @@
 <script>
     import background from './listBackgroud.vue'
     export default {
-        props: ['member','board','users'],
+        props: ['member','board','users','user'],
         components: {
           background
         },
@@ -164,14 +164,15 @@
                 setTimeout(() => this.$emit('close'), 500);
             },
         getBackgrouds(){
-            axios.get('getAllBackgrouds',{
+            axios.get('api/getAllBackgrouds',{
             })
             .then(response => {
               this.listAllBackgroud = response.data
             })
           },
           updateBackground(data){
-            axios.post("updateBackground/"+this.board._id,{
+            axios.post("api/updateBackground/"+this.board._id,{
+              user: this.user,
               id_background : data,
             }).then(response => {
               this.$emit("updateBackground");
@@ -179,8 +180,12 @@
           },
           remove(){
             if(this.users.role == 1){
-              if(confirm("Bạn có chắc chắn muốn xóa ? ")){
-                window.location.assign('removeBoards/'+this.board._id);
+              if(confirm("Bạn có chắc chắn muốn lưu trữ boards này ? ")){
+                axios.post('api/stogareBoards/'+this.board._id,  {
+                  user: this.user})
+                  .then((response) => {
+                      this.$router.push({ name: 'home'});
+                  })
               }
             }else{
               alert("chỉ có admin mới có quyền xóa bảng này")

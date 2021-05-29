@@ -82,7 +82,7 @@ select option {
 </style>
 <script>
     export default{
-    	props: ['stylist','card','user','task'],
+    	props: ['stylist','card','user','task','nofication','userReceinofication'],
       components: {
           
       },
@@ -97,7 +97,9 @@ select option {
         this.getNow();
     	}, 
       computed: {
-
+        id_board() {
+          return this.$route.params.id_board;
+        }
       },
     	methods: {
         getNow() {
@@ -113,18 +115,25 @@ select option {
           }  
         },
         addTask(){
-          axios.post('addTask/'+this.card._id,{
+          axios.post('api/addTask/'+this.card._id,{
             time: this.time,
             date: this.date,
             reminder: this.option,
+            user: this.user,
+            id_board: this.id_board,
+            nofication: 'add task in '+ this.nofication,
+            userReceived: this.userReceinofication
           }).then(response => {
             this.$emit('hanldeAddTask');
           })
         },
         revokeTask(){
           if(confirm('Bạn có muốn xóa task này')){
-            axios.post('revokeTask/'+this.card._id,{
-
+            axios.post('api/revokeTask/'+this.card._id,{
+            user: this.user,
+            id_board: this.id_board,
+            nofication: 'remove task in '+ this.nofication,
+            userReceived: this.userReceinofication
             }).then(response => {
               this.$emit('hanldeAddTask');
             });

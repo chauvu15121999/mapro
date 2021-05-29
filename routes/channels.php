@@ -25,3 +25,7 @@ Broadcast::channel('updateB.{id}',function($user) {
 Broadcast::channel('updateC.{id}',function($user) {
   return Auth::check(); 	
 });
+
+Broadcast::channel('updateU.{id}',function($user) {
+  return Auth::check(); 	
+});

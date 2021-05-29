@@ -16,13 +16,14 @@ class listController extends Controller {
 		$list = new listCart();
 		$list->list_name = $Request->list_name;
 		$list->board = $Request->id_board;
-		$list->by_user = $Request->user;
+		$list->by_user = $Request->user['_id'];
 		$list->order = '';
 		$list->watch = 0;
+		$list->storage = false;
 		$list->save();
 		$time = Carbon::now();
         $mess = 'đã thêm list '. $Request->list_name .' vào lúc: '.$time;
-        Broadcast(new updateBoards(Auth::user(),$mess,$Request->id_board))->toOthers();
+        Broadcast(new updateBoards(User::find($Request->user['_id']),$mess,$Request->id_board))->toOthers();
 		return response()->json($list);
 		// Realtime
 	}
@@ -41,14 +42,14 @@ class listController extends Controller {
 		$list->save();
 			$time = Carbon::now();
 	        $mess = 'đã thêm list '. $list->list_name .' vào lúc: '.$time;
-	        Broadcast(new updateBoards(Auth::user(),$mess,$list->board))->toOthers();
+	        Broadcast(new updateBoards(User::find($Request->user['_id']),$mess,$list->board))->toOthers();
 	}
 	//  Xóa 
-	public function remove($id){
+	public function remove(Request $Request ,$id){
 		$list = listCart::find($id);
 		$time = Carbon::now();
 	    $mess = 'đã xóa list '. $list->list_name .' vào lúc: '.$time;
-	    Broadcast(new updateBoards(Auth::user(),$mess,$list->board))->toOthers();
+	    Broadcast(new updateBoards(User::find($Request->user['_id']),$mess,$list->board))->toOthers();
         $card = cards::where('list_id',$id)->get();
             foreach ($card as $key => $value) {
              checkList::where('card_id',$value['_id'])->delete();
@@ -56,6 +57,12 @@ class listController extends Controller {
         cards::where('list_id',$id)->delete();
         $list->delete();
 	}
+	public function stogareList(Request $Request, $id){
+        $list = listCart::find($id);
+        $list->storage == true ? $list->storage = false : $list->storage = true;
+        $list->save();
+        Broadcast(new updateBoards(User::find($Request->user['_id']),'',$id))->toOthers();
+      }
 	//  Cập nhật vi trí 
 	public function updatePosition(Request $Request, $id_board){
 		$listCart = listCart::where('board',$id_board)->get();
@@ -71,6 +78,6 @@ class listController extends Controller {
 		}
 		$time = Carbon::now();
         $mess = '';
-        Broadcast(new updateBoards(Auth::user(),$mess,$id_board))->toOthers();	
+        Broadcast(new updateBoards(User::find($Request->user['_id']),$mess,$id_board))->toOthers();	
 	}
 }

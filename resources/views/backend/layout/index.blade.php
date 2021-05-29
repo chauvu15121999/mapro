@@ -32,26 +32,14 @@
   </head>
   <body>
     <div id="app" class="container-scroller">
-      <!-- partial:partials/_navbar.html -->
-
-       <?php 
-      $url = url()->full();
-       $url =  parse_url($url)['path'];
-       $url = explode( '/', $url );          
-      ?>
-      @if($url[1] == 'b')
-        @include('backend/layout/nav2')
-      @else
-        @include('backend/layout/nav')
-      @endif
-
-      <!-- partial -->
-      
-        {{-- partial:partials/_sidebar.html --}}
-          @yield('content')
-        <!-- main-panel ends -->
-      
-      <!-- page-body-wrapper ends -->
+      <!-- partial:partials/_navbar.html --> 
+      <?php 
+			  $teamtype = json_encode($teamtype);
+		  ?>
+        <App
+        :teamtype="{{$teamtype}}"
+        :user="{{Auth()->user()}}"
+        ></App>
     </div>
     @yield('script')
     <script src="public/js/app.js" type="text/javascript" charset="utf-8" ></script>

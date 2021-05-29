@@ -7,7 +7,8 @@
       ghostClass = "listMove"
       class="draggable-list ml-4"> 
        <!--  -->
-       <div v-for="list in lists " :key="list._id" :data-id="list._id" class=" pr-5 h-auto listCard">
+      <template v-for="list in lists ">  
+       <div  v-if="list.storage == false" :key="list._id" :data-id="list._id" class=" mr-5 ml-2 h-auto listCard">
           <div class="row">
             <div class="col-11 group-lisCard" >
               <div class="row mt-2 mb-1 handle-list" style="height: 30px;">
@@ -47,6 +48,7 @@
             </div>
           </div>           
         </div>
+      </template>
         <!-- Thêm list khác  -->
       <div class="pr-5  h-auto addCard">
           <div  class="row">
@@ -190,6 +192,7 @@ import menuList from './menuList.vue'
     	components: {
 			menuList,
       Card,
+      draggable
     	},
     	data(){
     		return{
@@ -211,16 +214,17 @@ import menuList from './menuList.vue'
          },
     		}
     	},
-    	 created(){
-    		this.getAll();
-          Echo.channel('updateB.'+this.board._id).listen('updateBoards',(e) => {
-                this.getAll();
-                // load lại dữ liệu 
-                // axios.post('pushNoficationBoard/'+this.board._id,{
-                //   user : e.user,
-                //   content: e.message,
-                // }); 
-          });
+      computed: {
+        id_board() {
+            return this.$route.params.id_board
+          }
+      },
+    	mounted(){
+    		  this.getAll();
+            Echo.channel('updateB.'+this.id_board).listen('updateBoards',(e) => {
+               this.getAll();
+               console.log('list');
+            });
     	},
       updated(){
         this.change();
@@ -237,19 +241,17 @@ import menuList from './menuList.vue'
     			}
     		},
     		addList(){
-    			axios.post('addList',{
-    				id_board : this.board._id,
-    				user : this.user._id,
+    			axios.post('api/addList',{
+    				id_board : this.$route.params.id_board,
+    				user : this.user,
     				list_name : this.inputNameList,
     			}).then(response =>{
     				this.getAll();
     				this.inputNameList = '';
-    			});
-    			
+    			});		
     		},
     		getAll(){
-    			axios.get('getAllList/'+this.board._id,{
-
+    			axios.get('api/getAllList/'+this.$route.params.id_board,{
     			}).then(response =>{
     				this.lists = response.data;
     			});
@@ -257,8 +259,9 @@ import menuList from './menuList.vue'
         // Thay đổi tên 
     		chageNameList(event,id_list){
     			if( event.target.value != ''){
-	              axios.post('chanNameList/'+id_list,{
-	                name : event.target.value
+	              axios.post('api/chanNameList/'+id_list,{
+	                name : event.target.value,
+                  user: this.user
 	             }).then(response =>{
 	               this.getAll();
 	             })
@@ -283,7 +286,8 @@ import menuList from './menuList.vue'
                 list.order = index + 1;
               }), 500);
              // Cập nhật vào csdl
-              setTimeout(() => axios.post('updatePositionList/' + this.board._id,{
+              setTimeout(() => axios.post('api/updatePositionList/' + this.board._id,{
+                user: this.user,
                 lists : this.lists,
               }).then(response => {
                 console.log(response.data);

@@ -1,6 +1,5 @@
 
 <nav
-  style="background: rgba(0, 0, 0, 0.5); "
  class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row broad">
         <div style="background: rgba(0, 0, 0, 0.5);" class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
           <a class="navbar-brand brand-logo" href="home/{{Auth::user()->user_name}}"><img src="public/backend/assets/images/logo.svg" alt="logo" /></a>
