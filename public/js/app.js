@@ -4617,7 +4617,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['stylist', 'Members', 'card', 'user'],
+  props: ['stylist', 'Members', 'card'],
   components: {},
   data: function data() {
     return {
@@ -4631,9 +4631,8 @@ __webpack_require__.r(__webpack_exports__);
     handleRemoveMember: function handleRemoveMember() {
       var _this = this;
 
-      axios.post('api/addMemberToCard/' + this.card._id, {
-        members: this.member,
-        user: this.user
+      axios.post('addMemberToCard/' + this.card._id, {
+        members: this.member
       }).then(function (response) {
         _this.$emit('close');
 
