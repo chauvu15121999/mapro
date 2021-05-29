@@ -119530,7 +119530,7 @@ var User = {
 };
 /* harmony default export */ __webpack_exports__["default"] = (new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   mode: 'history',
-  base: 'Mapro/',
+  base: '/',
   routes: [// bao gồm danh sách route
   {
     path: '/',

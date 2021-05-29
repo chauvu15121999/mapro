@@ -14,7 +14,7 @@ const User = {
 }
 export default new Router({
 	mode: 'history',
-	base: 'Mapro/',
+	base: '/',
 	routes: [ // bao gồm danh sách route
 	{
 		path: '/', ///path của route
