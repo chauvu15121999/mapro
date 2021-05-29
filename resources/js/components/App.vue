@@ -14,6 +14,7 @@
 <script>
     import navHeader from './nav'
     export default{
+        name: 'App',
         props: ['user','teamtype'],
         components: {
             navHeader,
