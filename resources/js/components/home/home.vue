@@ -6,7 +6,7 @@
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
           <ul class="nav">
             <li class="nav-item nav-profile">
-              <a v-bind:href="'home/'+user.user_name+'/dashboard.html'" class="nav-link">
+               <router-link class="dropdown-item" :to="{name: 'profile'}"></router-link>
                 <div class="nav-profile-image">
                   <img v-bind:src="user.avatar.encoded" alt="profile">
                   <span class="login-status online"></span>
@@ -19,12 +19,12 @@
                 <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
               </a>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <a class="nav-link" href="'home/'+user.user_name+'/dashboard.html'">
                 <span class="menu-title">Bảng</span>
                 <i class="mdi mdi-table menu-icon"></i>
               </a>
-            </li>
+            </li> -->
             <li class="nav-item">
               <a class="nav-link" v-bind:href="'home/'+user.user_name+'/dashboard.html'">
                 <span class="menu-title">Trang chủ</span>
